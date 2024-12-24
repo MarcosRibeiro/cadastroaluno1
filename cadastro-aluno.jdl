@@ -1,0 +1,131 @@
+/// --- cadastro-aluno.jdl --- ///
+
+entity CadastroAluno {
+dataCadastro LocalDate required, // renomeado de "data" para "dataCadastro"
+matricula String maxlength(20),
+grupo String maxlength(50),
+nome String required maxlength(255),
+dn LocalDate required,
+cep String required maxlength(10),
+endereco String required maxlength(5000),
+qd String maxlength(10),
+lote String maxlength(10),
+endnumero String maxlength(10),
+bairro String maxlength(100),
+municipio String maxlength(100),
+uf String maxlength(2),
+fone String required maxlength(15),
+certidao String maxlength(50),
+termo String maxlength(50),
+cartorio String maxlength(100),
+naturalidade String maxlength(100),
+rg String maxlength(20),
+cpf String required maxlength(14),
+nis String maxlength(15),
+cras String maxlength(100),
+filiacaoPai String maxlength(255),
+paiTelefone String maxlength(15),
+paiNaturalidade String maxlength(100),
+paiUf String maxlength(2),
+paiRg String maxlength(20),
+paiDataNascimento LocalDate,
+paiCpf String maxlength(14),
+paiNis String maxlength(15),
+paiTituloEleitor String maxlength(20),
+paiZona String maxlength(10),
+paiSecao String maxlength(10),
+paiMunicipio String maxlength(100),
+filiacaoMae String required maxlength(255),
+maeTelefone String maxlength(15),
+maeNaturalidade String maxlength(100),
+maeUf String maxlength(2),
+maeRg String maxlength(20),
+maeDataNascimento LocalDate,
+maeCpf String maxlength(14),
+maeNis String maxlength(15),
+maeTituloEleitor String maxlength(20),
+maeZona String maxlength(10),
+maeSecao String maxlength(10),
+maeMunicipio String maxlength(100),
+nomeEscola String maxlength(255),
+anoCursando String maxlength(50),
+turno Turno,
+mediaEscolar Double,
+prioritario SimNao,
+obs String maxlength(5000),
+comportamentoCasa Comportamento,
+comportamentoEscola Comportamento,
+deficiencia SimNao,
+adaptacoes SimNao,
+medicacao SimNao,
+medicacaoDesc String maxlength(5000),
+alergia SimNao,
+alergiaDesc String maxlength(5000),
+historicoMedico String maxlength(5000),
+rendaFamiliar String maxlength(20),
+pessoasTrabalham Integer,
+numPessoasLar Integer,
+beneficioSocial SimNao,
+beneficios String maxlength(5000),
+tipoResidencia TipoResidencia,
+tipoResidenciaDesc String maxlength(100),
+situacaoResidencia SituacaoResidencia,
+situacaoResidenciaDesc String maxlength(100),
+contatoEmergencia String required maxlength(255),
+foneEmergencia String required maxlength(15),
+relacaoEmergencia String required maxlength(50),
+autorizacao Boolean required,
+fotoAluno String,
+fotoMae String
+}
+
+entity Responsavel {
+nome String required maxlength(255),
+parentesco String required maxlength(50)
+}
+
+entity Deslocamento {
+nome String required maxlength(255),
+grau String required maxlength(50)
+}
+
+enum Turno {
+MATUTINO,
+VESPERTINO,
+NOTURNO
+}
+
+enum SimNao {
+SIM,
+NAO
+}
+
+enum Comportamento {
+TRANQUILO,
+AGITADO
+}
+
+enum TipoResidencia {
+CASA,
+APARTAMENTO,
+OUTRO
+}
+
+enum SituacaoResidencia {
+PROPRIA,
+ALUGADA,
+CEDIDA,
+OUTRA
+}
+
+/// RELACIONAMENTOS ///
+// Para OneToMany no JHipster 8, o "lado 'um'" deve declarar a coleção (ex.: {responsaveis})
+// e o "lado 'muitos'" deve declarar o campo do 'um' (ex.: {cadastroAluno}).
+
+relationship OneToMany {
+CadastroAluno{responsaveis} to Responsavel{cadastroAluno},
+CadastroAluno{deslocamentos} to Deslocamento{cadastroAluno}
+}
+
+/// Paginação ///
+paginate CadastroAluno, Responsavel, Deslocamento with pagination
