@@ -1,18 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { CepService } from '../cep.service';
 
 @Component({
-  selector: 'app-endereco',
+  selector: 'jhi-endereco',
   templateUrl: './endereco.component.html',
   styleUrls: ['./endereco.component.css'],
 })
-export class EnderecoComponent implements OnInit {
+export class EnderecoComponent {
   @Input() form!: FormGroup;
 
   constructor(private cepService: CepService) {}
-
-  ngOnInit(): void {}
 
   buscarCep(): void {
     const cep = this.form.get('cep')?.value;

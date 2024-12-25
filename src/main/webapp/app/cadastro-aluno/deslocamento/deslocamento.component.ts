@@ -1,17 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-deslocamento',
+  selector: 'jhi-deslocamento',
   templateUrl: './deslocamento.component.html',
   styleUrls: ['./deslocamento.component.css'],
 })
-export class DeslocamentoComponent implements OnInit {
-  @Input() form!: FormGroup;
+export class DeslocamentoComponent {
+  @Input() form!: FormGroup<any>;
 
   constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {}
 
   get deslocamentos(): FormArray {
     return this.form.get('deslocamentos') as FormArray;

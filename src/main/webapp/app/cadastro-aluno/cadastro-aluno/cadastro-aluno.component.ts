@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CadastroAlunoService } from '../../entities/cadastro-aluno/service/cadastro-aluno.service';
 import { ICadastroAluno } from '../../entities/cadastro-aluno/cadastro-aluno.model';
 
 @Component({
-  selector: 'app-cadastro-aluno',
+  selector: 'jhi-cadastro-aluno',
   templateUrl: './cadastro-aluno.component.html',
   styleUrls: ['./cadastro-aluno.component.css'],
 })
-export class CadastroAlunoComponent implements OnInit {
+export class CadastroAlunoComponent {
   cadastroAlunoForm: FormGroup;
 
   constructor(
@@ -116,17 +116,12 @@ export class CadastroAlunoComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    // Aqui você pode carregar dados iniciais, se necessário
-  }
-
   onSubmit(): void {
     if (this.cadastroAlunoForm.valid) {
       const cadastroAluno: ICadastroAluno = this.cadastroAlunoForm.value;
       this.cadastroAlunoService.create(cadastroAluno).subscribe({
         next: () => {
           // Lidar com sucesso
-          console.log('Cadastro realizado com sucesso!');
           this.onClear(); // Limpa o formulário após o envio
         },
         error: error => {
@@ -142,5 +137,10 @@ export class CadastroAlunoComponent implements OnInit {
 
   onClear(): void {
     this.cadastroAlunoForm.reset();
+  }
+
+  protected onError(): void {
+    // Lidar com erro
+    console.error('Erro ao cadastrar:');
   }
 }
