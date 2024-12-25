@@ -1,0 +1,93 @@
+package com.mycompany.myapp.repository;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.data.relational.core.sql.Column;
+import org.springframework.data.relational.core.sql.Expression;
+import org.springframework.data.relational.core.sql.Table;
+
+public class CadastroAlunoSqlHelper {
+
+    public static List<Expression> getColumns(Table table, String columnPrefix) {
+        List<Expression> columns = new ArrayList<>();
+        columns.add(Column.aliased("id", table, columnPrefix + "_id"));
+        columns.add(Column.aliased("data_cadastro", table, columnPrefix + "_data_cadastro"));
+        columns.add(Column.aliased("matricula", table, columnPrefix + "_matricula"));
+        columns.add(Column.aliased("grupo", table, columnPrefix + "_grupo"));
+        columns.add(Column.aliased("nome", table, columnPrefix + "_nome"));
+        columns.add(Column.aliased("dn", table, columnPrefix + "_dn"));
+        columns.add(Column.aliased("cep", table, columnPrefix + "_cep"));
+        columns.add(Column.aliased("endereco", table, columnPrefix + "_endereco"));
+        columns.add(Column.aliased("qd", table, columnPrefix + "_qd"));
+        columns.add(Column.aliased("lote", table, columnPrefix + "_lote"));
+        columns.add(Column.aliased("endnumero", table, columnPrefix + "_endnumero"));
+        columns.add(Column.aliased("bairro", table, columnPrefix + "_bairro"));
+        columns.add(Column.aliased("municipio", table, columnPrefix + "_municipio"));
+        columns.add(Column.aliased("uf", table, columnPrefix + "_uf"));
+        columns.add(Column.aliased("fone", table, columnPrefix + "_fone"));
+        columns.add(Column.aliased("certidao", table, columnPrefix + "_certidao"));
+        columns.add(Column.aliased("termo", table, columnPrefix + "_termo"));
+        columns.add(Column.aliased("cartorio", table, columnPrefix + "_cartorio"));
+        columns.add(Column.aliased("naturalidade", table, columnPrefix + "_naturalidade"));
+        columns.add(Column.aliased("rg", table, columnPrefix + "_rg"));
+        columns.add(Column.aliased("cpf", table, columnPrefix + "_cpf"));
+        columns.add(Column.aliased("nis", table, columnPrefix + "_nis"));
+        columns.add(Column.aliased("cras", table, columnPrefix + "_cras"));
+        columns.add(Column.aliased("filiacao_pai", table, columnPrefix + "_filiacao_pai"));
+        columns.add(Column.aliased("pai_telefone", table, columnPrefix + "_pai_telefone"));
+        columns.add(Column.aliased("pai_naturalidade", table, columnPrefix + "_pai_naturalidade"));
+        columns.add(Column.aliased("pai_uf", table, columnPrefix + "_pai_uf"));
+        columns.add(Column.aliased("pai_rg", table, columnPrefix + "_pai_rg"));
+        columns.add(Column.aliased("pai_data_nascimento", table, columnPrefix + "_pai_data_nascimento"));
+        columns.add(Column.aliased("pai_cpf", table, columnPrefix + "_pai_cpf"));
+        columns.add(Column.aliased("pai_nis", table, columnPrefix + "_pai_nis"));
+        columns.add(Column.aliased("pai_titulo_eleitor", table, columnPrefix + "_pai_titulo_eleitor"));
+        columns.add(Column.aliased("pai_zona", table, columnPrefix + "_pai_zona"));
+        columns.add(Column.aliased("pai_secao", table, columnPrefix + "_pai_secao"));
+        columns.add(Column.aliased("pai_municipio", table, columnPrefix + "_pai_municipio"));
+        columns.add(Column.aliased("filiacao_mae", table, columnPrefix + "_filiacao_mae"));
+        columns.add(Column.aliased("mae_telefone", table, columnPrefix + "_mae_telefone"));
+        columns.add(Column.aliased("mae_naturalidade", table, columnPrefix + "_mae_naturalidade"));
+        columns.add(Column.aliased("mae_uf", table, columnPrefix + "_mae_uf"));
+        columns.add(Column.aliased("mae_rg", table, columnPrefix + "_mae_rg"));
+        columns.add(Column.aliased("mae_data_nascimento", table, columnPrefix + "_mae_data_nascimento"));
+        columns.add(Column.aliased("mae_cpf", table, columnPrefix + "_mae_cpf"));
+        columns.add(Column.aliased("mae_nis", table, columnPrefix + "_mae_nis"));
+        columns.add(Column.aliased("mae_titulo_eleitor", table, columnPrefix + "_mae_titulo_eleitor"));
+        columns.add(Column.aliased("mae_zona", table, columnPrefix + "_mae_zona"));
+        columns.add(Column.aliased("mae_secao", table, columnPrefix + "_mae_secao"));
+        columns.add(Column.aliased("mae_municipio", table, columnPrefix + "_mae_municipio"));
+        columns.add(Column.aliased("nome_escola", table, columnPrefix + "_nome_escola"));
+        columns.add(Column.aliased("ano_cursando", table, columnPrefix + "_ano_cursando"));
+        columns.add(Column.aliased("turno", table, columnPrefix + "_turno"));
+        columns.add(Column.aliased("media_escolar", table, columnPrefix + "_media_escolar"));
+        columns.add(Column.aliased("prioritario", table, columnPrefix + "_prioritario"));
+        columns.add(Column.aliased("obs", table, columnPrefix + "_obs"));
+        columns.add(Column.aliased("comportamento_casa", table, columnPrefix + "_comportamento_casa"));
+        columns.add(Column.aliased("comportamento_escola", table, columnPrefix + "_comportamento_escola"));
+        columns.add(Column.aliased("deficiencia", table, columnPrefix + "_deficiencia"));
+        columns.add(Column.aliased("adaptacoes", table, columnPrefix + "_adaptacoes"));
+        columns.add(Column.aliased("medicacao", table, columnPrefix + "_medicacao"));
+        columns.add(Column.aliased("medicacao_desc", table, columnPrefix + "_medicacao_desc"));
+        columns.add(Column.aliased("alergia", table, columnPrefix + "_alergia"));
+        columns.add(Column.aliased("alergia_desc", table, columnPrefix + "_alergia_desc"));
+        columns.add(Column.aliased("historico_medico", table, columnPrefix + "_historico_medico"));
+        columns.add(Column.aliased("renda_familiar", table, columnPrefix + "_renda_familiar"));
+        columns.add(Column.aliased("pessoas_trabalham", table, columnPrefix + "_pessoas_trabalham"));
+        columns.add(Column.aliased("num_pessoas_lar", table, columnPrefix + "_num_pessoas_lar"));
+        columns.add(Column.aliased("beneficio_social", table, columnPrefix + "_beneficio_social"));
+        columns.add(Column.aliased("beneficios", table, columnPrefix + "_beneficios"));
+        columns.add(Column.aliased("tipo_residencia", table, columnPrefix + "_tipo_residencia"));
+        columns.add(Column.aliased("tipo_residencia_desc", table, columnPrefix + "_tipo_residencia_desc"));
+        columns.add(Column.aliased("situacao_residencia", table, columnPrefix + "_situacao_residencia"));
+        columns.add(Column.aliased("situacao_residencia_desc", table, columnPrefix + "_situacao_residencia_desc"));
+        columns.add(Column.aliased("contato_emergencia", table, columnPrefix + "_contato_emergencia"));
+        columns.add(Column.aliased("fone_emergencia", table, columnPrefix + "_fone_emergencia"));
+        columns.add(Column.aliased("relacao_emergencia", table, columnPrefix + "_relacao_emergencia"));
+        columns.add(Column.aliased("autorizacao", table, columnPrefix + "_autorizacao"));
+        columns.add(Column.aliased("foto_aluno", table, columnPrefix + "_foto_aluno"));
+        columns.add(Column.aliased("foto_mae", table, columnPrefix + "_foto_mae"));
+
+        return columns;
+    }
+}

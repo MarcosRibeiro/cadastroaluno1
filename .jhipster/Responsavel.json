@@ -1,0 +1,31 @@
+{
+  "annotations": {
+    "changelogDate": "20241225223448"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "nome",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "255"
+    },
+    {
+      "fieldName": "parentesco",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    }
+  ],
+  "name": "Responsavel",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "cadastroAluno",
+      "otherEntityRelationshipName": "responsaveis",
+      "relationshipName": "cadastroAluno",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ]
+}

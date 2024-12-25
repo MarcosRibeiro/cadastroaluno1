@@ -1,0 +1,7 @@
+export enum Turno {
+  MATUTINO = 'MATUTINO',
+
+  VESPERTINO = 'VESPERTINO',
+
+  NOTURNO = 'NOTURNO',
+}

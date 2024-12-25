@@ -1,0 +1,9 @@
+{
+  "cadastroaluno1App": {
+    "Comportamento": {
+      "null": "",
+      "TRANQUILO": "TRANQUILO",
+      "AGITADO": "AGITADO"
+    }
+  }
+}

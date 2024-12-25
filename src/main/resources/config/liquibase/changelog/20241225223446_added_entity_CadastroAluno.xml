@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity CadastroAluno.
+    -->
+    <changeSet id="20241225223446-1" author="jhipster">
+        <createTable tableName="cadastro_aluno">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1500">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="data_cadastro" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="matricula" type="varchar(20)">
+                <constraints nullable="true" />
+            </column>
+            <column name="grupo" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="nome" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="dn" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="cep" type="varchar(10)">
+                <constraints nullable="false" />
+            </column>
+            <column name="endereco" type="varchar(5000)">
+                <constraints nullable="false" />
+            </column>
+            <column name="qd" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+            <column name="lote" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+            <column name="endnumero" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+            <column name="bairro" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="municipio" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="uf" type="varchar(2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="fone" type="varchar(15)">
+                <constraints nullable="false" />
+            </column>
+            <column name="certidao" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="termo" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="cartorio" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="naturalidade" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="rg" type="varchar(20)">
+                <constraints nullable="true" />
+            </column>
+            <column name="cpf" type="varchar(14)">
+                <constraints nullable="false" />
+            </column>
+            <column name="nis" type="varchar(15)">
+                <constraints nullable="true" />
+            </column>
+            <column name="cras" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="filiacao_pai" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pai_telefone" type="varchar(15)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pai_naturalidade" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pai_uf" type="varchar(2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pai_rg" type="varchar(20)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pai_data_nascimento" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="pai_cpf" type="varchar(14)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pai_nis" type="varchar(15)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pai_titulo_eleitor" type="varchar(20)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pai_zona" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pai_secao" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pai_municipio" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="filiacao_mae" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="mae_telefone" type="varchar(15)">
+                <constraints nullable="true" />
+            </column>
+            <column name="mae_naturalidade" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="mae_uf" type="varchar(2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="mae_rg" type="varchar(20)">
+                <constraints nullable="true" />
+            </column>
+            <column name="mae_data_nascimento" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="mae_cpf" type="varchar(14)">
+                <constraints nullable="true" />
+            </column>
+            <column name="mae_nis" type="varchar(15)">
+                <constraints nullable="true" />
+            </column>
+            <column name="mae_titulo_eleitor" type="varchar(20)">
+                <constraints nullable="true" />
+            </column>
+            <column name="mae_zona" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+            <column name="mae_secao" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+            <column name="mae_municipio" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="nome_escola" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="ano_cursando" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="turno" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="media_escolar" type="double">
+                <constraints nullable="true" />
+            </column>
+            <column name="prioritario" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="obs" type="varchar(5000)">
+                <constraints nullable="true" />
+            </column>
+            <column name="comportamento_casa" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="comportamento_escola" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="deficiencia" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="adaptacoes" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="medicacao" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="medicacao_desc" type="varchar(5000)">
+                <constraints nullable="true" />
+            </column>
+            <column name="alergia" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="alergia_desc" type="varchar(5000)">
+                <constraints nullable="true" />
+            </column>
+            <column name="historico_medico" type="varchar(5000)">
+                <constraints nullable="true" />
+            </column>
+            <column name="renda_familiar" type="varchar(20)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pessoas_trabalham" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="num_pessoas_lar" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="beneficio_social" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="beneficios" type="varchar(5000)">
+                <constraints nullable="true" />
+            </column>
+            <column name="tipo_residencia" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="tipo_residencia_desc" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="situacao_residencia" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="situacao_residencia_desc" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="contato_emergencia" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="fone_emergencia" type="varchar(15)">
+                <constraints nullable="false" />
+            </column>
+            <column name="relacao_emergencia" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="autorizacao" type="boolean">
+                <constraints nullable="false" />
+            </column>
+            <column name="foto_aluno" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="foto_mae" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20241225223446-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/cadastro_aluno.csv"
+                  separator=";"
+                  tableName="cadastro_aluno"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="data_cadastro" type="date"/>
+            <column name="matricula" type="string"/>
+            <column name="grupo" type="string"/>
+            <column name="nome" type="string"/>
+            <column name="dn" type="date"/>
+            <column name="cep" type="string"/>
+            <column name="endereco" type="string"/>
+            <column name="qd" type="string"/>
+            <column name="lote" type="string"/>
+            <column name="endnumero" type="string"/>
+            <column name="bairro" type="string"/>
+            <column name="municipio" type="string"/>
+            <column name="uf" type="string"/>
+            <column name="fone" type="string"/>
+            <column name="certidao" type="string"/>
+            <column name="termo" type="string"/>
+            <column name="cartorio" type="string"/>
+            <column name="naturalidade" type="string"/>
+            <column name="rg" type="string"/>
+            <column name="cpf" type="string"/>
+            <column name="nis" type="string"/>
+            <column name="cras" type="string"/>
+            <column name="filiacao_pai" type="string"/>
+            <column name="pai_telefone" type="string"/>
+            <column name="pai_naturalidade" type="string"/>
+            <column name="pai_uf" type="string"/>
+            <column name="pai_rg" type="string"/>
+            <column name="pai_data_nascimento" type="date"/>
+            <column name="pai_cpf" type="string"/>
+            <column name="pai_nis" type="string"/>
+            <column name="pai_titulo_eleitor" type="string"/>
+            <column name="pai_zona" type="string"/>
+            <column name="pai_secao" type="string"/>
+            <column name="pai_municipio" type="string"/>
+            <column name="filiacao_mae" type="string"/>
+            <column name="mae_telefone" type="string"/>
+            <column name="mae_naturalidade" type="string"/>
+            <column name="mae_uf" type="string"/>
+            <column name="mae_rg" type="string"/>
+            <column name="mae_data_nascimento" type="date"/>
+            <column name="mae_cpf" type="string"/>
+            <column name="mae_nis" type="string"/>
+            <column name="mae_titulo_eleitor" type="string"/>
+            <column name="mae_zona" type="string"/>
+            <column name="mae_secao" type="string"/>
+            <column name="mae_municipio" type="string"/>
+            <column name="nome_escola" type="string"/>
+            <column name="ano_cursando" type="string"/>
+            <column name="turno" type="string"/>
+            <column name="media_escolar" type="numeric"/>
+            <column name="prioritario" type="string"/>
+            <column name="obs" type="string"/>
+            <column name="comportamento_casa" type="string"/>
+            <column name="comportamento_escola" type="string"/>
+            <column name="deficiencia" type="string"/>
+            <column name="adaptacoes" type="string"/>
+            <column name="medicacao" type="string"/>
+            <column name="medicacao_desc" type="string"/>
+            <column name="alergia" type="string"/>
+            <column name="alergia_desc" type="string"/>
+            <column name="historico_medico" type="string"/>
+            <column name="renda_familiar" type="string"/>
+            <column name="pessoas_trabalham" type="numeric"/>
+            <column name="num_pessoas_lar" type="numeric"/>
+            <column name="beneficio_social" type="string"/>
+            <column name="beneficios" type="string"/>
+            <column name="tipo_residencia" type="string"/>
+            <column name="tipo_residencia_desc" type="string"/>
+            <column name="situacao_residencia" type="string"/>
+            <column name="situacao_residencia_desc" type="string"/>
+            <column name="contato_emergencia" type="string"/>
+            <column name="fone_emergencia" type="string"/>
+            <column name="relacao_emergencia" type="string"/>
+            <column name="autorizacao" type="boolean"/>
+            <column name="foto_aluno" type="string"/>
+            <column name="foto_mae" type="string"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

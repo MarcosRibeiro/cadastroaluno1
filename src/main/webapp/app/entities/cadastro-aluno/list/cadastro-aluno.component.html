@@ -1,0 +1,825 @@
+<div>
+  <h2 id="page-heading" data-cy="CadastroAlunoHeading">
+    <span jhiTranslate="cadastroaluno1App.cadastroAluno.home.title">Cadastro Alunos</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="cadastroaluno1App.cadastroAluno.home.refreshListLabel">Atualizar lista</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-cadastro-aluno"
+        [routerLink]="['/cadastro-aluno/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span class="hidden-sm-down" jhiTranslate="cadastroaluno1App.cadastroAluno.home.createLabel">Criar novo Cadastro Aluno</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
+    <div class="col-sm-12">
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch" jhiTranslate="cadastroaluno1App.cadastroAluno.home.search"
+          >Pesquisar por Cadastro Aluno</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="currentSearch"
+          id="currentSearch"
+          name="currentSearch"
+          placeholder="{{ 'cadastroaluno1App.cadastroAluno.home.search' | translate }}"
+        />
+
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
+
+        @if (currentSearch) {
+          <button class="btn btn-danger" (click)="search('')">
+            <fa-icon icon="trash-alt"></fa-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+
+  @if (cadastroAlunos().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="cadastroaluno1App.cadastroAluno.home.notFound">Nenhum Cadastro Aluno encontrado</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">Código</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dataCadastro">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.dataCadastro">Data Cadastro</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="matricula">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.matricula">Matricula</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="grupo">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.grupo">Grupo</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nome">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.nome">Nome</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dn">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.dn">Dn</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cep">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.cep">Cep</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="endereco">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.endereco">Endereco</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="qd">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.qd">Qd</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lote">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.lote">Lote</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="endnumero">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.endnumero">Endnumero</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bairro">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.bairro">Bairro</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="municipio">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.municipio">Municipio</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="uf">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.uf">Uf</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fone">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.fone">Fone</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="certidao">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.certidao">Certidao</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="termo">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.termo">Termo</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cartorio">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.cartorio">Cartorio</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="naturalidade">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.naturalidade">Naturalidade</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="rg">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.rg">Rg</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cpf">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.cpf">Cpf</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nis">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.nis">Nis</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cras">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.cras">Cras</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="filiacaoPai">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.filiacaoPai">Filiacao Pai</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paiTelefone">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiTelefone">Pai Telefone</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paiNaturalidade">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiNaturalidade">Pai Naturalidade</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paiUf">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiUf">Pai Uf</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paiRg">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiRg">Pai Rg</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paiDataNascimento">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiDataNascimento">Pai Data Nascimento</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paiCpf">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiCpf">Pai Cpf</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paiNis">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiNis">Pai Nis</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paiTituloEleitor">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiTituloEleitor">Pai Titulo Eleitor</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paiZona">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiZona">Pai Zona</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paiSecao">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiSecao">Pai Secao</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="paiMunicipio">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiMunicipio">Pai Municipio</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="filiacaoMae">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.filiacaoMae">Filiacao Mae</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="maeTelefone">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeTelefone">Mae Telefone</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="maeNaturalidade">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeNaturalidade">Mae Naturalidade</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="maeUf">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeUf">Mae Uf</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="maeRg">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeRg">Mae Rg</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="maeDataNascimento">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeDataNascimento">Mae Data Nascimento</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="maeCpf">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeCpf">Mae Cpf</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="maeNis">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeNis">Mae Nis</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="maeTituloEleitor">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeTituloEleitor">Mae Titulo Eleitor</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="maeZona">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeZona">Mae Zona</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="maeSecao">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeSecao">Mae Secao</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="maeMunicipio">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeMunicipio">Mae Municipio</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nomeEscola">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.nomeEscola">Nome Escola</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="anoCursando">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.anoCursando">Ano Cursando</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="turno">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.turno">Turno</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="mediaEscolar">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.mediaEscolar">Media Escolar</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="prioritario">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.prioritario">Prioritario</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="obs">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.obs">Obs</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="comportamentoCasa">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.comportamentoCasa">Comportamento Casa</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="comportamentoEscola">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.comportamentoEscola">Comportamento Escola</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="deficiencia">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.deficiencia">Deficiencia</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="adaptacoes">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.adaptacoes">Adaptacoes</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="medicacao">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.medicacao">Medicacao</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="medicacaoDesc">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.medicacaoDesc">Medicacao Desc</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="alergia">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.alergia">Alergia</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="alergiaDesc">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.alergiaDesc">Alergia Desc</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="historicoMedico">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.historicoMedico">Historico Medico</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="rendaFamiliar">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.rendaFamiliar">Renda Familiar</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="pessoasTrabalham">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.pessoasTrabalham">Pessoas Trabalham</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="numPessoasLar">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.numPessoasLar">Num Pessoas Lar</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="beneficioSocial">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.beneficioSocial">Beneficio Social</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="beneficios">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.beneficios">Beneficios</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tipoResidencia">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.tipoResidencia">Tipo Residencia</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tipoResidenciaDesc">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.tipoResidenciaDesc">Tipo Residencia Desc</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="situacaoResidencia">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.situacaoResidencia">Situacao Residencia</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="situacaoResidenciaDesc">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.situacaoResidenciaDesc">Situacao Residencia Desc</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="contatoEmergencia">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.contatoEmergencia">Contato Emergencia</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="foneEmergencia">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.foneEmergencia">Fone Emergencia</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="relacaoEmergencia">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.relacaoEmergencia">Relacao Emergencia</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="autorizacao">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.autorizacao">Autorizacao</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fotoAluno">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.fotoAluno">Foto Aluno</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fotoMae">
+              <div class="d-flex">
+                <span jhiTranslate="cadastroaluno1App.cadastroAluno.fotoMae">Foto Mae</span>
+                @if (!currentSearch) {
+                  <fa-icon class="p-1" icon="sort"></fa-icon>
+                }
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (cadastroAluno of cadastroAlunos(); track trackId(cadastroAluno)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/cadastro-aluno', cadastroAluno.id, 'view']">{{ cadastroAluno.id }}</a>
+              </td>
+              <td>{{ cadastroAluno.dataCadastro | formatMediumDate }}</td>
+              <td>{{ cadastroAluno.matricula }}</td>
+              <td>{{ cadastroAluno.grupo }}</td>
+              <td>{{ cadastroAluno.nome }}</td>
+              <td>{{ cadastroAluno.dn | formatMediumDate }}</td>
+              <td>{{ cadastroAluno.cep }}</td>
+              <td>{{ cadastroAluno.endereco }}</td>
+              <td>{{ cadastroAluno.qd }}</td>
+              <td>{{ cadastroAluno.lote }}</td>
+              <td>{{ cadastroAluno.endnumero }}</td>
+              <td>{{ cadastroAluno.bairro }}</td>
+              <td>{{ cadastroAluno.municipio }}</td>
+              <td>{{ cadastroAluno.uf }}</td>
+              <td>{{ cadastroAluno.fone }}</td>
+              <td>{{ cadastroAluno.certidao }}</td>
+              <td>{{ cadastroAluno.termo }}</td>
+              <td>{{ cadastroAluno.cartorio }}</td>
+              <td>{{ cadastroAluno.naturalidade }}</td>
+              <td>{{ cadastroAluno.rg }}</td>
+              <td>{{ cadastroAluno.cpf }}</td>
+              <td>{{ cadastroAluno.nis }}</td>
+              <td>{{ cadastroAluno.cras }}</td>
+              <td>{{ cadastroAluno.filiacaoPai }}</td>
+              <td>{{ cadastroAluno.paiTelefone }}</td>
+              <td>{{ cadastroAluno.paiNaturalidade }}</td>
+              <td>{{ cadastroAluno.paiUf }}</td>
+              <td>{{ cadastroAluno.paiRg }}</td>
+              <td>{{ cadastroAluno.paiDataNascimento | formatMediumDate }}</td>
+              <td>{{ cadastroAluno.paiCpf }}</td>
+              <td>{{ cadastroAluno.paiNis }}</td>
+              <td>{{ cadastroAluno.paiTituloEleitor }}</td>
+              <td>{{ cadastroAluno.paiZona }}</td>
+              <td>{{ cadastroAluno.paiSecao }}</td>
+              <td>{{ cadastroAluno.paiMunicipio }}</td>
+              <td>{{ cadastroAluno.filiacaoMae }}</td>
+              <td>{{ cadastroAluno.maeTelefone }}</td>
+              <td>{{ cadastroAluno.maeNaturalidade }}</td>
+              <td>{{ cadastroAluno.maeUf }}</td>
+              <td>{{ cadastroAluno.maeRg }}</td>
+              <td>{{ cadastroAluno.maeDataNascimento | formatMediumDate }}</td>
+              <td>{{ cadastroAluno.maeCpf }}</td>
+              <td>{{ cadastroAluno.maeNis }}</td>
+              <td>{{ cadastroAluno.maeTituloEleitor }}</td>
+              <td>{{ cadastroAluno.maeZona }}</td>
+              <td>{{ cadastroAluno.maeSecao }}</td>
+              <td>{{ cadastroAluno.maeMunicipio }}</td>
+              <td>{{ cadastroAluno.nomeEscola }}</td>
+              <td>{{ cadastroAluno.anoCursando }}</td>
+              <td [jhiTranslate]="'cadastroaluno1App.Turno.' + (cadastroAluno.turno ?? 'null')">
+                {{ { null: '', MATUTINO: 'MATUTINO', VESPERTINO: 'VESPERTINO', NOTURNO: 'NOTURNO' }[cadastroAluno.turno ?? 'null'] }}
+              </td>
+              <td>{{ cadastroAluno.mediaEscolar }}</td>
+              <td [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAluno.prioritario ?? 'null')">
+                {{ { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAluno.prioritario ?? 'null'] }}
+              </td>
+              <td>{{ cadastroAluno.obs }}</td>
+              <td [jhiTranslate]="'cadastroaluno1App.Comportamento.' + (cadastroAluno.comportamentoCasa ?? 'null')">
+                {{ { null: '', TRANQUILO: 'TRANQUILO', AGITADO: 'AGITADO' }[cadastroAluno.comportamentoCasa ?? 'null'] }}
+              </td>
+              <td [jhiTranslate]="'cadastroaluno1App.Comportamento.' + (cadastroAluno.comportamentoEscola ?? 'null')">
+                {{ { null: '', TRANQUILO: 'TRANQUILO', AGITADO: 'AGITADO' }[cadastroAluno.comportamentoEscola ?? 'null'] }}
+              </td>
+              <td [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAluno.deficiencia ?? 'null')">
+                {{ { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAluno.deficiencia ?? 'null'] }}
+              </td>
+              <td [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAluno.adaptacoes ?? 'null')">
+                {{ { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAluno.adaptacoes ?? 'null'] }}
+              </td>
+              <td [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAluno.medicacao ?? 'null')">
+                {{ { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAluno.medicacao ?? 'null'] }}
+              </td>
+              <td>{{ cadastroAluno.medicacaoDesc }}</td>
+              <td [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAluno.alergia ?? 'null')">
+                {{ { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAluno.alergia ?? 'null'] }}
+              </td>
+              <td>{{ cadastroAluno.alergiaDesc }}</td>
+              <td>{{ cadastroAluno.historicoMedico }}</td>
+              <td>{{ cadastroAluno.rendaFamiliar }}</td>
+              <td>{{ cadastroAluno.pessoasTrabalham }}</td>
+              <td>{{ cadastroAluno.numPessoasLar }}</td>
+              <td [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAluno.beneficioSocial ?? 'null')">
+                {{ { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAluno.beneficioSocial ?? 'null'] }}
+              </td>
+              <td>{{ cadastroAluno.beneficios }}</td>
+              <td [jhiTranslate]="'cadastroaluno1App.TipoResidencia.' + (cadastroAluno.tipoResidencia ?? 'null')">
+                {{ { null: '', CASA: 'CASA', APARTAMENTO: 'APARTAMENTO', OUTRO: 'OUTRO' }[cadastroAluno.tipoResidencia ?? 'null'] }}
+              </td>
+              <td>{{ cadastroAluno.tipoResidenciaDesc }}</td>
+              <td [jhiTranslate]="'cadastroaluno1App.SituacaoResidencia.' + (cadastroAluno.situacaoResidencia ?? 'null')">
+                {{
+                  { null: '', PROPRIA: 'PROPRIA', ALUGADA: 'ALUGADA', CEDIDA: 'CEDIDA', OUTRA: 'OUTRA' }[
+                    cadastroAluno.situacaoResidencia ?? 'null'
+                  ]
+                }}
+              </td>
+              <td>{{ cadastroAluno.situacaoResidenciaDesc }}</td>
+              <td>{{ cadastroAluno.contatoEmergencia }}</td>
+              <td>{{ cadastroAluno.foneEmergencia }}</td>
+              <td>{{ cadastroAluno.relacaoEmergencia }}</td>
+              <td>{{ cadastroAluno.autorizacao }}</td>
+              <td>{{ cadastroAluno.fotoAluno }}</td>
+              <td>{{ cadastroAluno.fotoMae }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/cadastro-aluno', cadastroAluno.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizar</span>
+                  </a>
+
+                  <a [routerLink]="['/cadastro-aluno', cadastroAluno.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editar</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(cadastroAluno)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Excluir</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (cadastroAlunos().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

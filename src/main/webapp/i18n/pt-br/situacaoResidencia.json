@@ -1,0 +1,11 @@
+{
+  "cadastroaluno1App": {
+    "SituacaoResidencia": {
+      "null": "",
+      "PROPRIA": "PROPRIA",
+      "ALUGADA": "ALUGADA",
+      "CEDIDA": "CEDIDA",
+      "OUTRA": "OUTRA"
+    }
+  }
+}

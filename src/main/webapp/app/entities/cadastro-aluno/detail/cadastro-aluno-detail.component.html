@@ -1,0 +1,360 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (cadastroAluno(); as cadastroAlunoRef) {
+      <div>
+        <h2 data-cy="cadastroAlunoDetailsHeading">
+          <span jhiTranslate="cadastroaluno1App.cadastroAluno.detail.title">Cadastro Aluno</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">Código</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.dataCadastro">Data Cadastro</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.dataCadastro | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.matricula">Matricula</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.matricula }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.grupo">Grupo</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.grupo }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.nome">Nome</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.nome }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.dn">Dn</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.dn | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.cep">Cep</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.cep }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.endereco">Endereco</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.endereco }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.qd">Qd</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.qd }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.lote">Lote</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.lote }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.endnumero">Endnumero</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.endnumero }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.bairro">Bairro</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.bairro }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.municipio">Municipio</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.municipio }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.uf">Uf</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.uf }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.fone">Fone</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.fone }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.certidao">Certidao</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.certidao }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.termo">Termo</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.termo }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.cartorio">Cartorio</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.cartorio }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.naturalidade">Naturalidade</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.naturalidade }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.rg">Rg</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.rg }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.cpf">Cpf</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.cpf }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.nis">Nis</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.nis }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.cras">Cras</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.cras }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.filiacaoPai">Filiacao Pai</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.filiacaoPai }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.paiTelefone">Pai Telefone</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.paiTelefone }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.paiNaturalidade">Pai Naturalidade</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.paiNaturalidade }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.paiUf">Pai Uf</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.paiUf }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.paiRg">Pai Rg</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.paiRg }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.paiDataNascimento">Pai Data Nascimento</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.paiDataNascimento | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.paiCpf">Pai Cpf</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.paiCpf }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.paiNis">Pai Nis</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.paiNis }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.paiTituloEleitor">Pai Titulo Eleitor</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.paiTituloEleitor }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.paiZona">Pai Zona</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.paiZona }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.paiSecao">Pai Secao</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.paiSecao }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.paiMunicipio">Pai Municipio</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.paiMunicipio }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.filiacaoMae">Filiacao Mae</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.filiacaoMae }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.maeTelefone">Mae Telefone</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.maeTelefone }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.maeNaturalidade">Mae Naturalidade</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.maeNaturalidade }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.maeUf">Mae Uf</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.maeUf }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.maeRg">Mae Rg</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.maeRg }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.maeDataNascimento">Mae Data Nascimento</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.maeDataNascimento | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.maeCpf">Mae Cpf</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.maeCpf }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.maeNis">Mae Nis</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.maeNis }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.maeTituloEleitor">Mae Titulo Eleitor</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.maeTituloEleitor }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.maeZona">Mae Zona</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.maeZona }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.maeSecao">Mae Secao</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.maeSecao }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.maeMunicipio">Mae Municipio</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.maeMunicipio }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.nomeEscola">Nome Escola</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.nomeEscola }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.anoCursando">Ano Cursando</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.anoCursando }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.turno">Turno</span></dt>
+          <dd>
+            <span [jhiTranslate]="'cadastroaluno1App.Turno.' + (cadastroAlunoRef.turno ?? 'null')">{{
+              { null: '', MATUTINO: 'MATUTINO', VESPERTINO: 'VESPERTINO', NOTURNO: 'NOTURNO' }[cadastroAlunoRef.turno ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.mediaEscolar">Media Escolar</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.mediaEscolar }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.prioritario">Prioritario</span></dt>
+          <dd>
+            <span [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAlunoRef.prioritario ?? 'null')">{{
+              { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAlunoRef.prioritario ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.obs">Obs</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.obs }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.comportamentoCasa">Comportamento Casa</span></dt>
+          <dd>
+            <span [jhiTranslate]="'cadastroaluno1App.Comportamento.' + (cadastroAlunoRef.comportamentoCasa ?? 'null')">{{
+              { null: '', TRANQUILO: 'TRANQUILO', AGITADO: 'AGITADO' }[cadastroAlunoRef.comportamentoCasa ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.comportamentoEscola">Comportamento Escola</span></dt>
+          <dd>
+            <span [jhiTranslate]="'cadastroaluno1App.Comportamento.' + (cadastroAlunoRef.comportamentoEscola ?? 'null')">{{
+              { null: '', TRANQUILO: 'TRANQUILO', AGITADO: 'AGITADO' }[cadastroAlunoRef.comportamentoEscola ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.deficiencia">Deficiencia</span></dt>
+          <dd>
+            <span [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAlunoRef.deficiencia ?? 'null')">{{
+              { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAlunoRef.deficiencia ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.adaptacoes">Adaptacoes</span></dt>
+          <dd>
+            <span [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAlunoRef.adaptacoes ?? 'null')">{{
+              { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAlunoRef.adaptacoes ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.medicacao">Medicacao</span></dt>
+          <dd>
+            <span [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAlunoRef.medicacao ?? 'null')">{{
+              { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAlunoRef.medicacao ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.medicacaoDesc">Medicacao Desc</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.medicacaoDesc }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.alergia">Alergia</span></dt>
+          <dd>
+            <span [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAlunoRef.alergia ?? 'null')">{{
+              { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAlunoRef.alergia ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.alergiaDesc">Alergia Desc</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.alergiaDesc }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.historicoMedico">Historico Medico</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.historicoMedico }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.rendaFamiliar">Renda Familiar</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.rendaFamiliar }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.pessoasTrabalham">Pessoas Trabalham</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.pessoasTrabalham }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.numPessoasLar">Num Pessoas Lar</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.numPessoasLar }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.beneficioSocial">Beneficio Social</span></dt>
+          <dd>
+            <span [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAlunoRef.beneficioSocial ?? 'null')">{{
+              { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAlunoRef.beneficioSocial ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.beneficios">Beneficios</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.beneficios }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.tipoResidencia">Tipo Residencia</span></dt>
+          <dd>
+            <span [jhiTranslate]="'cadastroaluno1App.TipoResidencia.' + (cadastroAlunoRef.tipoResidencia ?? 'null')">{{
+              { null: '', CASA: 'CASA', APARTAMENTO: 'APARTAMENTO', OUTRO: 'OUTRO' }[cadastroAlunoRef.tipoResidencia ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.tipoResidenciaDesc">Tipo Residencia Desc</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.tipoResidenciaDesc }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.situacaoResidencia">Situacao Residencia</span></dt>
+          <dd>
+            <span [jhiTranslate]="'cadastroaluno1App.SituacaoResidencia.' + (cadastroAlunoRef.situacaoResidencia ?? 'null')">{{
+              { null: '', PROPRIA: 'PROPRIA', ALUGADA: 'ALUGADA', CEDIDA: 'CEDIDA', OUTRA: 'OUTRA' }[
+                cadastroAlunoRef.situacaoResidencia ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.situacaoResidenciaDesc">Situacao Residencia Desc</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.situacaoResidenciaDesc }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.contatoEmergencia">Contato Emergencia</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.contatoEmergencia }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.foneEmergencia">Fone Emergencia</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.foneEmergencia }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.relacaoEmergencia">Relacao Emergencia</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.relacaoEmergencia }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.autorizacao">Autorizacao</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.autorizacao }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.fotoAluno">Foto Aluno</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.fotoAluno }}</span>
+          </dd>
+          <dt><span jhiTranslate="cadastroaluno1App.cadastroAluno.fotoMae">Foto Mae</span></dt>
+          <dd>
+            <span>{{ cadastroAlunoRef.fotoMae }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Voltar</span>
+        </button>
+
+        <button type="button" [routerLink]="['/cadastro-aluno', cadastroAlunoRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

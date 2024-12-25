@@ -1,0 +1,10 @@
+{
+  "cadastroaluno1App": {
+    "Turno": {
+      "null": "",
+      "MATUTINO": "MATUTINO",
+      "VESPERTINO": "VESPERTINO",
+      "NOTURNO": "NOTURNO"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "cadastroaluno1App": {
+    "responsavel": {
+      "home": {
+        "title": "Responsavels",
+        "refreshListLabel": "Atualizar lista",
+        "createLabel": "Criar novo Responsavel",
+        "createOrEditLabel": "Criar ou editar Responsavel",
+        "search": "Pesquisar por Responsavel",
+        "notFound": "Nenhum Responsavel encontrado"
+      },
+      "created": "Um novo Responsavel foi criado com o identificador {{ param }}",
+      "updated": "Um Responsavel foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Responsavel foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Responsavel {{ id }}?"
+      },
+      "detail": {
+        "title": "Responsavel"
+      },
+      "id": "ID",
+      "nome": "Nome",
+      "parentesco": "Parentesco",
+      "cadastroAluno": "Cadastro Aluno"
+    }
+  }
+}
