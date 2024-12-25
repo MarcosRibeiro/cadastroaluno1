@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'jhi-documentos',
-  imports: [],
+  selector: 'app-documentos',
   templateUrl: './documentos.component.html',
-  styleUrl: './documentos.component.scss',
+  styleUrls: ['./documentos.component.css'],
 })
-export class DocumentosComponent {}
+export class DocumentosComponent implements OnInit {
+  @Input() form!: FormGroup;
+
+  constructor() {}
+
+  ngOnInit(): void {}
+}

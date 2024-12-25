@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'jhi-dados-aluno',
-  imports: [],
+  selector: 'app-dados-aluno',
   templateUrl: './dados-aluno.component.html',
-  styleUrl: './dados-aluno.component.scss',
+  styleUrls: ['./dados-aluno.component.css'],
 })
-export class DadosAlunoComponent {}
+export class DadosAlunoComponent implements OnInit {
+  @Input() form!: FormGroup;
+
+  constructor() {}
+
+  ngOnInit(): void {}
+}

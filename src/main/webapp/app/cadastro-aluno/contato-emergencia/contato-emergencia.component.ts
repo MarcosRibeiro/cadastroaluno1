@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'jhi-contato-emergencia',
-  imports: [],
+  selector: 'app-contato-emergencia',
   templateUrl: './contato-emergencia.component.html',
-  styleUrl: './contato-emergencia.component.scss',
+  styleUrls: ['./contato-emergencia.component.css'],
 })
-export class ContatoEmergenciaComponent {}
+export class ContatoEmergenciaComponent implements OnInit {
+  @Input() form!: FormGroup;
+
+  constructor() {}
+
+  ngOnInit(): void {}
+}

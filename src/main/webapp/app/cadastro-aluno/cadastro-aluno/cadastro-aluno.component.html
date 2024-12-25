@@ -1,1 +1,26 @@
-<p>cadastro-aluno works!</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Cadastro de Aluno</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="cadastroAlunoForm" (ngSubmit)="onSubmit()">
+      <app-dados-aluno formGroupName="dadosAluno"></app-dados-aluno>
+      <app-endereco formGroupName="endereco"></app-endereco>
+      <app-documentos formGroupName="documentos"></app-documentos>
+      <app-filiacao formGroupName="filiacao"></app-filiacao>
+      <app-informacoes-escolares formGroupName="informacoesEscolares"></app-informacoes-escolares>
+      <app-informacoes-complementares formGroupName="informacoesComplementares"></app-informacoes-complementares>
+      <app-responsaveis formGroupName="responsaveis"></app-responsaveis>
+      <app-deslocamento formGroupName="deslocamento"></app-deslocamento>
+      <app-contato-emergencia formGroupName="contatoEmergencia"></app-contato-emergencia>
+      <app-autorizacao-fotos formGroupName="autorizacaoFotos"></app-autorizacao-fotos>
+
+      <div class="button-container">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!cadastroAlunoForm.valid">
+          <mat-icon>save</mat-icon> Salvar
+        </button>
+        <button mat-raised-button color="warn" type="button" (click)="onClear()"><mat-icon>delete</mat-icon> Limpar</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

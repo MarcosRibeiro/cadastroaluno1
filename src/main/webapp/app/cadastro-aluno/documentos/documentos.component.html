@@ -1,1 +1,61 @@
-<p>documentos works!</p>
+<div [formGroup]="form">
+  <h3>Documentos</h3>
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>Matrícula</mat-label>
+      <input matInput formControlName="matricula" />
+      <mat-error *ngIf="form.get('matricula')?.hasError('maxlength')"> Matrícula deve ter no máximo 20 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-4">
+      <mat-label>Certidão de Nascimento</mat-label>
+      <input matInput formControlName="certidao" />
+      <mat-error *ngIf="form.get('certidao')?.hasError('maxlength')"> Certidão deve ter no máximo 50 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>Termo</mat-label>
+      <input matInput formControlName="termo" />
+      <mat-error *ngIf="form.get('termo')?.hasError('maxlength')"> Termo deve ter no máximo 50 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-4">
+      <mat-label>Cartório</mat-label>
+      <input matInput formControlName="cartorio" />
+      <mat-error *ngIf="form.get('cartorio')?.hasError('maxlength')"> Cartório deve ter no máximo 100 caracteres. </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-4">
+      <mat-label>Naturalidade</mat-label>
+      <input matInput formControlName="naturalidade" />
+      <mat-error *ngIf="form.get('naturalidade')?.hasError('maxlength')"> Naturalidade deve ter no máximo 100 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>RG</mat-label>
+      <input matInput formControlName="rg" />
+      <mat-error *ngIf="form.get('rg')?.hasError('maxlength')"> RG deve ter no máximo 20 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>CPF</mat-label>
+      <input matInput formControlName="cpf" mask="000.000.000-00" required />
+      <mat-error *ngIf="form.get('cpf')?.hasError('required') && form.get('cpf')?.touched"> CPF é obrigatório. </mat-error>
+      <mat-error *ngIf="form.get('cpf')?.hasError('maxlength')"> CPF deve ter no máximo 14 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>NIS</mat-label>
+      <input matInput formControlName="nis" />
+      <mat-error *ngIf="form.get('nis')?.hasError('maxlength')"> NIS deve ter no máximo 15 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>CRAS</mat-label>
+      <input matInput formControlName="cras" />
+      <mat-error *ngIf="form.get('cras')?.hasError('maxlength')"> CRAS deve ter no máximo 100 caracteres. </mat-error>
+    </mat-form-field>
+  </div>
+</div>

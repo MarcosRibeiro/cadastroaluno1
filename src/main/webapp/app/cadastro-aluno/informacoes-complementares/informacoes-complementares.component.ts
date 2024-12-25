@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'jhi-informacoes-complementares',
-  imports: [],
+  selector: 'app-informacoes-complementares',
   templateUrl: './informacoes-complementares.component.html',
-  styleUrl: './informacoes-complementares.component.scss',
+  styleUrls: ['./informacoes-complementares.component.css'],
 })
-export class InformacoesComplementaresComponent {}
+export class InformacoesComplementaresComponent implements OnInit {
+  @Input() form!: FormGroup;
+
+  constructor() {}
+
+  ngOnInit(): void {}
+}

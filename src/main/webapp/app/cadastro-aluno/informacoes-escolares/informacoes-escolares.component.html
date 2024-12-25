@@ -1,1 +1,32 @@
-<p>informacoes-escolares works!</p>
+<div [formGroup]="form">
+  <h3>Informações Escoalres</h3>
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-6">
+      <mat-label>Nome da Escola</mat-label>
+      <input matInput formControlName="nomeEscola" />
+      <mat-error *ngIf="form.get('nomeEscola')?.hasError('maxlength')"> Nome da Escola deve ter no máximo 255 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Ano Cursando</mat-label>
+      <input matInput formControlName="anoCursando" />
+      <mat-error *ngIf="form.get('anoCursando')?.hasError('maxlength')"> Ano Cursando deve ter no máximo 50 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Turno</mat-label>
+      <mat-select formControlName="turno">
+        <mat-option value="MATUTINO">Matutino</mat-option>
+        <mat-option value="VESPERTINO">Vespertino</mat-option>
+        <mat-option value="NOTURNO">Noturno</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Média Escolar</mat-label>
+      <input matInput type="number" formControlName="mediaEscolar" />
+    </mat-form-field>
+  </div>
+</div>

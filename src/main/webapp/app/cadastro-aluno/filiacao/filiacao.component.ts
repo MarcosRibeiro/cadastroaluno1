@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'jhi-filiacao',
-  imports: [],
+  selector: 'app-filiacao',
   templateUrl: './filiacao.component.html',
-  styleUrl: './filiacao.component.scss',
+  styleUrls: ['./filiacao.component.css'],
 })
-export class FiliacaoComponent {}
+export class FiliacaoComponent implements OnInit {
+  @Input() form!: FormGroup;
+
+  constructor() {}
+
+  ngOnInit(): void {}
+}

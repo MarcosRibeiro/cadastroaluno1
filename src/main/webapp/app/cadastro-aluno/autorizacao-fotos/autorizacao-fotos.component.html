@@ -1,1 +1,27 @@
-<p>autorizacao-fotos works!</p>
+<div [formGroup]="form">
+  <h3>Autorização e Fotos</h3>
+  <div class="row">
+    <div class="col-md-12">
+      <mat-checkbox formControlName="autorizacao" required>
+        Autorizo o uso da imagem do meu/minha filho(a) para fins de divulgação das atividades da instituição.
+      </mat-checkbox>
+      <mat-error *ngIf="form.get('autorizacao')?.hasError('required') && form.get('autorizacao')?.touched">
+        Autorização é obrigatória.
+      </mat-error>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <mat-label>Foto do Aluno</mat-label>
+      <input type="file" accept="image/*" (change)="onFotoAlunoChange($event)" />
+      <img [src]="fotoAlunoPreview" *ngIf="fotoAlunoPreview" class="img-preview" />
+    </div>
+
+    <div class="col-md-6">
+      <mat-label>Foto da Mãe</mat-label>
+      <input type="file" accept="image/*" (change)="onFotoMaeChange($event)" />
+      <img [src]="fotoMaePreview" *ngIf="fotoMaePreview" class="img-preview" />
+    </div>
+  </div>
+</div>

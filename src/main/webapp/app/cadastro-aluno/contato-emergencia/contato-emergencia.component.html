@@ -1,1 +1,37 @@
-<p>contato-emergencia works!</p>
+<div [formGroup]="form">
+  <h3>Contato de Emergência</h3>
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-6">
+      <mat-label>Contato de Emergência</mat-label>
+      <input matInput formControlName="contatoEmergencia" required />
+      <mat-error *ngIf="form.get('contatoEmergencia')?.hasError('required') && form.get('contatoEmergencia')?.touched">
+        Contato de Emergência é obrigatório.
+      </mat-error>
+      <mat-error *ngIf="form.get('contatoEmergencia')?.hasError('maxlength')">
+        Contato de Emergência deve ter no máximo 255 caracteres.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Telefone de Emergência</mat-label>
+      <input matInput formControlName="foneEmergencia" mask="(00) 0000-0000||(00) 0 0000-0000" required />
+      <mat-error *ngIf="form.get('foneEmergencia')?.hasError('required') && form.get('foneEmergencia')?.touched">
+        Telefone de Emergência é obrigatório.
+      </mat-error>
+      <mat-error *ngIf="form.get('foneEmergencia')?.hasError('maxlength')">
+        Telefone de Emergência deve ter no máximo 15 caracteres.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Relação de Emergência</mat-label>
+      <input matInput formControlName="relacaoEmergencia" required />
+      <mat-error *ngIf="form.get('relacaoEmergencia')?.hasError('required') && form.get('relacaoEmergencia')?.touched">
+        Relação de Emergência é obrigatória.
+      </mat-error>
+      <mat-error *ngIf="form.get('relacaoEmergencia')?.hasError('maxlength')">
+        Relação de Emergência deve ter no máximo 50 caracteres.
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div>

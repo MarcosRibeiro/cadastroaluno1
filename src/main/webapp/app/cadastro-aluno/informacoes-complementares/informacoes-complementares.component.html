@@ -1,1 +1,171 @@
-<p>informacoes-complementares works!</p>
+<div [formGroup]="form">
+  <h3>Informações Complementares</h3>
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Prioritário</mat-label>
+      <mat-select formControlName="prioritario">
+        <mat-option value="SIM">Sim</mat-option>
+        <mat-option value="NAO">Não</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-9">
+      <mat-label>Observações</mat-label>
+      <textarea matInput formControlName="obs"></textarea>
+      <mat-error *ngIf="form.get('obs')?.hasError('maxlength')"> Observações deve ter no máximo 5000 caracteres. </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Comportamento em Casa</mat-label>
+      <mat-select formControlName="comportamentoCasa">
+        <mat-option value="TRANQUILO">Tranquilo</mat-option>
+        <mat-option value="AGITADO">Agitado</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Comportamento na Escola</mat-label>
+      <mat-select formControlName="comportamentoEscola">
+        <mat-option value="TRANQUILO">Tranquilo</mat-option>
+        <mat-option value="AGITADO">Agitado</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Deficiência</mat-label>
+      <mat-select formControlName="deficiencia">
+        <mat-option value="SIM">Sim</mat-option>
+        <mat-option value="NAO">Não</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Adaptações</mat-label>
+      <mat-select formControlName="adaptacoes">
+        <mat-option value="SIM">Sim</mat-option>
+        <mat-option value="NAO">Não</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Medicação</mat-label>
+      <mat-select formControlName="medicacao">
+        <mat-option value="SIM">Sim</mat-option>
+        <mat-option value="NAO">Não</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-9">
+      <mat-label>Descrição da Medicação</mat-label>
+      <textarea matInput formControlName="medicacaoDesc"></textarea>
+      <mat-error *ngIf="form.get('medicacaoDesc')?.hasError('maxlength')">
+        Descrição da Medicação deve ter no máximo 5000 caracteres.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Alergia</mat-label>
+      <mat-select formControlName="alergia">
+        <mat-option value="SIM">Sim</mat-option>
+        <mat-option value="NAO">Não</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-9">
+      <mat-label>Descrição da Alergia</mat-label>
+      <textarea matInput formControlName="alergiaDesc"></textarea>
+      <mat-error *ngIf="form.get('alergiaDesc')?.hasError('maxlength')">
+        Descrição da Alergia deve ter no máximo 5000 caracteres.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-12">
+      <mat-label>Histórico Médico</mat-label>
+      <textarea matInput formControlName="historicoMedico"></textarea>
+      <mat-error *ngIf="form.get('historicoMedico')?.hasError('maxlength')">
+        Histórico Médico deve ter no máximo 5000 caracteres.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Renda Familiar</mat-label>
+      <input matInput formControlName="rendaFamiliar" />
+      <mat-error *ngIf="form.get('rendaFamiliar')?.hasError('maxlength')"> Renda Familiar deve ter no máximo 20 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Pessoas que Trabalham</mat-label>
+      <input matInput type="number" formControlName="pessoasTrabalham" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Número de Pessoas no Lar</mat-label>
+      <input matInput type="number" formControlName="numPessoasLar" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Benefício Social</mat-label>
+      <mat-select formControlName="beneficioSocial">
+        <mat-option value="SIM">Sim</mat-option>
+        <mat-option value="NAO">Não</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-12">
+      <mat-label>Benefícios</mat-label>
+      <textarea matInput formControlName="beneficios"></textarea>
+      <mat-error *ngIf="form.get('beneficios')?.hasError('maxlength')"> Benefícios deve ter no máximo 5000 caracteres. </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Tipo de Residência</mat-label>
+      <mat-select formControlName="tipoResidencia">
+        <mat-option value="CASA">Casa</mat-option>
+        <mat-option value="APARTAMENTO">Apartamento</mat-option>
+        <mat-option value="OUTRO">Outro</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-9">
+      <mat-label>Descrição do Tipo de Residência</mat-label>
+      <input matInput formControlName="tipoResidenciaDesc" />
+      <mat-error *ngIf="form.get('tipoResidenciaDesc')?.hasError('maxlength')">
+        Descrição do Tipo de Residência deve ter no máximo 100 caracteres.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Situação da Residência</mat-label>
+      <mat-select formControlName="situacaoResidencia">
+        <mat-option value="PROPRIA">Própria</mat-option>
+        <mat-option value="ALUGADA">Alugada</mat-option>
+        <mat-option value="CEDIDA">Cedida</mat-option>
+        <mat-option value="OUTRA">Outra</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-9">
+      <mat-label>Descrição da Situação da Residência</mat-label>
+      <input matInput formControlName="situacaoResidenciaDesc" />
+      <mat-error *ngIf="form.get('situacaoResidenciaDesc')?.hasError('maxlength')">
+        Descrição da Situação da Residência deve ter no máximo 100 caracteres.
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div>

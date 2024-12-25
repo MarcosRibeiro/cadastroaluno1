@@ -1,16 +1,13 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable, asapScheduler, map, scheduled } from 'rxjs';
-
-import { catchError } from 'rxjs/operators';
-
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { SearchWithPagination } from 'app/core/request/request.model';
 import { ICadastroAluno, NewCadastroAluno } from '../cadastro-aluno.model';
 
 export type PartialUpdateCadastroAluno = Partial<ICadastroAluno> & Pick<ICadastroAluno, 'id'>;
@@ -33,11 +30,12 @@ export type EntityArrayResponseType = HttpResponse<ICadastroAluno[]>;
 
 @Injectable({ providedIn: 'root' })
 export class CadastroAlunoService {
-  protected readonly http = inject(HttpClient);
-  protected readonly applicationConfigService = inject(ApplicationConfigService);
-
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/cadastro-alunos');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/cadastro-alunos/_search');
+
+  constructor(
+    protected http: HttpClient,
+    protected applicationConfigService: ApplicationConfigService,
+  ) {}
 
   create(cadastroAluno: NewCadastroAluno): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(cadastroAluno);
@@ -77,15 +75,6 @@ export class CadastroAlunoService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<RestCadastroAluno[]>(this.resourceSearchUrl, { params: options, observe: 'response' }).pipe(
-      map(res => this.convertResponseArrayFromServer(res)),
-
-      catchError(() => scheduled([new HttpResponse<ICadastroAluno[]>()], asapScheduler)),
-    );
-  }
-
   getCadastroAlunoIdentifier(cadastroAluno: Pick<ICadastroAluno, 'id'>): number {
     return cadastroAluno.id;
   }
@@ -100,8 +89,8 @@ export class CadastroAlunoService {
   ): Type[] {
     const cadastroAlunos: Type[] = cadastroAlunosToCheck.filter(isPresent);
     if (cadastroAlunos.length > 0) {
-      const cadastroAlunoCollectionIdentifiers = cadastroAlunoCollection.map(cadastroAlunoItem =>
-        this.getCadastroAlunoIdentifier(cadastroAlunoItem),
+      const cadastroAlunoCollectionIdentifiers = cadastroAlunoCollection.map(
+        cadastroAlunoItem => this.getCadastroAlunoIdentifier(cadastroAlunoItem)!,
       );
       const cadastroAlunosToAdd = cadastroAlunos.filter(cadastroAlunoItem => {
         const cadastroAlunoIdentifier = this.getCadastroAlunoIdentifier(cadastroAlunoItem);

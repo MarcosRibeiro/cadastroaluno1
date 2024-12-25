@@ -1,1 +1,176 @@
-<p>filiacao works!</p>
+<div [formGroup]="form">
+  <h3>Filiação</h3>
+
+  <!-- Dados do Pai -->
+  <h4>Dados do Pai</h4>
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-6">
+      <mat-label>Nome do Pai</mat-label>
+      <input matInput formControlName="filiacaoPai" />
+      <mat-error *ngIf="form.get('filiacaoPai')?.hasError('maxlength')"> Nome do Pai deve ter no máximo 255 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>Telefone do Pai</mat-label>
+      <input matInput formControlName="paiTelefone" mask="(00) 0000-0000||(00) 0 0000-0000" />
+      <mat-error *ngIf="form.get('paiTelefone')?.hasError('maxlength')"> Telefone do Pai deve ter no máximo 15 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Naturalidade do Pai</mat-label>
+      <input matInput formControlName="paiNaturalidade" />
+      <mat-error *ngIf="form.get('paiNaturalidade')?.hasError('maxlength')">
+        Naturalidade do Pai deve ter no máximo 100 caracteres.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-1">
+      <mat-label>UF do Pai</mat-label>
+      <input matInput formControlName="paiUf" />
+      <mat-error *ngIf="form.get('paiUf')?.hasError('maxlength')"> UF do Pai deve ter no máximo 2 caracteres. </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>RG do Pai</mat-label>
+      <input matInput formControlName="paiRg" />
+      <mat-error *ngIf="form.get('paiRg')?.hasError('maxlength')"> RG do Pai deve ter no máximo 20 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>Data de Nascimento do Pai</mat-label>
+      <input matInput [matDatepicker]="pickerPaiDataNascimento" formControlName="paiDataNascimento" />
+      <mat-datepicker-toggle matSuffix [for]="pickerPaiDataNascimento"></mat-datepicker-toggle>
+      <mat-datepicker #pickerPaiDataNascimento></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>CPF do Pai</mat-label>
+      <input matInput formControlName="paiCpf" mask="000.000.000-00" />
+      <mat-error *ngIf="form.get('paiCpf')?.hasError('maxlength')"> CPF do Pai deve ter no máximo 14 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>NIS do Pai</mat-label>
+      <input matInput formControlName="paiNis" />
+      <mat-error *ngIf="form.get('paiNis')?.hasError('maxlength')"> NIS do Pai deve ter no máximo 15 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-4">
+      <mat-label>Título de Eleitor do Pai</mat-label>
+      <input matInput formControlName="paiTituloEleitor" />
+      <mat-error *ngIf="form.get('paiTituloEleitor')?.hasError('maxlength')">
+        Título de Eleitor do Pai deve ter no máximo 20 caracteres.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>Zona do Pai</mat-label>
+      <input matInput formControlName="paiZona" />
+      <mat-error *ngIf="form.get('paiZona')?.hasError('maxlength')"> Zona do Pai deve ter no máximo 10 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>Seção do Pai</mat-label>
+      <input matInput formControlName="paiSecao" />
+      <mat-error *ngIf="form.get('paiSecao')?.hasError('maxlength')"> Seção do Pai deve ter no máximo 10 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-4">
+      <mat-label>Município do Pai</mat-label>
+      <input matInput formControlName="paiMunicipio" />
+      <mat-error *ngIf="form.get('paiMunicipio')?.hasError('maxlength')"> Município do Pai deve ter no máximo 100 caracteres. </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Dados da Mãe -->
+  <h4>Dados da Mãe</h4>
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-6">
+      <mat-label>Nome da Mãe</mat-label>
+      <input matInput formControlName="filiacaoMae" required />
+      <mat-error *ngIf="form.get('filiacaoMae')?.hasError('required') && form.get('filiacaoMae')?.touched">
+        Nome da Mãe é obrigatório.
+      </mat-error>
+      <mat-error *ngIf="form.get('filiacaoMae')?.hasError('maxlength')"> Nome da Mãe deve ter no máximo 255 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>Telefone da Mãe</mat-label>
+      <input matInput formControlName="maeTelefone" mask="(00) 0000-0000||(00) 0 0000-0000" />
+      <mat-error *ngIf="form.get('maeTelefone')?.hasError('maxlength')"> Telefone da Mãe deve ter no máximo 15 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-3">
+      <mat-label>Naturalidade da Mãe</mat-label>
+      <input matInput formControlName="maeNaturalidade" />
+      <mat-error *ngIf="form.get('maeNaturalidade')?.hasError('maxlength')">
+        Naturalidade da Mãe deve ter no máximo 100 caracteres.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-1">
+      <mat-label>UF da Mãe</mat-label>
+      <input matInput formControlName="maeUf" />
+      <mat-error *ngIf="form.get('maeUf')?.hasError('maxlength')"> UF da Mãe deve ter no máximo 2 caracteres. </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>RG da Mãe</mat-label>
+      <input matInput formControlName="maeRg" />
+      <mat-error *ngIf="form.get('maeRg')?.hasError('maxlength')"> RG da Mãe deve ter no máximo 20 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>Data de Nascimento da Mãe</mat-label>
+      <input matInput [matDatepicker]="pickerMaeDataNascimento" formControlName="maeDataNascimento" />
+      <mat-datepicker-toggle matSuffix [for]="pickerMaeDataNascimento"></mat-datepicker-toggle>
+      <mat-datepicker #pickerMaeDataNascimento></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>CPF da Mãe</mat-label>
+      <input matInput formControlName="maeCpf" mask="000.000.000-00" />
+      <mat-error *ngIf="form.get('maeCpf')?.hasError('maxlength')"> CPF da Mãe deve ter no máximo 14 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>NIS da Mãe</mat-label>
+      <input matInput formControlName="maeNis" />
+      <mat-error *ngIf="form.get('maeNis')?.hasError('maxlength')"> NIS da Mãe deve ter no máximo 15 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-4">
+      <mat-label>Título de Eleitor da Mãe</mat-label>
+      <input matInput formControlName="maeTituloEleitor" />
+      <mat-error *ngIf="form.get('maeTituloEleitor')?.hasError('maxlength')">
+        Título de Eleitor da Mãe deve ter no máximo 20 caracteres.
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>Zona da Mãe</mat-label>
+      <input matInput formControlName="maeZona" />
+      <mat-error *ngIf="form.get('maeZona')?.hasError('maxlength')"> Zona da Mãe deve ter no máximo 10 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-2">
+      <mat-label>Seção da Mãe</mat-label>
+      <input matInput formControlName="maeSecao" />
+      <mat-error *ngIf="form.get('maeSecao')?.hasError('maxlength')"> Seção da Mãe deve ter no máximo 10 caracteres. </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="col-md-4">
+      <mat-label>Município da Mãe</mat-label>
+      <input matInput formControlName="maeMunicipio" />
+      <mat-error *ngIf="form.get('maeMunicipio')?.hasError('maxlength')"> Município da Mãe deve ter no máximo 100 caracteres. </mat-error>
+    </mat-form-field>
+  </div>
+</div>
