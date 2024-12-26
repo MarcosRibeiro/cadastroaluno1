@@ -1,25 +1,25 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
-import SharedModule from 'app/shared/shared.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { CadastroAlunoFormService, CadastroAlunoFormGroup } from './cadastro-aluno-form.service';
+import { ICadastroAluno } from '../cadastro-aluno.model';
+import { CadastroAlunoService } from '../service/cadastro-aluno.service';
+import { IResponsavel } from 'app/entities/responsavel/responsavel.model';
+import { ResponsavelService } from 'app/entities/responsavel/service/responsavel.service';
+import { IDeslocamento } from 'app/entities/deslocamento/deslocamento.model';
+import { DeslocamentoService } from 'app/entities/deslocamento/service/deslocamento.service';
 import { Turno } from 'app/entities/enumerations/turno.model';
 import { SimNao } from 'app/entities/enumerations/sim-nao.model';
 import { Comportamento } from 'app/entities/enumerations/comportamento.model';
 import { TipoResidencia } from 'app/entities/enumerations/tipo-residencia.model';
 import { SituacaoResidencia } from 'app/entities/enumerations/situacao-residencia.model';
-import { CadastroAlunoService } from '../service/cadastro-aluno.service';
-import { ICadastroAluno } from '../cadastro-aluno.model';
-import { CadastroAlunoFormGroup, CadastroAlunoFormService } from './cadastro-aluno-form.service';
 
 @Component({
   selector: 'jhi-cadastro-aluno-update',
   templateUrl: './cadastro-aluno-update.component.html',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class CadastroAlunoUpdateComponent implements OnInit {
   isSaving = false;
@@ -30,12 +30,23 @@ export class CadastroAlunoUpdateComponent implements OnInit {
   tipoResidenciaValues = Object.keys(TipoResidencia);
   situacaoResidenciaValues = Object.keys(SituacaoResidencia);
 
-  protected cadastroAlunoService = inject(CadastroAlunoService);
-  protected cadastroAlunoFormService = inject(CadastroAlunoFormService);
-  protected activatedRoute = inject(ActivatedRoute);
+  responsavelsSharedCollection: IResponsavel[] = [];
+  deslocamentosSharedCollection: IDeslocamento[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: CadastroAlunoFormGroup = this.cadastroAlunoFormService.createCadastroAlunoFormGroup();
+
+  constructor(
+    protected cadastroAlunoService: CadastroAlunoService,
+    protected cadastroAlunoFormService: CadastroAlunoFormService,
+    protected responsavelService: ResponsavelService,
+    protected deslocamentoService: DeslocamentoService,
+    protected activatedRoute: ActivatedRoute,
+  ) {}
+
+  compareResponsavel = (o1: IResponsavel | null, o2: IResponsavel | null): boolean => this.responsavelService.compareResponsavel(o1, o2);
+
+  compareDeslocamento = (o1: IDeslocamento | null, o2: IDeslocamento | null): boolean =>
+    this.deslocamentoService.compareDeslocamento(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ cadastroAluno }) => {
@@ -43,6 +54,8 @@ export class CadastroAlunoUpdateComponent implements OnInit {
       if (cadastroAluno) {
         this.updateForm(cadastroAluno);
       }
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -82,5 +95,42 @@ export class CadastroAlunoUpdateComponent implements OnInit {
   protected updateForm(cadastroAluno: ICadastroAluno): void {
     this.cadastroAluno = cadastroAluno;
     this.cadastroAlunoFormService.resetForm(this.editForm, cadastroAluno);
+
+    this.responsavelsSharedCollection = this.responsavelService.addResponsavelToCollectionIfMissing<IResponsavel>(
+      this.responsavelsSharedCollection,
+      ...(cadastroAluno.responsavels ?? []),
+    );
+    this.deslocamentosSharedCollection = this.deslocamentoService.addDeslocamentoToCollectionIfMissing<IDeslocamento>(
+      this.deslocamentosSharedCollection,
+      ...(cadastroAluno.deslocamentos ?? []),
+    );
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.responsavelService
+      .query()
+      .pipe(map((res: HttpResponse<IResponsavel[]>) => res.body ?? []))
+      .pipe(
+        map((responsavels: IResponsavel[]) =>
+          this.responsavelService.addResponsavelToCollectionIfMissing<IResponsavel>(
+            responsavels,
+            ...(this.cadastroAluno?.responsavels ?? []),
+          ),
+        ),
+      )
+      .subscribe((responsavels: IResponsavel[]) => (this.responsavelsSharedCollection = responsavels));
+
+    this.deslocamentoService
+      .query()
+      .pipe(map((res: HttpResponse<IDeslocamento[]>) => res.body ?? []))
+      .pipe(
+        map((deslocamentos: IDeslocamento[]) =>
+          this.deslocamentoService.addDeslocamentoToCollectionIfMissing<IDeslocamento>(
+            deslocamentos,
+            ...(this.cadastroAluno?.deslocamentos ?? []),
+          ),
+        ),
+      )
+      .subscribe((deslocamentos: IDeslocamento[]) => (this.deslocamentosSharedCollection = deslocamentos));
   }
 }

@@ -1,0 +1,91 @@
+/* Centraliza o formulário na página */
+.d-flex {
+  display: flex;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.col-8 {
+  width: 70%; /* Ajuste a largura conforme necessário, um pouco maior que o padrão */
+  max-width: 900px; /* Largura máxima para evitar que o formulário fique muito largo em telas grandes */
+}
+
+/* Estilização dos campos do formulário */
+mat-form-field {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+/* Ajustes para os campos de data */
+.mat-datepicker-toggle {
+  margin-left: -30px; /* Ajuste para o ícone do datepicker */
+}
+
+/* Ajustes para os checkboxes */
+.mat-checkbox {
+  margin-bottom: 1rem;
+}
+
+/* Estilização dos botões */
+.mt-3 {
+  margin-top: 1rem; /* Espaçamento acima dos botões */
+
+  button {
+    margin-right: 0.5rem; /* Espaçamento entre os botões */
+  }
+}
+
+/* Estilos específicos para o layout do seu formulário */
+.titulo {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.subtitulo {
+  font-weight: bold;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.linha {
+  display: flex;
+  gap: 1rem; /* Espaçamento entre os campos na mesma linha */
+  align-items: center; /* Alinha os itens verticalmente */
+
+  .campo {
+    flex: 1; /* Faz os campos ocuparem a largura disponível */
+  }
+}
+
+.campo-metade {
+  width: 50%;
+}
+
+.campo-terco {
+  width: 33.33%;
+}
+
+.campo-quarto {
+  width: 25%;
+}
+
+/* Adaptações para telas menores */
+@media (max-width: 768px) {
+  .col-8 {
+    width: 95%; /* Aumenta a largura do formulário em telas menores */
+    max-width: none;
+  }
+
+  .linha {
+    flex-direction: column; /* Empilha os campos verticalmente em telas menores */
+
+    .campo-metade,
+    .campo-terco,
+    .campo-quarto {
+      width: 100%; /* Faz os campos ocuparem a largura total em telas menores */
+    }
+  }
+}

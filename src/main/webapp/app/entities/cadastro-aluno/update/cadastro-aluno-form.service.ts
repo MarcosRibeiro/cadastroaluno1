@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { ICadastroAluno, NewCadastroAluno } from '../cadastro-aluno.model';
 
@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type CadastroAlunoFormGroupInput = ICadastroAluno | PartialWithRequiredKeyOf<NewCadastroAluno>;
 
-type CadastroAlunoFormDefaults = Pick<NewCadastroAluno, 'id' | 'autorizacao'>;
+type CadastroAlunoFormDefaults = Pick<NewCadastroAluno, 'id' | 'responsavels' | 'deslocamentos' | 'autorizacao'>;
 
 type CadastroAlunoFormGroupContent = {
   id: FormControl<ICadastroAluno['id'] | NewCadastroAluno['id']>;
@@ -31,7 +31,7 @@ type CadastroAlunoFormGroupContent = {
   bairro: FormControl<ICadastroAluno['bairro']>;
   municipio: FormControl<ICadastroAluno['municipio']>;
   uf: FormControl<ICadastroAluno['uf']>;
-  fone: FormControl<ICadastroAluno['fone']>;
+  telefone: FormControl<ICadastroAluno['telefone']>;
   certidao: FormControl<ICadastroAluno['certidao']>;
   termo: FormControl<ICadastroAluno['termo']>;
   cartorio: FormControl<ICadastroAluno['cartorio']>;
@@ -94,6 +94,8 @@ type CadastroAlunoFormGroupContent = {
   autorizacao: FormControl<ICadastroAluno['autorizacao']>;
   fotoAluno: FormControl<ICadastroAluno['fotoAluno']>;
   fotoMae: FormControl<ICadastroAluno['fotoMae']>;
+  responsavels: FormControl<ICadastroAluno['responsavels']>;
+  deslocamentos: FormControl<ICadastroAluno['deslocamentos']>;
 };
 
 export type CadastroAlunoFormGroup = FormGroup<CadastroAlunoFormGroupContent>;
@@ -129,10 +131,10 @@ export class CadastroAlunoFormService {
         validators: [Validators.required],
       }),
       cep: new FormControl(cadastroAlunoRawValue.cep, {
-        validators: [Validators.required, Validators.maxLength(10)],
+        validators: [Validators.required, Validators.minLength(8), Validators.maxLength(9), Validators.pattern(/^\\d{5}-\\d{3}$/)],
       }),
       endereco: new FormControl(cadastroAlunoRawValue.endereco, {
-        validators: [Validators.required, Validators.maxLength(5000)],
+        validators: [Validators.required, Validators.maxLength(255)],
       }),
       qd: new FormControl(cadastroAlunoRawValue.qd, {
         validators: [Validators.maxLength(10)],
@@ -152,8 +154,13 @@ export class CadastroAlunoFormService {
       uf: new FormControl(cadastroAlunoRawValue.uf, {
         validators: [Validators.maxLength(2)],
       }),
-      fone: new FormControl(cadastroAlunoRawValue.fone, {
-        validators: [Validators.required, Validators.maxLength(15)],
+      telefone: new FormControl(cadastroAlunoRawValue.telefone, {
+        validators: [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(15),
+          Validators.pattern(/^(\\\\d{2})\\\\s(\\\\d{4,5})-\\\\d{4}$/),
+        ],
       }),
       certidao: new FormControl(cadastroAlunoRawValue.certidao, {
         validators: [Validators.maxLength(50)],
@@ -171,7 +178,12 @@ export class CadastroAlunoFormService {
         validators: [Validators.maxLength(20)],
       }),
       cpf: new FormControl(cadastroAlunoRawValue.cpf, {
-        validators: [Validators.required, Validators.maxLength(14)],
+        validators: [
+          Validators.required,
+          Validators.minLength(11),
+          Validators.maxLength(14),
+          Validators.pattern(/^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$/),
+        ],
       }),
       nis: new FormControl(cadastroAlunoRawValue.nis, {
         validators: [Validators.maxLength(15)],
@@ -196,7 +208,7 @@ export class CadastroAlunoFormService {
       }),
       paiDataNascimento: new FormControl(cadastroAlunoRawValue.paiDataNascimento),
       paiCpf: new FormControl(cadastroAlunoRawValue.paiCpf, {
-        validators: [Validators.maxLength(14)],
+        validators: [Validators.minLength(11), Validators.maxLength(14), Validators.pattern(/^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$/)],
       }),
       paiNis: new FormControl(cadastroAlunoRawValue.paiNis, {
         validators: [Validators.maxLength(15)],
@@ -230,7 +242,7 @@ export class CadastroAlunoFormService {
       }),
       maeDataNascimento: new FormControl(cadastroAlunoRawValue.maeDataNascimento),
       maeCpf: new FormControl(cadastroAlunoRawValue.maeCpf, {
-        validators: [Validators.maxLength(14)],
+        validators: [Validators.minLength(11), Validators.maxLength(14), Validators.pattern(/^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$/)],
       }),
       maeNis: new FormControl(cadastroAlunoRawValue.maeNis, {
         validators: [Validators.maxLength(15)],
@@ -295,7 +307,12 @@ export class CadastroAlunoFormService {
         validators: [Validators.required, Validators.maxLength(255)],
       }),
       foneEmergencia: new FormControl(cadastroAlunoRawValue.foneEmergencia, {
-        validators: [Validators.required, Validators.maxLength(15)],
+        validators: [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(15),
+          Validators.pattern(/^(\\\\d{2})\\\\s(\\\\d{4,5})-\\\\d{4}$/),
+        ],
       }),
       relacaoEmergencia: new FormControl(cadastroAlunoRawValue.relacaoEmergencia, {
         validators: [Validators.required, Validators.maxLength(50)],
@@ -305,6 +322,8 @@ export class CadastroAlunoFormService {
       }),
       fotoAluno: new FormControl(cadastroAlunoRawValue.fotoAluno),
       fotoMae: new FormControl(cadastroAlunoRawValue.fotoMae),
+      responsavels: new FormControl(cadastroAlunoRawValue.responsavels ?? []),
+      deslocamentos: new FormControl(cadastroAlunoRawValue.deslocamentos ?? []),
     });
   }
 
@@ -325,6 +344,8 @@ export class CadastroAlunoFormService {
   private getFormDefaults(): CadastroAlunoFormDefaults {
     return {
       id: null,
+      responsavels: [],
+      deslocamentos: [],
       autorizacao: false,
     };
   }

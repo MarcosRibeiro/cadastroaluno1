@@ -1,1398 +1,585 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2
-        id="jhi-cadastro-aluno-heading"
-        data-cy="CadastroAlunoCreateUpdateHeading"
-        jhiTranslate="cadastroalunoApp.cadastroAluno.home.createOrEditLabel"
-      >
-        Criar ou editar Cadastro Aluno
-      </h2>
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-cadastro-aluno-heading" data-cy="CadastroAlunoCreateUpdateHeading">Cadastro de Aluno</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" for="field_id" jhiTranslate="cadastroalunoApp.cadastroAluno.id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
-
-        @let dataCadastroRef = editForm.get('dataCadastro')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_dataCadastro" jhiTranslate="cadastroalunoApp.cadastroAluno.dataCadastro"
-            >Data Cadastro</label
-          >
-          <div class="input-group">
-            <input
-              id="field_dataCadastro"
-              data-cy="dataCadastro"
-              type="text"
-              class="form-control"
-              name="dataCadastro"
-              ngbDatepicker
-              #dataCadastroDp="ngbDatepicker"
-              formControlName="dataCadastro"
-            />
-            <button type="button" class="btn btn-secondary" (click)="dataCadastroDp.toggle()">
-              <fa-icon icon="calendar-alt"></fa-icon>
-            </button>
-          </div>
-          @if (dataCadastroRef.invalid && (dataCadastroRef.dirty || dataCadastroRef.touched)) {
-            <div>
-              @if (editForm.get('dataCadastro')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
-              }
-            </div>
-          }
+        <mat-form-field appearance="outline">
+          <mat-label>Data Cadastro</mat-label>
+          <input matInput [matDatepicker]="dataCadastro" formControlName="dataCadastro" required />
+          <mat-datepicker-toggle matSuffix [for]="dataCadastro"></mat-datepicker-toggle>
+          <mat-datepicker #dataCadastro></mat-datepicker>
+          <mat-error *ngIf="editForm.get('dataCadastro')!.invalid && editForm.get('dataCadastro')!.touched">
+            Data de Cadastro é obrigatória.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Matricula</mat-label>
+          <input matInput formControlName="matricula" maxlength="20" />
+          <mat-error *ngIf="editForm.get('matricula')!.invalid && editForm.get('matricula')!.touched"> Matrícula inválida. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Grupo</mat-label>
+          <input matInput formControlName="grupo" maxlength="50" />
+          <mat-error *ngIf="editForm.get('grupo')!.invalid && editForm.get('grupo')!.touched"> Grupo inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="nome" required maxlength="255" />
+          <mat-error *ngIf="editForm.get('nome')!.invalid && editForm.get('nome')!.touched"> Nome é obrigatório. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data de Nascimento</mat-label>
+          <input matInput [matDatepicker]="dn" formControlName="dn" required />
+          <mat-datepicker-toggle matSuffix [for]="dn"></mat-datepicker-toggle>
+          <mat-datepicker #dn></mat-datepicker>
+          <mat-error *ngIf="editForm.get('dn')!.invalid && editForm.get('dn')!.touched"> Data de Nascimento é obrigatória. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CEP</mat-label>
+          <input matInput formControlName="cep" required minlength="8" maxlength="9" pattern="^\d{5}-\d{3}$" />
+          <mat-error *ngIf="editForm.get('cep')!.invalid && editForm.get('cep')!.touched"> CEP inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Endereco</mat-label>
+          <input matInput formControlName="endereco" required maxlength="255" />
+          <mat-error *ngIf="editForm.get('endereco')!.invalid && editForm.get('endereco')!.touched"> Endereço é obrigatório. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>QD</mat-label>
+          <input matInput formControlName="qd" maxlength="10" />
+          <mat-error *ngIf="editForm.get('qd')!.invalid && editForm.get('qd')!.touched"> Quadra inválida. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Lote</mat-label>
+          <input matInput formControlName="lote" maxlength="10" />
+          <mat-error *ngIf="editForm.get('lote')!.invalid && editForm.get('lote')!.touched"> Lote inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Endnumero</mat-label>
+          <input matInput formControlName="endnumero" maxlength="10" />
+          <mat-error *ngIf="editForm.get('endnumero')!.invalid && editForm.get('endnumero')!.touched">
+            Número do endereço inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Bairro</mat-label>
+          <input matInput formControlName="bairro" maxlength="100" />
+          <mat-error *ngIf="editForm.get('bairro')!.invalid && editForm.get('bairro')!.touched"> Bairro inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Municipio</mat-label>
+          <input matInput formControlName="municipio" maxlength="100" />
+          <mat-error *ngIf="editForm.get('municipio')!.invalid && editForm.get('municipio')!.touched"> Município inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>UF</mat-label>
+          <input matInput formControlName="uf" maxlength="2" />
+          <mat-error *ngIf="editForm.get('uf')!.invalid && editForm.get('uf')!.touched"> UF inválida. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone</mat-label>
+          <input matInput formControlName="telefone" required minlength="10" maxlength="15" pattern="^(\d{2})\s(\d{4,5})-\d{4}$" />
+          <mat-error *ngIf="editForm.get('telefone')!.invalid && editForm.get('telefone')!.touched"> Telefone inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Certidao</mat-label>
+          <input matInput formControlName="certidao" maxlength="50" />
+          <mat-error *ngIf="editForm.get('certidao')!.invalid && editForm.get('certidao')!.touched"> Certidão inválida. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Termo</mat-label>
+          <input matInput formControlName="termo" maxlength="50" />
+          <mat-error *ngIf="editForm.get('termo')!.invalid && editForm.get('termo')!.touched"> Termo inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Cartorio</mat-label>
+          <input matInput formControlName="cartorio" maxlength="100" />
+          <mat-error *ngIf="editForm.get('cartorio')!.invalid && editForm.get('cartorio')!.touched"> Cartório inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Naturalidade</mat-label>
+          <input matInput formControlName="naturalidade" maxlength="100" />
+          <mat-error *ngIf="editForm.get('naturalidade')!.invalid && editForm.get('naturalidade')!.touched">
+            Naturalidade inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>RG</mat-label>
+          <input matInput formControlName="rg" maxlength="20" />
+          <mat-error *ngIf="editForm.get('rg')!.invalid && editForm.get('rg')!.touched"> RG inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CPF</mat-label>
+          <input matInput formControlName="cpf" required minlength="11" maxlength="14" pattern="^\d{3}\.\d{3}\.\d{3}-\d{2}$" />
+          <mat-error *ngIf="editForm.get('cpf')!.invalid && editForm.get('cpf')!.touched"> CPF inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>NIS</mat-label>
+          <input matInput formControlName="nis" maxlength="15" />
+          <mat-error *ngIf="editForm.get('nis')!.invalid && editForm.get('nis')!.touched"> NIS inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CRAS</mat-label>
+          <input matInput formControlName="cras" maxlength="100" />
+          <mat-error *ngIf="editForm.get('cras')!.invalid && editForm.get('cras')!.touched"> CRAS inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nome do Pai</mat-label>
+          <input matInput formControlName="filiacaoPai" maxlength="255" />
+          <mat-error *ngIf="editForm.get('filiacaoPai')!.invalid && editForm.get('filiacaoPai')!.touched">
+            Nome do Pai inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone do Pai</mat-label>
+          <input matInput formControlName="paiTelefone" maxlength="15" />
+          <mat-error *ngIf="editForm.get('paiTelefone')!.invalid && editForm.get('paiTelefone')!.touched">
+            Telefone do Pai inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Naturalidade do Pai</mat-label>
+          <input matInput formControlName="paiNaturalidade" maxlength="100" />
+          <mat-error *ngIf="editForm.get('paiNaturalidade')!.invalid && editForm.get('paiNaturalidade')!.touched">
+            Naturalidade do Pai inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>UF do Pai</mat-label>
+          <input matInput formControlName="paiUf" maxlength="2" />
+          <mat-error *ngIf="editForm.get('paiUf')!.invalid && editForm.get('paiUf')!.touched"> UF do Pai inválida. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>RG do Pai</mat-label>
+          <input matInput formControlName="paiRg" maxlength="20" />
+          <mat-error *ngIf="editForm.get('paiRg')!.invalid && editForm.get('paiRg')!.touched"> RG do Pai inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data de Nascimento do Pai</mat-label>
+          <input matInput [matDatepicker]="paiDataNascimento" formControlName="paiDataNascimento" />
+          <mat-datepicker-toggle matSuffix [for]="paiDataNascimento"></mat-datepicker-toggle>
+          <mat-datepicker #paiDataNascimento></mat-datepicker>
+          <mat-error *ngIf="editForm.get('paiDataNascimento')!.invalid && editForm.get('paiDataNascimento')!.touched">
+            Data de Nascimento do Pai inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CPF do Pai</mat-label>
+          <input matInput formControlName="paiCpf" minlength="11" maxlength="14" pattern="^\d{3}\.\d{3}\.\d{3}-\d{2}$" />
+          <mat-error *ngIf="editForm.get('paiCpf')!.invalid && editForm.get('paiCpf')!.touched"> CPF do Pai inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>NIS do Pai</mat-label>
+          <input matInput formControlName="paiNis" maxlength="15" />
+          <mat-error *ngIf="editForm.get('paiNis')!.invalid && editForm.get('paiNis')!.touched"> NIS do Pai inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Título de Eleitor do Pai</mat-label>
+          <input matInput formControlName="paiTituloEleitor" maxlength="20" />
+          <mat-error *ngIf="editForm.get('paiTituloEleitor')!.invalid && editForm.get('paiTituloEleitor')!.touched">
+            Título de Eleitor do Pai inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Zona Eleitoral do Pai</mat-label>
+          <input matInput formControlName="paiZona" maxlength="10" />
+          <mat-error *ngIf="editForm.get('paiZona')!.invalid && editForm.get('paiZona')!.touched">
+            Zona Eleitoral do Pai inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Seção Eleitoral do Pai</mat-label>
+          <input matInput formControlName="paiSecao" maxlength="10" />
+          <mat-error *ngIf="editForm.get('paiSecao')!.invalid && editForm.get('paiSecao')!.touched">
+            Seção Eleitoral do Pai inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Município do Título de Eleitor do Pai</mat-label>
+          <input matInput formControlName="paiMunicipio" maxlength="100" />
+          <mat-error *ngIf="editForm.get('paiMunicipio')!.invalid && editForm.get('paiMunicipio')!.touched">
+            Município do Título de Eleitor do Pai inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nome da Mãe</mat-label>
+          <input matInput formControlName="filiacaoMae" required maxlength="255" />
+          <mat-error *ngIf="editForm.get('filiacaoMae')!.invalid && editForm.get('filiacaoMae')!.touched">
+            Nome da Mãe é obrigatório.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone da Mãe</mat-label>
+          <input matInput formControlName="maeTelefone" maxlength="15" />
+          <mat-error *ngIf="editForm.get('maeTelefone')!.invalid && editForm.get('maeTelefone')!.touched">
+            Telefone da Mãe inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Naturalidade da Mãe</mat-label>
+          <input matInput formControlName="maeNaturalidade" maxlength="100" />
+          <mat-error *ngIf="editForm.get('maeNaturalidade')!.invalid && editForm.get('maeNaturalidade')!.touched">
+            Naturalidade da Mãe inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>UF da Mãe</mat-label>
+          <input matInput formControlName="maeUf" maxlength="2" />
+          <mat-error *ngIf="editForm.get('maeUf')!.invalid && editForm.get('maeUf')!.touched"> UF da Mãe inválida. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>RG da Mãe</mat-label>
+          <input matInput formControlName="maeRg" maxlength="20" />
+          <mat-error *ngIf="editForm.get('maeRg')!.invalid && editForm.get('maeRg')!.touched"> RG da Mãe inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data de Nascimento da Mãe</mat-label>
+          <input matInput [matDatepicker]="maeDataNascimento" formControlName="maeDataNascimento" />
+          <mat-datepicker-toggle matSuffix [for]="maeDataNascimento"></mat-datepicker-toggle>
+          <mat-datepicker #maeDataNascimento></mat-datepicker>
+          <mat-error *ngIf="editForm.get('maeDataNascimento')!.invalid && editForm.get('maeDataNascimento')!.touched">
+            Data de Nascimento da Mãe inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CPF da Mãe</mat-label>
+          <input matInput formControlName="maeCpf" minlength="11" maxlength="14" pattern="^\d{3}\.\d{3}\.\d{3}-\d{2}$" />
+          <mat-error *ngIf="editForm.get('maeCpf')!.invalid && editForm.get('maeCpf')!.touched"> CPF da Mãe inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>NIS da Mãe</mat-label>
+          <input matInput formControlName="maeNis" maxlength="15" />
+          <mat-error *ngIf="editForm.get('maeNis')!.invalid && editForm.get('maeNis')!.touched"> NIS da Mãe inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Título de Eleitor da Mãe</mat-label>
+          <input matInput formControlName="maeTituloEleitor" maxlength="20" />
+          <mat-error *ngIf="editForm.get('maeTituloEleitor')!.invalid && editForm.get('maeTituloEleitor')!.touched">
+            Título de Eleitor da Mãe inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Zona Eleitoral da Mãe</mat-label>
+          <input matInput formControlName="maeZona" maxlength="10" />
+          <mat-error *ngIf="editForm.get('maeZona')!.invalid && editForm.get('maeZona')!.touched">
+            Zona Eleitoral da Mãe inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Seção Eleitoral da Mãe</mat-label>
+          <input matInput formControlName="maeSecao" maxlength="10" />
+          <mat-error *ngIf="editForm.get('maeSecao')!.invalid && editForm.get('maeSecao')!.touched">
+            Seção Eleitoral da Mãe inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Município do Título de Eleitor da Mãe</mat-label>
+          <input matInput formControlName="maeMunicipio" maxlength="100" />
+          <mat-error *ngIf="editForm.get('maeMunicipio')!.invalid && editForm.get('maeMunicipio')!.touched">
+            Município do Título de Eleitor da Mãe inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nome da Escola</mat-label>
+          <input matInput formControlName="nomeEscola" maxlength="255" />
+          <mat-error *ngIf="editForm.get('nomeEscola')!.invalid && editForm.get('nomeEscola')!.touched">
+            Nome da Escola inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Ano Cursando</mat-label>
+          <input matInput formControlName="anoCursando" maxlength="50" />
+          <mat-error *ngIf="editForm.get('anoCursando')!.invalid && editForm.get('anoCursando')!.touched">
+            Ano Cursando inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Turno</mat-label>
+          <mat-select formControlName="turno">
+            <mat-option *ngFor="let turno of turnoValues" [value]="turno">
+              {{ turno }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="editForm.get('turno')!.invalid && editForm.get('turno')!.touched"> Turno inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Média Escolar</mat-label>
+          <input matInput type="number" formControlName="mediaEscolar" />
+          <mat-error *ngIf="editForm.get('mediaEscolar')!.invalid && editForm.get('mediaEscolar')!.touched">
+            Média Escolar inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Prioritário</mat-label>
+          <mat-select formControlName="prioritario">
+            <mat-option *ngFor="let simNao of simNaoValues" [value]="simNao">
+              {{ simNao }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="editForm.get('prioritario')!.invalid && editForm.get('prioritario')!.touched">
+            Prioritário inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Observações</mat-label>
+          <textarea matInput formControlName="obs" maxlength="5000"></textarea>
+          <mat-error *ngIf="editForm.get('obs')!.invalid && editForm.get('obs')!.touched"> Observações inválidas. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Comportamento em Casa</mat-label>
+          <mat-select formControlName="comportamentoCasa">
+            <mat-option *ngFor="let comportamento of comportamentoValues" [value]="comportamento">
+              {{ comportamento }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="editForm.get('comportamentoCasa')!.invalid && editForm.get('comportamentoCasa')!.touched">
+            Comportamento em Casa inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Comportamento na Escola</mat-label>
+          <mat-select formControlName="comportamentoEscola">
+            <mat-option *ngFor="let comportamento of comportamentoValues" [value]="comportamento">
+              {{ comportamento }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="editForm.get('comportamentoEscola')!.invalid && editForm.get('comportamentoEscola')!.touched">
+            Comportamento na Escola inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Possui Deficiência?</mat-label>
+          <mat-select formControlName="deficiencia">
+            <mat-option *ngFor="let simNao of simNaoValues" [value]="simNao">
+              {{ simNao }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="editForm.get('deficiencia')!.invalid && editForm.get('deficiencia')!.touched"> Resposta inválida. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Necessita Adaptações?</mat-label>
+          <mat-select formControlName="adaptacoes">
+            <mat-option *ngFor="let simNao of simNaoValues" [value]="simNao">
+              {{ simNao }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="editForm.get('adaptacoes')!.invalid && editForm.get('adaptacoes')!.touched"> Resposta inválida. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Toma Medicação?</mat-label>
+          <mat-select formControlName="medicacao">
+            <mat-option *ngFor="let simNao of simNaoValues" [value]="simNao">
+              {{ simNao }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="editForm.get('medicacao')!.invalid && editForm.get('medicacao')!.touched"> Resposta inválida. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição da Medicação</mat-label>
+          <textarea matInput formControlName="medicacaoDesc" maxlength="5000"></textarea>
+          <mat-error *ngIf="editForm.get('medicacaoDesc')!.invalid && editForm.get('medicacaoDesc')!.touched">
+            Descrição da Medicação inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Possui Alergia?</mat-label>
+          <mat-select formControlName="alergia">
+            <mat-option *ngFor="let simNao of simNaoValues" [value]="simNao">
+              {{ simNao }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="editForm.get('alergia')!.invalid && editForm.get('alergia')!.touched"> Resposta inválida. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição da Alergia</mat-label>
+          <textarea matInput formControlName="alergiaDesc" maxlength="5000"></textarea>
+          <mat-error *ngIf="editForm.get('alergiaDesc')!.invalid && editForm.get('alergiaDesc')!.touched">
+            Descrição da Alergia inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Histórico Médico</mat-label>
+          <textarea matInput formControlName="historicoMedico" maxlength="5000"></textarea>
+          <mat-error *ngIf="editForm.get('historicoMedico')!.invalid && editForm.get('historicoMedico')!.touched">
+            Histórico Médico inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Renda Familiar</mat-label>
+          <input matInput formControlName="rendaFamiliar" maxlength="20" />
+          <mat-error *ngIf="editForm.get('rendaFamiliar')!.invalid && editForm.get('rendaFamiliar')!.touched">
+            Renda Familiar inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Pessoas que Trabalham</mat-label>
+          <input matInput type="number" formControlName="pessoasTrabalham" />
+          <mat-error *ngIf="editForm.get('pessoasTrabalham')!.invalid && editForm.get('pessoasTrabalham')!.touched">
+            Número inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Número de Pessoas no Lar</mat-label>
+          <input matInput type="number" formControlName="numPessoasLar" />
+          <mat-error *ngIf="editForm.get('numPessoasLar')!.invalid && editForm.get('numPessoasLar')!.touched"> Número inválido. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Recebe Benefício Social?</mat-label>
+          <mat-select formControlName="beneficioSocial">
+            <mat-option *ngFor="let simNao of simNaoValues" [value]="simNao">
+              {{ simNao }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="editForm.get('beneficioSocial')!.invalid && editForm.get('beneficioSocial')!.touched">
+            Resposta inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Benefícios</mat-label>
+          <textarea matInput formControlName="beneficios" maxlength="5000"></textarea>
+          <mat-error *ngIf="editForm.get('beneficios')!.invalid && editForm.get('beneficios')!.touched"> Benefícios inválidos. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de Residência</mat-label>
+          <mat-select formControlName="tipoResidencia">
+            <mat-option *ngFor="let tipoResidencia of tipoResidenciaValues" [value]="tipoResidencia">
+              {{ tipoResidencia }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="editForm.get('tipoResidencia')!.invalid && editForm.get('tipoResidencia')!.touched">
+            Tipo de Residência inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição do Tipo de Residência (se outro)</mat-label>
+          <input matInput formControlName="tipoResidenciaDesc" maxlength="100" />
+          <mat-error *ngIf="editForm.get('tipoResidenciaDesc')!.invalid && editForm.get('tipoResidenciaDesc')!.touched">
+            Descrição inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Situação da Residência</mat-label>
+          <mat-select formControlName="situacaoResidencia">
+            <mat-option *ngFor="let situacaoResidencia of situacaoResidenciaValues" [value]="situacaoResidencia">
+              {{ situacaoResidencia }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="editForm.get('situacaoResidencia')!.invalid && editForm.get('situacaoResidencia')!.touched">
+            Situação da Residência inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição da Situação da Residência (se outra)</mat-label>
+          <input matInput formControlName="situacaoResidenciaDesc" maxlength="100" />
+          <mat-error *ngIf="editForm.get('situacaoResidenciaDesc')!.invalid && editForm.get('situacaoResidenciaDesc')!.touched">
+            Descrição inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contato de Emergência</mat-label>
+          <input matInput formControlName="contatoEmergencia" required maxlength="255" />
+          <mat-error *ngIf="editForm.get('contatoEmergencia')!.invalid && editForm.get('contatoEmergencia')!.touched">
+            Contato de Emergência é obrigatório.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone de Emergência</mat-label>
+          <input matInput formControlName="foneEmergencia" required minlength="10" maxlength="15" pattern="^(\d{2})\s(\d{4,5})-\d{4}$" />
+          <mat-error *ngIf="editForm.get('foneEmergencia')!.invalid && editForm.get('foneEmergencia')!.touched">
+            Telefone de Emergência inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Relação com o Contato de Emergência</mat-label>
+          <input matInput formControlName="relacaoEmergencia" required maxlength="50" />
+          <mat-error *ngIf="editForm.get('relacaoEmergencia')!.invalid && editForm.get('relacaoEmergencia')!.touched">
+            Relação inválida.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="autorizacao">Autorização para Sair Sozinho</mat-checkbox>
+
+        <div class="mt-3">
+          <button mat-raised-button color="primary" type="submit" [disabled]="editForm.invalid || isSaving">
+            <mat-icon>save</mat-icon> Salvar
+          </button>
+          <button mat-raised-button color="warn" type="button" (click)="previousState()"><mat-icon>cancel</mat-icon> Cancelar</button>
         </div>
-
-        @let matriculaRef = editForm.get('matricula')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_matricula" jhiTranslate="cadastroalunoApp.cadastroAluno.matricula">Matricula</label>
-          <input type="text" class="form-control" name="matricula" id="field_matricula" data-cy="matricula" formControlName="matricula" />
-          @if (matriculaRef.invalid && (matriculaRef.dirty || matriculaRef.touched)) {
-            <div>
-              @if (editForm.get('matricula')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '20' }"
-                  >Este campo não pode ter mais de 20 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let grupoRef = editForm.get('grupo')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_grupo" jhiTranslate="cadastroalunoApp.cadastroAluno.grupo">Grupo</label>
-          <input type="text" class="form-control" name="grupo" id="field_grupo" data-cy="grupo" formControlName="grupo" />
-          @if (grupoRef.invalid && (grupoRef.dirty || grupoRef.touched)) {
-            <div>
-              @if (editForm.get('grupo')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '50' }"
-                  >Este campo não pode ter mais de 50 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let nomeRef = editForm.get('nome')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_nome" jhiTranslate="cadastroalunoApp.cadastroAluno.nome">Nome</label>
-          <input type="text" class="form-control" name="nome" id="field_nome" data-cy="nome" formControlName="nome" />
-          @if (nomeRef.invalid && (nomeRef.dirty || nomeRef.touched)) {
-            <div>
-              @if (editForm.get('nome')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
-              }
-              @if (editForm.get('nome')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '255' }"
-                  >Este campo não pode ter mais de 255 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let dnRef = editForm.get('dn')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_dn" jhiTranslate="cadastroalunoApp.cadastroAluno.dn">Dn</label>
-          <div class="input-group">
-            <input
-              id="field_dn"
-              data-cy="dn"
-              type="text"
-              class="form-control"
-              name="dn"
-              ngbDatepicker
-              #dnDp="ngbDatepicker"
-              formControlName="dn"
-            />
-            <button type="button" class="btn btn-secondary" (click)="dnDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
-          </div>
-          @if (dnRef.invalid && (dnRef.dirty || dnRef.touched)) {
-            <div>
-              @if (editForm.get('dn')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
-              }
-            </div>
-          }
-        </div>
-
-        @let cepRef = editForm.get('cep')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_cep" jhiTranslate="cadastroalunoApp.cadastroAluno.cep">Cep</label>
-          <input type="text" class="form-control" name="cep" id="field_cep" data-cy="cep" formControlName="cep" />
-          @if (cepRef.invalid && (cepRef.dirty || cepRef.touched)) {
-            <div>
-              @if (editForm.get('cep')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
-              }
-              @if (editForm.get('cep')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '10' }"
-                  >Este campo não pode ter mais de 10 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let enderecoRef = editForm.get('endereco')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_endereco" jhiTranslate="cadastroalunoApp.cadastroAluno.endereco">Endereco</label>
-          <input type="text" class="form-control" name="endereco" id="field_endereco" data-cy="endereco" formControlName="endereco" />
-          @if (enderecoRef.invalid && (enderecoRef.dirty || enderecoRef.touched)) {
-            <div>
-              @if (editForm.get('endereco')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
-              }
-              @if (editForm.get('endereco')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '5000' }"
-                  >Este campo não pode ter mais de 5000 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let qdRef = editForm.get('qd')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_qd" jhiTranslate="cadastroalunoApp.cadastroAluno.qd">Qd</label>
-          <input type="text" class="form-control" name="qd" id="field_qd" data-cy="qd" formControlName="qd" />
-          @if (qdRef.invalid && (qdRef.dirty || qdRef.touched)) {
-            <div>
-              @if (editForm.get('qd')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '10' }"
-                  >Este campo não pode ter mais de 10 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let loteRef = editForm.get('lote')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_lote" jhiTranslate="cadastroalunoApp.cadastroAluno.lote">Lote</label>
-          <input type="text" class="form-control" name="lote" id="field_lote" data-cy="lote" formControlName="lote" />
-          @if (loteRef.invalid && (loteRef.dirty || loteRef.touched)) {
-            <div>
-              @if (editForm.get('lote')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '10' }"
-                  >Este campo não pode ter mais de 10 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let endnumeroRef = editForm.get('endnumero')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_endnumero" jhiTranslate="cadastroalunoApp.cadastroAluno.endnumero">Endnumero</label>
-          <input type="text" class="form-control" name="endnumero" id="field_endnumero" data-cy="endnumero" formControlName="endnumero" />
-          @if (endnumeroRef.invalid && (endnumeroRef.dirty || endnumeroRef.touched)) {
-            <div>
-              @if (editForm.get('endnumero')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '10' }"
-                  >Este campo não pode ter mais de 10 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let bairroRef = editForm.get('bairro')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_bairro" jhiTranslate="cadastroalunoApp.cadastroAluno.bairro">Bairro</label>
-          <input type="text" class="form-control" name="bairro" id="field_bairro" data-cy="bairro" formControlName="bairro" />
-          @if (bairroRef.invalid && (bairroRef.dirty || bairroRef.touched)) {
-            <div>
-              @if (editForm.get('bairro')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
-                  >Este campo não pode ter mais de 100 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let municipioRef = editForm.get('municipio')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_municipio" jhiTranslate="cadastroalunoApp.cadastroAluno.municipio">Municipio</label>
-          <input type="text" class="form-control" name="municipio" id="field_municipio" data-cy="municipio" formControlName="municipio" />
-          @if (municipioRef.invalid && (municipioRef.dirty || municipioRef.touched)) {
-            <div>
-              @if (editForm.get('municipio')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
-                  >Este campo não pode ter mais de 100 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let ufRef = editForm.get('uf')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_uf" jhiTranslate="cadastroalunoApp.cadastroAluno.uf">Uf</label>
-          <input type="text" class="form-control" name="uf" id="field_uf" data-cy="uf" formControlName="uf" />
-          @if (ufRef.invalid && (ufRef.dirty || ufRef.touched)) {
-            <div>
-              @if (editForm.get('uf')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '2' }"
-                  >Este campo não pode ter mais de 2 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let foneRef = editForm.get('fone')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_fone" jhiTranslate="cadastroalunoApp.cadastroAluno.fone">Fone</label>
-          <input type="text" class="form-control" name="fone" id="field_fone" data-cy="fone" formControlName="fone" />
-          @if (foneRef.invalid && (foneRef.dirty || foneRef.touched)) {
-            <div>
-              @if (editForm.get('fone')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
-              }
-              @if (editForm.get('fone')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '15' }"
-                  >Este campo não pode ter mais de 15 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let certidaoRef = editForm.get('certidao')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_certidao" jhiTranslate="cadastroalunoApp.cadastroAluno.certidao">Certidao</label>
-          <input type="text" class="form-control" name="certidao" id="field_certidao" data-cy="certidao" formControlName="certidao" />
-          @if (certidaoRef.invalid && (certidaoRef.dirty || certidaoRef.touched)) {
-            <div>
-              @if (editForm.get('certidao')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '50' }"
-                  >Este campo não pode ter mais de 50 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let termoRef = editForm.get('termo')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_termo" jhiTranslate="cadastroalunoApp.cadastroAluno.termo">Termo</label>
-          <input type="text" class="form-control" name="termo" id="field_termo" data-cy="termo" formControlName="termo" />
-          @if (termoRef.invalid && (termoRef.dirty || termoRef.touched)) {
-            <div>
-              @if (editForm.get('termo')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '50' }"
-                  >Este campo não pode ter mais de 50 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let cartorioRef = editForm.get('cartorio')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_cartorio" jhiTranslate="cadastroalunoApp.cadastroAluno.cartorio">Cartorio</label>
-          <input type="text" class="form-control" name="cartorio" id="field_cartorio" data-cy="cartorio" formControlName="cartorio" />
-          @if (cartorioRef.invalid && (cartorioRef.dirty || cartorioRef.touched)) {
-            <div>
-              @if (editForm.get('cartorio')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
-                  >Este campo não pode ter mais de 100 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let naturalidadeRef = editForm.get('naturalidade')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_naturalidade" jhiTranslate="cadastroalunoApp.cadastroAluno.naturalidade">Naturalidade</label>
-          <input
-            type="text"
-            class="form-control"
-            name="naturalidade"
-            id="field_naturalidade"
-            data-cy="naturalidade"
-            formControlName="naturalidade"
-          />
-          @if (naturalidadeRef.invalid && (naturalidadeRef.dirty || naturalidadeRef.touched)) {
-            <div>
-              @if (editForm.get('naturalidade')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
-                  >Este campo não pode ter mais de 100 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let rgRef = editForm.get('rg')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_rg" jhiTranslate="cadastroalunoApp.cadastroAluno.rg">Rg</label>
-          <input type="text" class="form-control" name="rg" id="field_rg" data-cy="rg" formControlName="rg" />
-          @if (rgRef.invalid && (rgRef.dirty || rgRef.touched)) {
-            <div>
-              @if (editForm.get('rg')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '20' }"
-                  >Este campo não pode ter mais de 20 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let cpfRef = editForm.get('cpf')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_cpf" jhiTranslate="cadastroalunoApp.cadastroAluno.cpf">Cpf</label>
-          <input type="text" class="form-control" name="cpf" id="field_cpf" data-cy="cpf" formControlName="cpf" />
-          @if (cpfRef.invalid && (cpfRef.dirty || cpfRef.touched)) {
-            <div>
-              @if (editForm.get('cpf')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
-              }
-              @if (editForm.get('cpf')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '14' }"
-                  >Este campo não pode ter mais de 14 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let nisRef = editForm.get('nis')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_nis" jhiTranslate="cadastroalunoApp.cadastroAluno.nis">Nis</label>
-          <input type="text" class="form-control" name="nis" id="field_nis" data-cy="nis" formControlName="nis" />
-          @if (nisRef.invalid && (nisRef.dirty || nisRef.touched)) {
-            <div>
-              @if (editForm.get('nis')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '15' }"
-                  >Este campo não pode ter mais de 15 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let crasRef = editForm.get('cras')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_cras" jhiTranslate="cadastroalunoApp.cadastroAluno.cras">Cras</label>
-          <input type="text" class="form-control" name="cras" id="field_cras" data-cy="cras" formControlName="cras" />
-          @if (crasRef.invalid && (crasRef.dirty || crasRef.touched)) {
-            <div>
-              @if (editForm.get('cras')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
-                  >Este campo não pode ter mais de 100 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let filiacaoPaiRef = editForm.get('filiacaoPai')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_filiacaoPai" jhiTranslate="cadastroalunoApp.cadastroAluno.filiacaoPai">Filiacao Pai</label>
-          <input
-            type="text"
-            class="form-control"
-            name="filiacaoPai"
-            id="field_filiacaoPai"
-            data-cy="filiacaoPai"
-            formControlName="filiacaoPai"
-          />
-          @if (filiacaoPaiRef.invalid && (filiacaoPaiRef.dirty || filiacaoPaiRef.touched)) {
-            <div>
-              @if (editForm.get('filiacaoPai')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '255' }"
-                  >Este campo não pode ter mais de 255 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let paiTelefoneRef = editForm.get('paiTelefone')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_paiTelefone" jhiTranslate="cadastroalunoApp.cadastroAluno.paiTelefone">Pai Telefone</label>
-          <input
-            type="text"
-            class="form-control"
-            name="paiTelefone"
-            id="field_paiTelefone"
-            data-cy="paiTelefone"
-            formControlName="paiTelefone"
-          />
-          @if (paiTelefoneRef.invalid && (paiTelefoneRef.dirty || paiTelefoneRef.touched)) {
-            <div>
-              @if (editForm.get('paiTelefone')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '15' }"
-                  >Este campo não pode ter mais de 15 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let paiNaturalidadeRef = editForm.get('paiNaturalidade')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_paiNaturalidade" jhiTranslate="cadastroalunoApp.cadastroAluno.paiNaturalidade"
-            >Pai Naturalidade</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="paiNaturalidade"
-            id="field_paiNaturalidade"
-            data-cy="paiNaturalidade"
-            formControlName="paiNaturalidade"
-          />
-          @if (paiNaturalidadeRef.invalid && (paiNaturalidadeRef.dirty || paiNaturalidadeRef.touched)) {
-            <div>
-              @if (editForm.get('paiNaturalidade')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
-                  >Este campo não pode ter mais de 100 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let paiUfRef = editForm.get('paiUf')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_paiUf" jhiTranslate="cadastroalunoApp.cadastroAluno.paiUf">Pai Uf</label>
-          <input type="text" class="form-control" name="paiUf" id="field_paiUf" data-cy="paiUf" formControlName="paiUf" />
-          @if (paiUfRef.invalid && (paiUfRef.dirty || paiUfRef.touched)) {
-            <div>
-              @if (editForm.get('paiUf')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '2' }"
-                  >Este campo não pode ter mais de 2 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let paiRgRef = editForm.get('paiRg')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_paiRg" jhiTranslate="cadastroalunoApp.cadastroAluno.paiRg">Pai Rg</label>
-          <input type="text" class="form-control" name="paiRg" id="field_paiRg" data-cy="paiRg" formControlName="paiRg" />
-          @if (paiRgRef.invalid && (paiRgRef.dirty || paiRgRef.touched)) {
-            <div>
-              @if (editForm.get('paiRg')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '20' }"
-                  >Este campo não pode ter mais de 20 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_paiDataNascimento" jhiTranslate="cadastroalunoApp.cadastroAluno.paiDataNascimento"
-            >Pai Data Nascimento</label
-          >
-          <div class="input-group">
-            <input
-              id="field_paiDataNascimento"
-              data-cy="paiDataNascimento"
-              type="text"
-              class="form-control"
-              name="paiDataNascimento"
-              ngbDatepicker
-              #paiDataNascimentoDp="ngbDatepicker"
-              formControlName="paiDataNascimento"
-            />
-            <button type="button" class="btn btn-secondary" (click)="paiDataNascimentoDp.toggle()">
-              <fa-icon icon="calendar-alt"></fa-icon>
-            </button>
-          </div>
-        </div>
-
-        @let paiCpfRef = editForm.get('paiCpf')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_paiCpf" jhiTranslate="cadastroalunoApp.cadastroAluno.paiCpf">Pai Cpf</label>
-          <input type="text" class="form-control" name="paiCpf" id="field_paiCpf" data-cy="paiCpf" formControlName="paiCpf" />
-          @if (paiCpfRef.invalid && (paiCpfRef.dirty || paiCpfRef.touched)) {
-            <div>
-              @if (editForm.get('paiCpf')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '14' }"
-                  >Este campo não pode ter mais de 14 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let paiNisRef = editForm.get('paiNis')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_paiNis" jhiTranslate="cadastroalunoApp.cadastroAluno.paiNis">Pai Nis</label>
-          <input type="text" class="form-control" name="paiNis" id="field_paiNis" data-cy="paiNis" formControlName="paiNis" />
-          @if (paiNisRef.invalid && (paiNisRef.dirty || paiNisRef.touched)) {
-            <div>
-              @if (editForm.get('paiNis')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '15' }"
-                  >Este campo não pode ter mais de 15 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let paiTituloEleitorRef = editForm.get('paiTituloEleitor')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_paiTituloEleitor" jhiTranslate="cadastroalunoApp.cadastroAluno.paiTituloEleitor"
-            >Pai Titulo Eleitor</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="paiTituloEleitor"
-            id="field_paiTituloEleitor"
-            data-cy="paiTituloEleitor"
-            formControlName="paiTituloEleitor"
-          />
-          @if (paiTituloEleitorRef.invalid && (paiTituloEleitorRef.dirty || paiTituloEleitorRef.touched)) {
-            <div>
-              @if (editForm.get('paiTituloEleitor')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '20' }"
-                  >Este campo não pode ter mais de 20 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let paiZonaRef = editForm.get('paiZona')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_paiZona" jhiTranslate="cadastroalunoApp.cadastroAluno.paiZona">Pai Zona</label>
-          <input type="text" class="form-control" name="paiZona" id="field_paiZona" data-cy="paiZona" formControlName="paiZona" />
-          @if (paiZonaRef.invalid && (paiZonaRef.dirty || paiZonaRef.touched)) {
-            <div>
-              @if (editForm.get('paiZona')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '10' }"
-                  >Este campo não pode ter mais de 10 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let paiSecaoRef = editForm.get('paiSecao')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_paiSecao" jhiTranslate="cadastroalunoApp.cadastroAluno.paiSecao">Pai Secao</label>
-          <input type="text" class="form-control" name="paiSecao" id="field_paiSecao" data-cy="paiSecao" formControlName="paiSecao" />
-          @if (paiSecaoRef.invalid && (paiSecaoRef.dirty || paiSecaoRef.touched)) {
-            <div>
-              @if (editForm.get('paiSecao')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '10' }"
-                  >Este campo não pode ter mais de 10 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let paiMunicipioRef = editForm.get('paiMunicipio')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_paiMunicipio" jhiTranslate="cadastroalunoApp.cadastroAluno.paiMunicipio"
-            >Pai Municipio</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="paiMunicipio"
-            id="field_paiMunicipio"
-            data-cy="paiMunicipio"
-            formControlName="paiMunicipio"
-          />
-          @if (paiMunicipioRef.invalid && (paiMunicipioRef.dirty || paiMunicipioRef.touched)) {
-            <div>
-              @if (editForm.get('paiMunicipio')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
-                  >Este campo não pode ter mais de 100 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let filiacaoMaeRef = editForm.get('filiacaoMae')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_filiacaoMae" jhiTranslate="cadastroalunoApp.cadastroAluno.filiacaoMae">Filiacao Mae</label>
-          <input
-            type="text"
-            class="form-control"
-            name="filiacaoMae"
-            id="field_filiacaoMae"
-            data-cy="filiacaoMae"
-            formControlName="filiacaoMae"
-          />
-          @if (filiacaoMaeRef.invalid && (filiacaoMaeRef.dirty || filiacaoMaeRef.touched)) {
-            <div>
-              @if (editForm.get('filiacaoMae')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
-              }
-              @if (editForm.get('filiacaoMae')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '255' }"
-                  >Este campo não pode ter mais de 255 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let maeTelefoneRef = editForm.get('maeTelefone')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_maeTelefone" jhiTranslate="cadastroalunoApp.cadastroAluno.maeTelefone">Mae Telefone</label>
-          <input
-            type="text"
-            class="form-control"
-            name="maeTelefone"
-            id="field_maeTelefone"
-            data-cy="maeTelefone"
-            formControlName="maeTelefone"
-          />
-          @if (maeTelefoneRef.invalid && (maeTelefoneRef.dirty || maeTelefoneRef.touched)) {
-            <div>
-              @if (editForm.get('maeTelefone')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '15' }"
-                  >Este campo não pode ter mais de 15 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let maeNaturalidadeRef = editForm.get('maeNaturalidade')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_maeNaturalidade" jhiTranslate="cadastroalunoApp.cadastroAluno.maeNaturalidade"
-            >Mae Naturalidade</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="maeNaturalidade"
-            id="field_maeNaturalidade"
-            data-cy="maeNaturalidade"
-            formControlName="maeNaturalidade"
-          />
-          @if (maeNaturalidadeRef.invalid && (maeNaturalidadeRef.dirty || maeNaturalidadeRef.touched)) {
-            <div>
-              @if (editForm.get('maeNaturalidade')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
-                  >Este campo não pode ter mais de 100 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let maeUfRef = editForm.get('maeUf')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_maeUf" jhiTranslate="cadastroalunoApp.cadastroAluno.maeUf">Mae Uf</label>
-          <input type="text" class="form-control" name="maeUf" id="field_maeUf" data-cy="maeUf" formControlName="maeUf" />
-          @if (maeUfRef.invalid && (maeUfRef.dirty || maeUfRef.touched)) {
-            <div>
-              @if (editForm.get('maeUf')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '2' }"
-                  >Este campo não pode ter mais de 2 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let maeRgRef = editForm.get('maeRg')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_maeRg" jhiTranslate="cadastroalunoApp.cadastroAluno.maeRg">Mae Rg</label>
-          <input type="text" class="form-control" name="maeRg" id="field_maeRg" data-cy="maeRg" formControlName="maeRg" />
-          @if (maeRgRef.invalid && (maeRgRef.dirty || maeRgRef.touched)) {
-            <div>
-              @if (editForm.get('maeRg')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '20' }"
-                  >Este campo não pode ter mais de 20 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_maeDataNascimento" jhiTranslate="cadastroalunoApp.cadastroAluno.maeDataNascimento"
-            >Mae Data Nascimento</label
-          >
-          <div class="input-group">
-            <input
-              id="field_maeDataNascimento"
-              data-cy="maeDataNascimento"
-              type="text"
-              class="form-control"
-              name="maeDataNascimento"
-              ngbDatepicker
-              #maeDataNascimentoDp="ngbDatepicker"
-              formControlName="maeDataNascimento"
-            />
-            <button type="button" class="btn btn-secondary" (click)="maeDataNascimentoDp.toggle()">
-              <fa-icon icon="calendar-alt"></fa-icon>
-            </button>
-          </div>
-        </div>
-
-        @let maeCpfRef = editForm.get('maeCpf')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_maeCpf" jhiTranslate="cadastroalunoApp.cadastroAluno.maeCpf">Mae Cpf</label>
-          <input type="text" class="form-control" name="maeCpf" id="field_maeCpf" data-cy="maeCpf" formControlName="maeCpf" />
-          @if (maeCpfRef.invalid && (maeCpfRef.dirty || maeCpfRef.touched)) {
-            <div>
-              @if (editForm.get('maeCpf')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '14' }"
-                  >Este campo não pode ter mais de 14 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let maeNisRef = editForm.get('maeNis')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_maeNis" jhiTranslate="cadastroalunoApp.cadastroAluno.maeNis">Mae Nis</label>
-          <input type="text" class="form-control" name="maeNis" id="field_maeNis" data-cy="maeNis" formControlName="maeNis" />
-          @if (maeNisRef.invalid && (maeNisRef.dirty || maeNisRef.touched)) {
-            <div>
-              @if (editForm.get('maeNis')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '15' }"
-                  >Este campo não pode ter mais de 15 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let maeTituloEleitorRef = editForm.get('maeTituloEleitor')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_maeTituloEleitor" jhiTranslate="cadastroalunoApp.cadastroAluno.maeTituloEleitor"
-            >Mae Titulo Eleitor</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="maeTituloEleitor"
-            id="field_maeTituloEleitor"
-            data-cy="maeTituloEleitor"
-            formControlName="maeTituloEleitor"
-          />
-          @if (maeTituloEleitorRef.invalid && (maeTituloEleitorRef.dirty || maeTituloEleitorRef.touched)) {
-            <div>
-              @if (editForm.get('maeTituloEleitor')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '20' }"
-                  >Este campo não pode ter mais de 20 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let maeZonaRef = editForm.get('maeZona')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_maeZona" jhiTranslate="cadastroalunoApp.cadastroAluno.maeZona">Mae Zona</label>
-          <input type="text" class="form-control" name="maeZona" id="field_maeZona" data-cy="maeZona" formControlName="maeZona" />
-          @if (maeZonaRef.invalid && (maeZonaRef.dirty || maeZonaRef.touched)) {
-            <div>
-              @if (editForm.get('maeZona')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '10' }"
-                  >Este campo não pode ter mais de 10 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let maeSecaoRef = editForm.get('maeSecao')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_maeSecao" jhiTranslate="cadastroalunoApp.cadastroAluno.maeSecao">Mae Secao</label>
-          <input type="text" class="form-control" name="maeSecao" id="field_maeSecao" data-cy="maeSecao" formControlName="maeSecao" />
-          @if (maeSecaoRef.invalid && (maeSecaoRef.dirty || maeSecaoRef.touched)) {
-            <div>
-              @if (editForm.get('maeSecao')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '10' }"
-                  >Este campo não pode ter mais de 10 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let maeMunicipioRef = editForm.get('maeMunicipio')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_maeMunicipio" jhiTranslate="cadastroalunoApp.cadastroAluno.maeMunicipio"
-            >Mae Municipio</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="maeMunicipio"
-            id="field_maeMunicipio"
-            data-cy="maeMunicipio"
-            formControlName="maeMunicipio"
-          />
-          @if (maeMunicipioRef.invalid && (maeMunicipioRef.dirty || maeMunicipioRef.touched)) {
-            <div>
-              @if (editForm.get('maeMunicipio')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
-                  >Este campo não pode ter mais de 100 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let nomeEscolaRef = editForm.get('nomeEscola')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_nomeEscola" jhiTranslate="cadastroalunoApp.cadastroAluno.nomeEscola">Nome Escola</label>
-          <input
-            type="text"
-            class="form-control"
-            name="nomeEscola"
-            id="field_nomeEscola"
-            data-cy="nomeEscola"
-            formControlName="nomeEscola"
-          />
-          @if (nomeEscolaRef.invalid && (nomeEscolaRef.dirty || nomeEscolaRef.touched)) {
-            <div>
-              @if (editForm.get('nomeEscola')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '255' }"
-                  >Este campo não pode ter mais de 255 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let anoCursandoRef = editForm.get('anoCursando')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_anoCursando" jhiTranslate="cadastroalunoApp.cadastroAluno.anoCursando">Ano Cursando</label>
-          <input
-            type="text"
-            class="form-control"
-            name="anoCursando"
-            id="field_anoCursando"
-            data-cy="anoCursando"
-            formControlName="anoCursando"
-          />
-          @if (anoCursandoRef.invalid && (anoCursandoRef.dirty || anoCursandoRef.touched)) {
-            <div>
-              @if (editForm.get('anoCursando')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '50' }"
-                  >Este campo não pode ter mais de 50 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_turno" jhiTranslate="cadastroalunoApp.cadastroAluno.turno">Turno</label>
-          <select class="form-control" name="turno" formControlName="turno" id="field_turno" data-cy="turno">
-            <option [ngValue]="null">{{ 'cadastroalunoApp.Turno.null' | translate }}</option>
-            @for (turno of turnoValues; track $index) {
-              <option [value]="turno">{{ 'cadastroalunoApp.Turno.' + turno | translate }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_mediaEscolar" jhiTranslate="cadastroalunoApp.cadastroAluno.mediaEscolar"
-            >Media Escolar</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            name="mediaEscolar"
-            id="field_mediaEscolar"
-            data-cy="mediaEscolar"
-            formControlName="mediaEscolar"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_prioritario" jhiTranslate="cadastroalunoApp.cadastroAluno.prioritario">Prioritario</label>
-          <select class="form-control" name="prioritario" formControlName="prioritario" id="field_prioritario" data-cy="prioritario">
-            <option [ngValue]="null">{{ 'cadastroalunoApp.SimNao.null' | translate }}</option>
-            @for (simNao of simNaoValues; track $index) {
-              <option [value]="simNao">{{ 'cadastroalunoApp.SimNao.' + simNao | translate }}</option>
-            }
-          </select>
-        </div>
-
-        @let obsRef = editForm.get('obs')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_obs" jhiTranslate="cadastroalunoApp.cadastroAluno.obs">Obs</label>
-          <input type="text" class="form-control" name="obs" id="field_obs" data-cy="obs" formControlName="obs" />
-          @if (obsRef.invalid && (obsRef.dirty || obsRef.touched)) {
-            <div>
-              @if (editForm.get('obs')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '5000' }"
-                  >Este campo não pode ter mais de 5000 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_comportamentoCasa" jhiTranslate="cadastroalunoApp.cadastroAluno.comportamentoCasa"
-            >Comportamento Casa</label
-          >
-          <select
-            class="form-control"
-            name="comportamentoCasa"
-            formControlName="comportamentoCasa"
-            id="field_comportamentoCasa"
-            data-cy="comportamentoCasa"
-          >
-            <option [ngValue]="null">{{ 'cadastroalunoApp.Comportamento.null' | translate }}</option>
-            @for (comportamento of comportamentoValues; track $index) {
-              <option [value]="comportamento">{{ 'cadastroalunoApp.Comportamento.' + comportamento | translate }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_comportamentoEscola" jhiTranslate="cadastroalunoApp.cadastroAluno.comportamentoEscola"
-            >Comportamento Escola</label
-          >
-          <select
-            class="form-control"
-            name="comportamentoEscola"
-            formControlName="comportamentoEscola"
-            id="field_comportamentoEscola"
-            data-cy="comportamentoEscola"
-          >
-            <option [ngValue]="null">{{ 'cadastroalunoApp.Comportamento.null' | translate }}</option>
-            @for (comportamento of comportamentoValues; track $index) {
-              <option [value]="comportamento">{{ 'cadastroalunoApp.Comportamento.' + comportamento | translate }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_deficiencia" jhiTranslate="cadastroalunoApp.cadastroAluno.deficiencia">Deficiencia</label>
-          <select class="form-control" name="deficiencia" formControlName="deficiencia" id="field_deficiencia" data-cy="deficiencia">
-            <option [ngValue]="null">{{ 'cadastroalunoApp.SimNao.null' | translate }}</option>
-            @for (simNao of simNaoValues; track $index) {
-              <option [value]="simNao">{{ 'cadastroalunoApp.SimNao.' + simNao | translate }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_adaptacoes" jhiTranslate="cadastroalunoApp.cadastroAluno.adaptacoes">Adaptacoes</label>
-          <select class="form-control" name="adaptacoes" formControlName="adaptacoes" id="field_adaptacoes" data-cy="adaptacoes">
-            <option [ngValue]="null">{{ 'cadastroalunoApp.SimNao.null' | translate }}</option>
-            @for (simNao of simNaoValues; track $index) {
-              <option [value]="simNao">{{ 'cadastroalunoApp.SimNao.' + simNao | translate }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_medicacao" jhiTranslate="cadastroalunoApp.cadastroAluno.medicacao">Medicacao</label>
-          <select class="form-control" name="medicacao" formControlName="medicacao" id="field_medicacao" data-cy="medicacao">
-            <option [ngValue]="null">{{ 'cadastroalunoApp.SimNao.null' | translate }}</option>
-            @for (simNao of simNaoValues; track $index) {
-              <option [value]="simNao">{{ 'cadastroalunoApp.SimNao.' + simNao | translate }}</option>
-            }
-          </select>
-        </div>
-
-        @let medicacaoDescRef = editForm.get('medicacaoDesc')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_medicacaoDesc" jhiTranslate="cadastroalunoApp.cadastroAluno.medicacaoDesc"
-            >Medicacao Desc</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="medicacaoDesc"
-            id="field_medicacaoDesc"
-            data-cy="medicacaoDesc"
-            formControlName="medicacaoDesc"
-          />
-          @if (medicacaoDescRef.invalid && (medicacaoDescRef.dirty || medicacaoDescRef.touched)) {
-            <div>
-              @if (editForm.get('medicacaoDesc')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '5000' }"
-                  >Este campo não pode ter mais de 5000 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_alergia" jhiTranslate="cadastroalunoApp.cadastroAluno.alergia">Alergia</label>
-          <select class="form-control" name="alergia" formControlName="alergia" id="field_alergia" data-cy="alergia">
-            <option [ngValue]="null">{{ 'cadastroalunoApp.SimNao.null' | translate }}</option>
-            @for (simNao of simNaoValues; track $index) {
-              <option [value]="simNao">{{ 'cadastroalunoApp.SimNao.' + simNao | translate }}</option>
-            }
-          </select>
-        </div>
-
-        @let alergiaDescRef = editForm.get('alergiaDesc')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_alergiaDesc" jhiTranslate="cadastroalunoApp.cadastroAluno.alergiaDesc">Alergia Desc</label>
-          <input
-            type="text"
-            class="form-control"
-            name="alergiaDesc"
-            id="field_alergiaDesc"
-            data-cy="alergiaDesc"
-            formControlName="alergiaDesc"
-          />
-          @if (alergiaDescRef.invalid && (alergiaDescRef.dirty || alergiaDescRef.touched)) {
-            <div>
-              @if (editForm.get('alergiaDesc')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '5000' }"
-                  >Este campo não pode ter mais de 5000 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let historicoMedicoRef = editForm.get('historicoMedico')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_historicoMedico" jhiTranslate="cadastroalunoApp.cadastroAluno.historicoMedico"
-            >Historico Medico</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="historicoMedico"
-            id="field_historicoMedico"
-            data-cy="historicoMedico"
-            formControlName="historicoMedico"
-          />
-          @if (historicoMedicoRef.invalid && (historicoMedicoRef.dirty || historicoMedicoRef.touched)) {
-            <div>
-              @if (editForm.get('historicoMedico')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '5000' }"
-                  >Este campo não pode ter mais de 5000 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let rendaFamiliarRef = editForm.get('rendaFamiliar')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_rendaFamiliar" jhiTranslate="cadastroalunoApp.cadastroAluno.rendaFamiliar"
-            >Renda Familiar</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="rendaFamiliar"
-            id="field_rendaFamiliar"
-            data-cy="rendaFamiliar"
-            formControlName="rendaFamiliar"
-          />
-          @if (rendaFamiliarRef.invalid && (rendaFamiliarRef.dirty || rendaFamiliarRef.touched)) {
-            <div>
-              @if (editForm.get('rendaFamiliar')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '20' }"
-                  >Este campo não pode ter mais de 20 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_pessoasTrabalham" jhiTranslate="cadastroalunoApp.cadastroAluno.pessoasTrabalham"
-            >Pessoas Trabalham</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            name="pessoasTrabalham"
-            id="field_pessoasTrabalham"
-            data-cy="pessoasTrabalham"
-            formControlName="pessoasTrabalham"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_numPessoasLar" jhiTranslate="cadastroalunoApp.cadastroAluno.numPessoasLar"
-            >Num Pessoas Lar</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            name="numPessoasLar"
-            id="field_numPessoasLar"
-            data-cy="numPessoasLar"
-            formControlName="numPessoasLar"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_beneficioSocial" jhiTranslate="cadastroalunoApp.cadastroAluno.beneficioSocial"
-            >Beneficio Social</label
-          >
-          <select
-            class="form-control"
-            name="beneficioSocial"
-            formControlName="beneficioSocial"
-            id="field_beneficioSocial"
-            data-cy="beneficioSocial"
-          >
-            <option [ngValue]="null">{{ 'cadastroalunoApp.SimNao.null' | translate }}</option>
-            @for (simNao of simNaoValues; track $index) {
-              <option [value]="simNao">{{ 'cadastroalunoApp.SimNao.' + simNao | translate }}</option>
-            }
-          </select>
-        </div>
-
-        @let beneficiosRef = editForm.get('beneficios')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_beneficios" jhiTranslate="cadastroalunoApp.cadastroAluno.beneficios">Beneficios</label>
-          <input
-            type="text"
-            class="form-control"
-            name="beneficios"
-            id="field_beneficios"
-            data-cy="beneficios"
-            formControlName="beneficios"
-          />
-          @if (beneficiosRef.invalid && (beneficiosRef.dirty || beneficiosRef.touched)) {
-            <div>
-              @if (editForm.get('beneficios')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '5000' }"
-                  >Este campo não pode ter mais de 5000 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_tipoResidencia" jhiTranslate="cadastroalunoApp.cadastroAluno.tipoResidencia"
-            >Tipo Residencia</label
-          >
-          <select
-            class="form-control"
-            name="tipoResidencia"
-            formControlName="tipoResidencia"
-            id="field_tipoResidencia"
-            data-cy="tipoResidencia"
-          >
-            <option [ngValue]="null">{{ 'cadastroalunoApp.TipoResidencia.null' | translate }}</option>
-            @for (tipoResidencia of tipoResidenciaValues; track $index) {
-              <option [value]="tipoResidencia">{{ 'cadastroalunoApp.TipoResidencia.' + tipoResidencia | translate }}</option>
-            }
-          </select>
-        </div>
-
-        @let tipoResidenciaDescRef = editForm.get('tipoResidenciaDesc')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_tipoResidenciaDesc" jhiTranslate="cadastroalunoApp.cadastroAluno.tipoResidenciaDesc"
-            >Tipo Residencia Desc</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="tipoResidenciaDesc"
-            id="field_tipoResidenciaDesc"
-            data-cy="tipoResidenciaDesc"
-            formControlName="tipoResidenciaDesc"
-          />
-          @if (tipoResidenciaDescRef.invalid && (tipoResidenciaDescRef.dirty || tipoResidenciaDescRef.touched)) {
-            <div>
-              @if (editForm.get('tipoResidenciaDesc')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
-                  >Este campo não pode ter mais de 100 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_situacaoResidencia" jhiTranslate="cadastroalunoApp.cadastroAluno.situacaoResidencia"
-            >Situacao Residencia</label
-          >
-          <select
-            class="form-control"
-            name="situacaoResidencia"
-            formControlName="situacaoResidencia"
-            id="field_situacaoResidencia"
-            data-cy="situacaoResidencia"
-          >
-            <option [ngValue]="null">{{ 'cadastroalunoApp.SituacaoResidencia.null' | translate }}</option>
-            @for (situacaoResidencia of situacaoResidenciaValues; track $index) {
-              <option [value]="situacaoResidencia">{{ 'cadastroalunoApp.SituacaoResidencia.' + situacaoResidencia | translate }}</option>
-            }
-          </select>
-        </div>
-
-        @let situacaoResidenciaDescRef = editForm.get('situacaoResidenciaDesc')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_situacaoResidenciaDesc" jhiTranslate="cadastroalunoApp.cadastroAluno.situacaoResidenciaDesc"
-            >Situacao Residencia Desc</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="situacaoResidenciaDesc"
-            id="field_situacaoResidenciaDesc"
-            data-cy="situacaoResidenciaDesc"
-            formControlName="situacaoResidenciaDesc"
-          />
-          @if (situacaoResidenciaDescRef.invalid && (situacaoResidenciaDescRef.dirty || situacaoResidenciaDescRef.touched)) {
-            <div>
-              @if (editForm.get('situacaoResidenciaDesc')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
-                  >Este campo não pode ter mais de 100 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let contatoEmergenciaRef = editForm.get('contatoEmergencia')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_contatoEmergencia" jhiTranslate="cadastroalunoApp.cadastroAluno.contatoEmergencia"
-            >Contato Emergencia</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="contatoEmergencia"
-            id="field_contatoEmergencia"
-            data-cy="contatoEmergencia"
-            formControlName="contatoEmergencia"
-          />
-          @if (contatoEmergenciaRef.invalid && (contatoEmergenciaRef.dirty || contatoEmergenciaRef.touched)) {
-            <div>
-              @if (editForm.get('contatoEmergencia')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
-              }
-              @if (editForm.get('contatoEmergencia')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '255' }"
-                  >Este campo não pode ter mais de 255 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let foneEmergenciaRef = editForm.get('foneEmergencia')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_foneEmergencia" jhiTranslate="cadastroalunoApp.cadastroAluno.foneEmergencia"
-            >Fone Emergencia</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="foneEmergencia"
-            id="field_foneEmergencia"
-            data-cy="foneEmergencia"
-            formControlName="foneEmergencia"
-          />
-          @if (foneEmergenciaRef.invalid && (foneEmergenciaRef.dirty || foneEmergenciaRef.touched)) {
-            <div>
-              @if (editForm.get('foneEmergencia')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
-              }
-              @if (editForm.get('foneEmergencia')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '15' }"
-                  >Este campo não pode ter mais de 15 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let relacaoEmergenciaRef = editForm.get('relacaoEmergencia')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_relacaoEmergencia" jhiTranslate="cadastroalunoApp.cadastroAluno.relacaoEmergencia"
-            >Relacao Emergencia</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="relacaoEmergencia"
-            id="field_relacaoEmergencia"
-            data-cy="relacaoEmergencia"
-            formControlName="relacaoEmergencia"
-          />
-          @if (relacaoEmergenciaRef.invalid && (relacaoEmergenciaRef.dirty || relacaoEmergenciaRef.touched)) {
-            <div>
-              @if (editForm.get('relacaoEmergencia')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
-              }
-              @if (editForm.get('relacaoEmergencia')?.errors?.maxlength) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '50' }"
-                  >Este campo não pode ter mais de 50 caracteres.</small
-                >
-              }
-            </div>
-          }
-        </div>
-
-        @let autorizacaoRef = editForm.get('autorizacao')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_autorizacao" jhiTranslate="cadastroalunoApp.cadastroAluno.autorizacao">Autorizacao</label>
-          <input
-            type="checkbox"
-            class="form-check"
-            name="autorizacao"
-            id="field_autorizacao"
-            data-cy="autorizacao"
-            formControlName="autorizacao"
-          />
-          @if (autorizacaoRef.invalid && (autorizacaoRef.dirty || autorizacaoRef.touched)) {
-            <div>
-              @if (editForm.get('autorizacao')?.errors?.required) {
-                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
-              }
-            </div>
-          }
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_fotoAluno" jhiTranslate="cadastroalunoApp.cadastroAluno.fotoAluno">Foto Aluno</label>
-          <input type="text" class="form-control" name="fotoAluno" id="field_fotoAluno" data-cy="fotoAluno" formControlName="fotoAluno" />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_fotoMae" jhiTranslate="cadastroalunoApp.cadastroAluno.fotoMae">Foto Mae</label>
-          <input type="text" class="form-control" name="fotoMae" id="field_fotoMae" data-cy="fotoMae" formControlName="fotoMae" />
-        </div>
-      </div>
-
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancelar</span>
-        </button>
-
-        <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
-        >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salvar</span>
-        </button>
       </div>
     </form>
   </div>
