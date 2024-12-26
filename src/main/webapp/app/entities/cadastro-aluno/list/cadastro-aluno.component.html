@@ -1,11 +1,11 @@
 <div>
   <h2 id="page-heading" data-cy="CadastroAlunoHeading">
-    <span jhiTranslate="cadastroaluno1App.cadastroAluno.home.title">Cadastro Alunos</span>
+    <span jhiTranslate="cadastroalunoApp.cadastroAluno.home.title">Cadastro Alunos</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
-        <span jhiTranslate="cadastroaluno1App.cadastroAluno.home.refreshListLabel">Atualizar lista</span>
+        <span jhiTranslate="cadastroalunoApp.cadastroAluno.home.refreshListLabel">Atualizar lista</span>
       </button>
 
       <button
@@ -15,7 +15,7 @@
         [routerLink]="['/cadastro-aluno/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span class="hidden-sm-down" jhiTranslate="cadastroaluno1App.cadastroAluno.home.createLabel">Criar novo Cadastro Aluno</span>
+        <span class="hidden-sm-down" jhiTranslate="cadastroalunoApp.cadastroAluno.home.createLabel">Criar novo Cadastro Aluno</span>
       </button>
     </div>
   </h2>
@@ -27,7 +27,7 @@
   <form name="searchForm" class="row row-cols-sm-auto align-items-center">
     <div class="col-sm-12">
       <div class="input-group w-100 mt-3">
-        <label class="visually-hidden" for="currentSearch" jhiTranslate="cadastroaluno1App.cadastroAluno.home.search"
+        <label class="visually-hidden" for="currentSearch" jhiTranslate="cadastroalunoApp.cadastroAluno.home.search"
           >Pesquisar por Cadastro Aluno</label
         >
         <input
@@ -36,7 +36,7 @@
           [(ngModel)]="currentSearch"
           id="currentSearch"
           name="currentSearch"
-          placeholder="{{ 'cadastroaluno1App.cadastroAluno.home.search' | translate }}"
+          placeholder="{{ 'cadastroalunoApp.cadastroAluno.home.search' | translate }}"
         />
 
         <button class="btn btn-info" (click)="search(currentSearch)">
@@ -54,7 +54,7 @@
 
   @if (cadastroAlunos().length === 0) {
     <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="cadastroaluno1App.cadastroAluno.home.notFound">Nenhum Cadastro Aluno encontrado</span>
+      <span jhiTranslate="cadastroalunoApp.cadastroAluno.home.notFound">Nenhum Cadastro Aluno encontrado</span>
     </div>
   } @else {
     <div class="table-responsive table-entities" id="entities">
@@ -70,14 +70,14 @@
             </th>
             <th scope="col" jhiSortBy="dataCadastro">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.dataCadastro">Data Cadastro</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.dataCadastro">Data Cadastro</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="matricula">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.matricula">Matricula</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.matricula">Matricula</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -85,7 +85,7 @@
             </th>
             <th scope="col" jhiSortBy="grupo">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.grupo">Grupo</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.grupo">Grupo</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -93,7 +93,7 @@
             </th>
             <th scope="col" jhiSortBy="nome">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.nome">Nome</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.nome">Nome</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -101,14 +101,14 @@
             </th>
             <th scope="col" jhiSortBy="dn">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.dn">Dn</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.dn">Dn</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="cep">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.cep">Cep</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.cep">Cep</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -116,7 +116,7 @@
             </th>
             <th scope="col" jhiSortBy="endereco">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.endereco">Endereco</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.endereco">Endereco</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -124,7 +124,7 @@
             </th>
             <th scope="col" jhiSortBy="qd">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.qd">Qd</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.qd">Qd</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -132,7 +132,7 @@
             </th>
             <th scope="col" jhiSortBy="lote">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.lote">Lote</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.lote">Lote</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -140,7 +140,7 @@
             </th>
             <th scope="col" jhiSortBy="endnumero">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.endnumero">Endnumero</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.endnumero">Endnumero</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -148,7 +148,7 @@
             </th>
             <th scope="col" jhiSortBy="bairro">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.bairro">Bairro</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.bairro">Bairro</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -156,7 +156,7 @@
             </th>
             <th scope="col" jhiSortBy="municipio">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.municipio">Municipio</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.municipio">Municipio</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -164,7 +164,7 @@
             </th>
             <th scope="col" jhiSortBy="uf">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.uf">Uf</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.uf">Uf</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -172,7 +172,7 @@
             </th>
             <th scope="col" jhiSortBy="fone">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.fone">Fone</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.fone">Fone</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -180,7 +180,7 @@
             </th>
             <th scope="col" jhiSortBy="certidao">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.certidao">Certidao</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.certidao">Certidao</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -188,7 +188,7 @@
             </th>
             <th scope="col" jhiSortBy="termo">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.termo">Termo</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.termo">Termo</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -196,7 +196,7 @@
             </th>
             <th scope="col" jhiSortBy="cartorio">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.cartorio">Cartorio</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.cartorio">Cartorio</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -204,7 +204,7 @@
             </th>
             <th scope="col" jhiSortBy="naturalidade">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.naturalidade">Naturalidade</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.naturalidade">Naturalidade</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -212,7 +212,7 @@
             </th>
             <th scope="col" jhiSortBy="rg">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.rg">Rg</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.rg">Rg</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -220,7 +220,7 @@
             </th>
             <th scope="col" jhiSortBy="cpf">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.cpf">Cpf</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.cpf">Cpf</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -228,7 +228,7 @@
             </th>
             <th scope="col" jhiSortBy="nis">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.nis">Nis</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.nis">Nis</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -236,7 +236,7 @@
             </th>
             <th scope="col" jhiSortBy="cras">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.cras">Cras</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.cras">Cras</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -244,7 +244,7 @@
             </th>
             <th scope="col" jhiSortBy="filiacaoPai">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.filiacaoPai">Filiacao Pai</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.filiacaoPai">Filiacao Pai</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -252,7 +252,7 @@
             </th>
             <th scope="col" jhiSortBy="paiTelefone">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiTelefone">Pai Telefone</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.paiTelefone">Pai Telefone</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -260,7 +260,7 @@
             </th>
             <th scope="col" jhiSortBy="paiNaturalidade">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiNaturalidade">Pai Naturalidade</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.paiNaturalidade">Pai Naturalidade</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -268,7 +268,7 @@
             </th>
             <th scope="col" jhiSortBy="paiUf">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiUf">Pai Uf</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.paiUf">Pai Uf</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -276,7 +276,7 @@
             </th>
             <th scope="col" jhiSortBy="paiRg">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiRg">Pai Rg</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.paiRg">Pai Rg</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -284,14 +284,14 @@
             </th>
             <th scope="col" jhiSortBy="paiDataNascimento">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiDataNascimento">Pai Data Nascimento</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.paiDataNascimento">Pai Data Nascimento</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="paiCpf">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiCpf">Pai Cpf</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.paiCpf">Pai Cpf</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -299,7 +299,7 @@
             </th>
             <th scope="col" jhiSortBy="paiNis">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiNis">Pai Nis</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.paiNis">Pai Nis</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -307,7 +307,7 @@
             </th>
             <th scope="col" jhiSortBy="paiTituloEleitor">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiTituloEleitor">Pai Titulo Eleitor</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.paiTituloEleitor">Pai Titulo Eleitor</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -315,7 +315,7 @@
             </th>
             <th scope="col" jhiSortBy="paiZona">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiZona">Pai Zona</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.paiZona">Pai Zona</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -323,7 +323,7 @@
             </th>
             <th scope="col" jhiSortBy="paiSecao">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiSecao">Pai Secao</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.paiSecao">Pai Secao</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -331,7 +331,7 @@
             </th>
             <th scope="col" jhiSortBy="paiMunicipio">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.paiMunicipio">Pai Municipio</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.paiMunicipio">Pai Municipio</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -339,7 +339,7 @@
             </th>
             <th scope="col" jhiSortBy="filiacaoMae">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.filiacaoMae">Filiacao Mae</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.filiacaoMae">Filiacao Mae</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -347,7 +347,7 @@
             </th>
             <th scope="col" jhiSortBy="maeTelefone">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeTelefone">Mae Telefone</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.maeTelefone">Mae Telefone</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -355,7 +355,7 @@
             </th>
             <th scope="col" jhiSortBy="maeNaturalidade">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeNaturalidade">Mae Naturalidade</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.maeNaturalidade">Mae Naturalidade</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -363,7 +363,7 @@
             </th>
             <th scope="col" jhiSortBy="maeUf">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeUf">Mae Uf</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.maeUf">Mae Uf</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -371,7 +371,7 @@
             </th>
             <th scope="col" jhiSortBy="maeRg">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeRg">Mae Rg</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.maeRg">Mae Rg</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -379,14 +379,14 @@
             </th>
             <th scope="col" jhiSortBy="maeDataNascimento">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeDataNascimento">Mae Data Nascimento</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.maeDataNascimento">Mae Data Nascimento</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="maeCpf">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeCpf">Mae Cpf</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.maeCpf">Mae Cpf</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -394,7 +394,7 @@
             </th>
             <th scope="col" jhiSortBy="maeNis">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeNis">Mae Nis</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.maeNis">Mae Nis</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -402,7 +402,7 @@
             </th>
             <th scope="col" jhiSortBy="maeTituloEleitor">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeTituloEleitor">Mae Titulo Eleitor</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.maeTituloEleitor">Mae Titulo Eleitor</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -410,7 +410,7 @@
             </th>
             <th scope="col" jhiSortBy="maeZona">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeZona">Mae Zona</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.maeZona">Mae Zona</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -418,7 +418,7 @@
             </th>
             <th scope="col" jhiSortBy="maeSecao">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeSecao">Mae Secao</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.maeSecao">Mae Secao</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -426,7 +426,7 @@
             </th>
             <th scope="col" jhiSortBy="maeMunicipio">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.maeMunicipio">Mae Municipio</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.maeMunicipio">Mae Municipio</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -434,7 +434,7 @@
             </th>
             <th scope="col" jhiSortBy="nomeEscola">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.nomeEscola">Nome Escola</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.nomeEscola">Nome Escola</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -442,7 +442,7 @@
             </th>
             <th scope="col" jhiSortBy="anoCursando">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.anoCursando">Ano Cursando</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.anoCursando">Ano Cursando</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -450,7 +450,7 @@
             </th>
             <th scope="col" jhiSortBy="turno">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.turno">Turno</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.turno">Turno</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -458,14 +458,14 @@
             </th>
             <th scope="col" jhiSortBy="mediaEscolar">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.mediaEscolar">Media Escolar</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.mediaEscolar">Media Escolar</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="prioritario">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.prioritario">Prioritario</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.prioritario">Prioritario</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -473,7 +473,7 @@
             </th>
             <th scope="col" jhiSortBy="obs">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.obs">Obs</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.obs">Obs</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -481,7 +481,7 @@
             </th>
             <th scope="col" jhiSortBy="comportamentoCasa">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.comportamentoCasa">Comportamento Casa</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.comportamentoCasa">Comportamento Casa</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -489,7 +489,7 @@
             </th>
             <th scope="col" jhiSortBy="comportamentoEscola">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.comportamentoEscola">Comportamento Escola</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.comportamentoEscola">Comportamento Escola</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -497,7 +497,7 @@
             </th>
             <th scope="col" jhiSortBy="deficiencia">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.deficiencia">Deficiencia</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.deficiencia">Deficiencia</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -505,7 +505,7 @@
             </th>
             <th scope="col" jhiSortBy="adaptacoes">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.adaptacoes">Adaptacoes</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.adaptacoes">Adaptacoes</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -513,7 +513,7 @@
             </th>
             <th scope="col" jhiSortBy="medicacao">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.medicacao">Medicacao</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.medicacao">Medicacao</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -521,7 +521,7 @@
             </th>
             <th scope="col" jhiSortBy="medicacaoDesc">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.medicacaoDesc">Medicacao Desc</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.medicacaoDesc">Medicacao Desc</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -529,7 +529,7 @@
             </th>
             <th scope="col" jhiSortBy="alergia">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.alergia">Alergia</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.alergia">Alergia</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -537,7 +537,7 @@
             </th>
             <th scope="col" jhiSortBy="alergiaDesc">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.alergiaDesc">Alergia Desc</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.alergiaDesc">Alergia Desc</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -545,7 +545,7 @@
             </th>
             <th scope="col" jhiSortBy="historicoMedico">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.historicoMedico">Historico Medico</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.historicoMedico">Historico Medico</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -553,7 +553,7 @@
             </th>
             <th scope="col" jhiSortBy="rendaFamiliar">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.rendaFamiliar">Renda Familiar</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.rendaFamiliar">Renda Familiar</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -561,21 +561,21 @@
             </th>
             <th scope="col" jhiSortBy="pessoasTrabalham">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.pessoasTrabalham">Pessoas Trabalham</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.pessoasTrabalham">Pessoas Trabalham</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="numPessoasLar">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.numPessoasLar">Num Pessoas Lar</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.numPessoasLar">Num Pessoas Lar</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="beneficioSocial">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.beneficioSocial">Beneficio Social</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.beneficioSocial">Beneficio Social</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -583,7 +583,7 @@
             </th>
             <th scope="col" jhiSortBy="beneficios">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.beneficios">Beneficios</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.beneficios">Beneficios</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -591,7 +591,7 @@
             </th>
             <th scope="col" jhiSortBy="tipoResidencia">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.tipoResidencia">Tipo Residencia</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.tipoResidencia">Tipo Residencia</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -599,7 +599,7 @@
             </th>
             <th scope="col" jhiSortBy="tipoResidenciaDesc">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.tipoResidenciaDesc">Tipo Residencia Desc</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.tipoResidenciaDesc">Tipo Residencia Desc</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -607,7 +607,7 @@
             </th>
             <th scope="col" jhiSortBy="situacaoResidencia">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.situacaoResidencia">Situacao Residencia</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.situacaoResidencia">Situacao Residencia</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -615,7 +615,7 @@
             </th>
             <th scope="col" jhiSortBy="situacaoResidenciaDesc">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.situacaoResidenciaDesc">Situacao Residencia Desc</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.situacaoResidenciaDesc">Situacao Residencia Desc</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -623,7 +623,7 @@
             </th>
             <th scope="col" jhiSortBy="contatoEmergencia">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.contatoEmergencia">Contato Emergencia</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.contatoEmergencia">Contato Emergencia</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -631,7 +631,7 @@
             </th>
             <th scope="col" jhiSortBy="foneEmergencia">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.foneEmergencia">Fone Emergencia</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.foneEmergencia">Fone Emergencia</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -639,7 +639,7 @@
             </th>
             <th scope="col" jhiSortBy="relacaoEmergencia">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.relacaoEmergencia">Relacao Emergencia</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.relacaoEmergencia">Relacao Emergencia</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -647,14 +647,14 @@
             </th>
             <th scope="col" jhiSortBy="autorizacao">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.autorizacao">Autorizacao</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.autorizacao">Autorizacao</span>
 
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
             <th scope="col" jhiSortBy="fotoAluno">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.fotoAluno">Foto Aluno</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.fotoAluno">Foto Aluno</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -662,7 +662,7 @@
             </th>
             <th scope="col" jhiSortBy="fotoMae">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.cadastroAluno.fotoMae">Foto Mae</span>
+                <span jhiTranslate="cadastroalunoApp.cadastroAluno.fotoMae">Foto Mae</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -725,31 +725,31 @@
               <td>{{ cadastroAluno.maeMunicipio }}</td>
               <td>{{ cadastroAluno.nomeEscola }}</td>
               <td>{{ cadastroAluno.anoCursando }}</td>
-              <td [jhiTranslate]="'cadastroaluno1App.Turno.' + (cadastroAluno.turno ?? 'null')">
+              <td [jhiTranslate]="'cadastroalunoApp.Turno.' + (cadastroAluno.turno ?? 'null')">
                 {{ { null: '', MATUTINO: 'MATUTINO', VESPERTINO: 'VESPERTINO', NOTURNO: 'NOTURNO' }[cadastroAluno.turno ?? 'null'] }}
               </td>
               <td>{{ cadastroAluno.mediaEscolar }}</td>
-              <td [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAluno.prioritario ?? 'null')">
+              <td [jhiTranslate]="'cadastroalunoApp.SimNao.' + (cadastroAluno.prioritario ?? 'null')">
                 {{ { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAluno.prioritario ?? 'null'] }}
               </td>
               <td>{{ cadastroAluno.obs }}</td>
-              <td [jhiTranslate]="'cadastroaluno1App.Comportamento.' + (cadastroAluno.comportamentoCasa ?? 'null')">
+              <td [jhiTranslate]="'cadastroalunoApp.Comportamento.' + (cadastroAluno.comportamentoCasa ?? 'null')">
                 {{ { null: '', TRANQUILO: 'TRANQUILO', AGITADO: 'AGITADO' }[cadastroAluno.comportamentoCasa ?? 'null'] }}
               </td>
-              <td [jhiTranslate]="'cadastroaluno1App.Comportamento.' + (cadastroAluno.comportamentoEscola ?? 'null')">
+              <td [jhiTranslate]="'cadastroalunoApp.Comportamento.' + (cadastroAluno.comportamentoEscola ?? 'null')">
                 {{ { null: '', TRANQUILO: 'TRANQUILO', AGITADO: 'AGITADO' }[cadastroAluno.comportamentoEscola ?? 'null'] }}
               </td>
-              <td [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAluno.deficiencia ?? 'null')">
+              <td [jhiTranslate]="'cadastroalunoApp.SimNao.' + (cadastroAluno.deficiencia ?? 'null')">
                 {{ { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAluno.deficiencia ?? 'null'] }}
               </td>
-              <td [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAluno.adaptacoes ?? 'null')">
+              <td [jhiTranslate]="'cadastroalunoApp.SimNao.' + (cadastroAluno.adaptacoes ?? 'null')">
                 {{ { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAluno.adaptacoes ?? 'null'] }}
               </td>
-              <td [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAluno.medicacao ?? 'null')">
+              <td [jhiTranslate]="'cadastroalunoApp.SimNao.' + (cadastroAluno.medicacao ?? 'null')">
                 {{ { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAluno.medicacao ?? 'null'] }}
               </td>
               <td>{{ cadastroAluno.medicacaoDesc }}</td>
-              <td [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAluno.alergia ?? 'null')">
+              <td [jhiTranslate]="'cadastroalunoApp.SimNao.' + (cadastroAluno.alergia ?? 'null')">
                 {{ { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAluno.alergia ?? 'null'] }}
               </td>
               <td>{{ cadastroAluno.alergiaDesc }}</td>
@@ -757,15 +757,15 @@
               <td>{{ cadastroAluno.rendaFamiliar }}</td>
               <td>{{ cadastroAluno.pessoasTrabalham }}</td>
               <td>{{ cadastroAluno.numPessoasLar }}</td>
-              <td [jhiTranslate]="'cadastroaluno1App.SimNao.' + (cadastroAluno.beneficioSocial ?? 'null')">
+              <td [jhiTranslate]="'cadastroalunoApp.SimNao.' + (cadastroAluno.beneficioSocial ?? 'null')">
                 {{ { null: '', SIM: 'SIM', NAO: 'NAO' }[cadastroAluno.beneficioSocial ?? 'null'] }}
               </td>
               <td>{{ cadastroAluno.beneficios }}</td>
-              <td [jhiTranslate]="'cadastroaluno1App.TipoResidencia.' + (cadastroAluno.tipoResidencia ?? 'null')">
+              <td [jhiTranslate]="'cadastroalunoApp.TipoResidencia.' + (cadastroAluno.tipoResidencia ?? 'null')">
                 {{ { null: '', CASA: 'CASA', APARTAMENTO: 'APARTAMENTO', OUTRO: 'OUTRO' }[cadastroAluno.tipoResidencia ?? 'null'] }}
               </td>
               <td>{{ cadastroAluno.tipoResidenciaDesc }}</td>
-              <td [jhiTranslate]="'cadastroaluno1App.SituacaoResidencia.' + (cadastroAluno.situacaoResidencia ?? 'null')">
+              <td [jhiTranslate]="'cadastroalunoApp.SituacaoResidencia.' + (cadastroAluno.situacaoResidencia ?? 'null')">
                 {{
                   { null: '', PROPRIA: 'PROPRIA', ALUGADA: 'ALUGADA', CEDIDA: 'CEDIDA', OUTRA: 'OUTRA' }[
                     cadastroAluno.situacaoResidencia ?? 'null'

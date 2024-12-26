@@ -5,15 +5,16 @@ import static com.mycompany.myapp.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Deslocamento;
 import com.mycompany.myapp.repository.DeslocamentoRepository;
-import com.mycompany.myapp.repository.EntityManager;
 import com.mycompany.myapp.repository.search.DeslocamentoSearchRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -23,17 +24,18 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.util.Streamable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Integration tests for the {@link DeslocamentoResource} REST controller.
  */
 @IntegrationTest
-@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_ENTITY_TIMEOUT)
+@AutoConfigureMockMvc
 @WithMockUser
 class DeslocamentoResourceIT {
 
@@ -63,7 +65,7 @@ class DeslocamentoResourceIT {
     private EntityManager em;
 
     @Autowired
-    private WebTestClient webTestClient;
+    private MockMvc restDeslocamentoMockMvc;
 
     private Deslocamento deslocamento;
 
@@ -89,14 +91,6 @@ class DeslocamentoResourceIT {
         return new Deslocamento().nome(UPDATED_NOME).grau(UPDATED_GRAU);
     }
 
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll(Deslocamento.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
-    }
-
     @BeforeEach
     public void initTest() {
         deslocamento = createEntity();
@@ -105,29 +99,27 @@ class DeslocamentoResourceIT {
     @AfterEach
     public void cleanup() {
         if (insertedDeslocamento != null) {
-            deslocamentoRepository.delete(insertedDeslocamento).block();
-            deslocamentoSearchRepository.delete(insertedDeslocamento).block();
+            deslocamentoRepository.delete(insertedDeslocamento);
+            deslocamentoSearchRepository.delete(insertedDeslocamento);
             insertedDeslocamento = null;
         }
-        deleteEntities(em);
     }
 
     @Test
+    @Transactional
     void createDeslocamento() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         // Create the Deslocamento
-        var returnedDeslocamento = webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(deslocamento))
-            .exchange()
-            .expectStatus()
-            .isCreated()
-            .expectBody(Deslocamento.class)
-            .returnResult()
-            .getResponseBody();
+        var returnedDeslocamento = om.readValue(
+            restDeslocamentoMockMvc
+                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(deslocamento)))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString(),
+            Deslocamento.class
+        );
 
         // Validate the Deslocamento in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
@@ -136,7 +128,7 @@ class DeslocamentoResourceIT {
         await()
             .atMost(5, TimeUnit.SECONDS)
             .untilAsserted(() -> {
-                int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+                int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
                 assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore + 1);
             });
 
@@ -144,158 +136,127 @@ class DeslocamentoResourceIT {
     }
 
     @Test
+    @Transactional
     void createDeslocamentoWithExistingId() throws Exception {
         // Create the Deslocamento with an existing ID
         deslocamento.setId(1L);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(deslocamento))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restDeslocamentoMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(deslocamento)))
+            .andExpect(status().isBadRequest());
 
         // Validate the Deslocamento in the database
         assertSameRepositoryCount(databaseSizeBeforeCreate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void checkNomeIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         // set the field null
         deslocamento.setNome(null);
 
         // Create the Deslocamento, which fails.
 
-        webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(deslocamento))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restDeslocamentoMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(deslocamento)))
+            .andExpect(status().isBadRequest());
 
         assertSameRepositoryCount(databaseSizeBeforeTest);
 
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void checkGrauIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         // set the field null
         deslocamento.setGrau(null);
 
         // Create the Deslocamento, which fails.
 
-        webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(deslocamento))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restDeslocamentoMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(deslocamento)))
+            .andExpect(status().isBadRequest());
 
         assertSameRepositoryCount(databaseSizeBeforeTest);
 
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
-    void getAllDeslocamentos() {
+    @Transactional
+    void getAllDeslocamentos() throws Exception {
         // Initialize the database
-        insertedDeslocamento = deslocamentoRepository.save(deslocamento).block();
+        insertedDeslocamento = deslocamentoRepository.saveAndFlush(deslocamento);
 
         // Get all the deslocamentoList
-        webTestClient
-            .get()
-            .uri(ENTITY_API_URL + "?sort=id,desc")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus()
-            .isOk()
-            .expectHeader()
-            .contentType(MediaType.APPLICATION_JSON)
-            .expectBody()
-            .jsonPath("$.[*].id")
-            .value(hasItem(deslocamento.getId().intValue()))
-            .jsonPath("$.[*].nome")
-            .value(hasItem(DEFAULT_NOME))
-            .jsonPath("$.[*].grau")
-            .value(hasItem(DEFAULT_GRAU));
+        restDeslocamentoMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(deslocamento.getId().intValue())))
+            .andExpect(jsonPath("$.[*].nome").value(hasItem(DEFAULT_NOME)))
+            .andExpect(jsonPath("$.[*].grau").value(hasItem(DEFAULT_GRAU)));
     }
 
     @Test
-    void getDeslocamento() {
+    @Transactional
+    void getDeslocamento() throws Exception {
         // Initialize the database
-        insertedDeslocamento = deslocamentoRepository.save(deslocamento).block();
+        insertedDeslocamento = deslocamentoRepository.saveAndFlush(deslocamento);
 
         // Get the deslocamento
-        webTestClient
-            .get()
-            .uri(ENTITY_API_URL_ID, deslocamento.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus()
-            .isOk()
-            .expectHeader()
-            .contentType(MediaType.APPLICATION_JSON)
-            .expectBody()
-            .jsonPath("$.id")
-            .value(is(deslocamento.getId().intValue()))
-            .jsonPath("$.nome")
-            .value(is(DEFAULT_NOME))
-            .jsonPath("$.grau")
-            .value(is(DEFAULT_GRAU));
+        restDeslocamentoMockMvc
+            .perform(get(ENTITY_API_URL_ID, deslocamento.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.id").value(deslocamento.getId().intValue()))
+            .andExpect(jsonPath("$.nome").value(DEFAULT_NOME))
+            .andExpect(jsonPath("$.grau").value(DEFAULT_GRAU));
     }
 
     @Test
-    void getNonExistingDeslocamento() {
+    @Transactional
+    void getNonExistingDeslocamento() throws Exception {
         // Get the deslocamento
-        webTestClient
-            .get()
-            .uri(ENTITY_API_URL_ID, Long.MAX_VALUE)
-            .accept(MediaType.APPLICATION_PROBLEM_JSON)
-            .exchange()
-            .expectStatus()
-            .isNotFound();
+        restDeslocamentoMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
     @Test
+    @Transactional
     void putExistingDeslocamento() throws Exception {
         // Initialize the database
-        insertedDeslocamento = deslocamentoRepository.save(deslocamento).block();
+        insertedDeslocamento = deslocamentoRepository.saveAndFlush(deslocamento);
 
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        deslocamentoSearchRepository.save(deslocamento).block();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        deslocamentoSearchRepository.save(deslocamento);
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
 
         // Update the deslocamento
-        Deslocamento updatedDeslocamento = deslocamentoRepository.findById(deslocamento.getId()).block();
+        Deslocamento updatedDeslocamento = deslocamentoRepository.findById(deslocamento.getId()).orElseThrow();
+        // Disconnect from session so that the updates on updatedDeslocamento are not directly saved in db
+        em.detach(updatedDeslocamento);
         updatedDeslocamento.nome(UPDATED_NOME).grau(UPDATED_GRAU);
 
-        webTestClient
-            .put()
-            .uri(ENTITY_API_URL_ID, updatedDeslocamento.getId())
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(updatedDeslocamento))
-            .exchange()
-            .expectStatus()
-            .isOk();
+        restDeslocamentoMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, updatedDeslocamento.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(updatedDeslocamento))
+            )
+            .andExpect(status().isOk());
 
         // Validate the Deslocamento in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
@@ -304,89 +265,82 @@ class DeslocamentoResourceIT {
         await()
             .atMost(5, TimeUnit.SECONDS)
             .untilAsserted(() -> {
-                int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+                int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
                 assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
-                List<Deslocamento> deslocamentoSearchList = Streamable.of(
-                    deslocamentoSearchRepository.findAll().collectList().block()
-                ).toList();
+                List<Deslocamento> deslocamentoSearchList = Streamable.of(deslocamentoSearchRepository.findAll()).toList();
                 Deslocamento testDeslocamentoSearch = deslocamentoSearchList.get(searchDatabaseSizeAfter - 1);
 
-                // Test fails because reactive api returns an empty object instead of null
-                // assertDeslocamentoAllPropertiesEquals(testDeslocamentoSearch, updatedDeslocamento);
-                assertDeslocamentoUpdatableFieldsEquals(testDeslocamentoSearch, updatedDeslocamento);
+                assertDeslocamentoAllPropertiesEquals(testDeslocamentoSearch, updatedDeslocamento);
             });
     }
 
     @Test
+    @Transactional
     void putNonExistingDeslocamento() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         deslocamento.setId(longCount.incrementAndGet());
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        webTestClient
-            .put()
-            .uri(ENTITY_API_URL_ID, deslocamento.getId())
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(deslocamento))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restDeslocamentoMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, deslocamento.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(deslocamento))
+            )
+            .andExpect(status().isBadRequest());
 
         // Validate the Deslocamento in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void putWithIdMismatchDeslocamento() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         deslocamento.setId(longCount.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        webTestClient
-            .put()
-            .uri(ENTITY_API_URL_ID, longCount.incrementAndGet())
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(deslocamento))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restDeslocamentoMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, longCount.incrementAndGet())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(deslocamento))
+            )
+            .andExpect(status().isBadRequest());
 
         // Validate the Deslocamento in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void putWithMissingIdPathParamDeslocamento() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         deslocamento.setId(longCount.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        webTestClient
-            .put()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(deslocamento))
-            .exchange()
-            .expectStatus()
-            .isEqualTo(405);
+        restDeslocamentoMockMvc
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(deslocamento)))
+            .andExpect(status().isMethodNotAllowed());
 
         // Validate the Deslocamento in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void partialUpdateDeslocamentoWithPatch() throws Exception {
         // Initialize the database
-        insertedDeslocamento = deslocamentoRepository.save(deslocamento).block();
+        insertedDeslocamento = deslocamentoRepository.saveAndFlush(deslocamento);
 
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
@@ -394,16 +348,15 @@ class DeslocamentoResourceIT {
         Deslocamento partialUpdatedDeslocamento = new Deslocamento();
         partialUpdatedDeslocamento.setId(deslocamento.getId());
 
-        partialUpdatedDeslocamento.nome(UPDATED_NOME).grau(UPDATED_GRAU);
+        partialUpdatedDeslocamento.nome(UPDATED_NOME);
 
-        webTestClient
-            .patch()
-            .uri(ENTITY_API_URL_ID, partialUpdatedDeslocamento.getId())
-            .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(partialUpdatedDeslocamento))
-            .exchange()
-            .expectStatus()
-            .isOk();
+        restDeslocamentoMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedDeslocamento.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(partialUpdatedDeslocamento))
+            )
+            .andExpect(status().isOk());
 
         // Validate the Deslocamento in the database
 
@@ -415,9 +368,10 @@ class DeslocamentoResourceIT {
     }
 
     @Test
+    @Transactional
     void fullUpdateDeslocamentoWithPatch() throws Exception {
         // Initialize the database
-        insertedDeslocamento = deslocamentoRepository.save(deslocamento).block();
+        insertedDeslocamento = deslocamentoRepository.saveAndFlush(deslocamento);
 
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
@@ -427,14 +381,13 @@ class DeslocamentoResourceIT {
 
         partialUpdatedDeslocamento.nome(UPDATED_NOME).grau(UPDATED_GRAU);
 
-        webTestClient
-            .patch()
-            .uri(ENTITY_API_URL_ID, partialUpdatedDeslocamento.getId())
-            .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(partialUpdatedDeslocamento))
-            .exchange()
-            .expectStatus()
-            .isOk();
+        restDeslocamentoMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedDeslocamento.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(partialUpdatedDeslocamento))
+            )
+            .andExpect(status().isOk());
 
         // Validate the Deslocamento in the database
 
@@ -443,123 +396,109 @@ class DeslocamentoResourceIT {
     }
 
     @Test
+    @Transactional
     void patchNonExistingDeslocamento() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         deslocamento.setId(longCount.incrementAndGet());
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        webTestClient
-            .patch()
-            .uri(ENTITY_API_URL_ID, deslocamento.getId())
-            .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(deslocamento))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restDeslocamentoMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, deslocamento.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(deslocamento))
+            )
+            .andExpect(status().isBadRequest());
 
         // Validate the Deslocamento in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void patchWithIdMismatchDeslocamento() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         deslocamento.setId(longCount.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        webTestClient
-            .patch()
-            .uri(ENTITY_API_URL_ID, longCount.incrementAndGet())
-            .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(deslocamento))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restDeslocamentoMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, longCount.incrementAndGet())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(deslocamento))
+            )
+            .andExpect(status().isBadRequest());
 
         // Validate the Deslocamento in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void patchWithMissingIdPathParamDeslocamento() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         deslocamento.setId(longCount.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        webTestClient
-            .patch()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(deslocamento))
-            .exchange()
-            .expectStatus()
-            .isEqualTo(405);
+        restDeslocamentoMockMvc
+            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(om.writeValueAsBytes(deslocamento)))
+            .andExpect(status().isMethodNotAllowed());
 
         // Validate the Deslocamento in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
-    void deleteDeslocamento() {
+    @Transactional
+    void deleteDeslocamento() throws Exception {
         // Initialize the database
-        insertedDeslocamento = deslocamentoRepository.save(deslocamento).block();
-        deslocamentoRepository.save(deslocamento).block();
-        deslocamentoSearchRepository.save(deslocamento).block();
+        insertedDeslocamento = deslocamentoRepository.saveAndFlush(deslocamento);
+        deslocamentoRepository.save(deslocamento);
+        deslocamentoSearchRepository.save(deslocamento);
 
         long databaseSizeBeforeDelete = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         assertThat(searchDatabaseSizeBefore).isEqualTo(databaseSizeBeforeDelete);
 
         // Delete the deslocamento
-        webTestClient
-            .delete()
-            .uri(ENTITY_API_URL_ID, deslocamento.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus()
-            .isNoContent();
+        restDeslocamentoMockMvc
+            .perform(delete(ENTITY_API_URL_ID, deslocamento.getId()).accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
         assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(deslocamentoSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore - 1);
     }
 
     @Test
-    void searchDeslocamento() {
+    @Transactional
+    void searchDeslocamento() throws Exception {
         // Initialize the database
-        insertedDeslocamento = deslocamentoRepository.save(deslocamento).block();
-        deslocamentoSearchRepository.save(deslocamento).block();
+        insertedDeslocamento = deslocamentoRepository.saveAndFlush(deslocamento);
+        deslocamentoSearchRepository.save(deslocamento);
 
         // Search the deslocamento
-        webTestClient
-            .get()
-            .uri(ENTITY_SEARCH_API_URL + "?query=id:" + deslocamento.getId())
-            .exchange()
-            .expectStatus()
-            .isOk()
-            .expectHeader()
-            .contentType(MediaType.APPLICATION_JSON)
-            .expectBody()
-            .jsonPath("$.[*].id")
-            .value(hasItem(deslocamento.getId().intValue()))
-            .jsonPath("$.[*].nome")
-            .value(hasItem(DEFAULT_NOME))
-            .jsonPath("$.[*].grau")
-            .value(hasItem(DEFAULT_GRAU));
+        restDeslocamentoMockMvc
+            .perform(get(ENTITY_SEARCH_API_URL + "?query=id:" + deslocamento.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(deslocamento.getId().intValue())))
+            .andExpect(jsonPath("$.[*].nome").value(hasItem(DEFAULT_NOME)))
+            .andExpect(jsonPath("$.[*].grau").value(hasItem(DEFAULT_GRAU)));
     }
 
     protected long getRepositoryCount() {
-        return deslocamentoRepository.count().block();
+        return deslocamentoRepository.count();
     }
 
     protected void assertIncrementedRepositoryCount(long countBefore) {
@@ -575,18 +514,14 @@ class DeslocamentoResourceIT {
     }
 
     protected Deslocamento getPersistedDeslocamento(Deslocamento deslocamento) {
-        return deslocamentoRepository.findById(deslocamento.getId()).block();
+        return deslocamentoRepository.findById(deslocamento.getId()).orElseThrow();
     }
 
     protected void assertPersistedDeslocamentoToMatchAllProperties(Deslocamento expectedDeslocamento) {
-        // Test fails because reactive api returns an empty object instead of null
-        // assertDeslocamentoAllPropertiesEquals(expectedDeslocamento, getPersistedDeslocamento(expectedDeslocamento));
-        assertDeslocamentoUpdatableFieldsEquals(expectedDeslocamento, getPersistedDeslocamento(expectedDeslocamento));
+        assertDeslocamentoAllPropertiesEquals(expectedDeslocamento, getPersistedDeslocamento(expectedDeslocamento));
     }
 
     protected void assertPersistedDeslocamentoToMatchUpdatableProperties(Deslocamento expectedDeslocamento) {
-        // Test fails because reactive api returns an empty object instead of null
-        // assertDeslocamentoAllUpdatablePropertiesEquals(expectedDeslocamento, getPersistedDeslocamento(expectedDeslocamento));
-        assertDeslocamentoUpdatableFieldsEquals(expectedDeslocamento, getPersistedDeslocamento(expectedDeslocamento));
+        assertDeslocamentoAllUpdatablePropertiesEquals(expectedDeslocamento, getPersistedDeslocamento(expectedDeslocamento));
     }
 }

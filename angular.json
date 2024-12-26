@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "cadastroaluno-1": {
+    "cadastroaluno": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -82,15 +82,15 @@
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "buildTarget": "cadastroaluno-1:build:development",
+            "buildTarget": "cadastroaluno:build:development",
             "port": 4200
           },
           "configurations": {
             "production": {
-              "buildTarget": "cadastroaluno-1:build:production"
+              "buildTarget": "cadastroaluno:build:production"
             },
             "development": {
-              "buildTarget": "cadastroaluno-1:build:development"
+              "buildTarget": "cadastroaluno:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -111,7 +111,6 @@
       "path": "./target/angular/",
       "environment": "all"
     },
-    "packageManager": "npm",
-    "analytics": false
+    "packageManager": "npm"
   }
 }

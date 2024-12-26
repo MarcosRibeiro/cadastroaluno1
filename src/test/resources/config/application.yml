@@ -15,7 +15,7 @@
 
 spring:
   application:
-    name: cadastroaluno1
+    name: cadastroaluno
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: test
@@ -36,13 +36,13 @@ spring:
           authorities-claim-name: auth
   task:
     execution:
-      thread-name-prefix: cadastroaluno-1-task-
+      thread-name-prefix: cadastroaluno-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: cadastroaluno-1-scheduling-
+      thread-name-prefix: cadastroaluno-scheduling-
       pool:
         size: 20
   thymeleaf:
@@ -59,9 +59,9 @@ server:
 # ===================================================================
 jhipster:
   clientApp:
-    name: 'cadastroaluno1App'
+    name: 'cadastroalunoApp'
   mail:
-    from: cadastroaluno1@localhost.com
+    from: cadastroaluno@localhost.com
     base-url: http://127.0.0.1:8080
   logging:
     # To test json console appender
@@ -75,7 +75,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-        base64-secret: MGNlZDM1MzM5Mzg2ZTgyYTJlZThlODEwNjY2MzdlMjcwZjllY2YwZmJlNTlhNTUwYjQ0MjdjNGQyMjc1ZjFmZDEwMjM2MzA5YjkxYmVlZmFhMDhkMTlkYTE1NzMzMTc1YzAwMjZiYzE3NWM3NTlhNDBhZTY2OGJjNGRkMTAwYzU=
+        base64-secret: MzA1YWY5ZTBkYTQ1YWJlODVkZjA3ZDMyMzEzOTNhNzUzOWE5YTRiNmRjYmIzMjg4YjA2MTA4YzhkOGQyOWU3NzBjMWJiMDM5ZmJlZjUzZTdkYzM0NDU0ZjdmNmQyZjYxNGI5MGM3NjZiMzhjNTc5MWI3MDM0NTkzNjBhMWI4Mjg=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 86400

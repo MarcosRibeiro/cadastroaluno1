@@ -4,7 +4,7 @@
       <h2
         id="jhi-deslocamento-heading"
         data-cy="DeslocamentoCreateUpdateHeading"
-        jhiTranslate="cadastroaluno1App.deslocamento.home.createOrEditLabel"
+        jhiTranslate="cadastroalunoApp.deslocamento.home.createOrEditLabel"
       >
         Criar ou editar Deslocamento
       </h2>
@@ -14,14 +14,14 @@
 
         @if (editForm.controls.id.value !== null) {
           <div class="mb-3">
-            <label class="form-label" for="field_id" jhiTranslate="cadastroaluno1App.deslocamento.id">ID</label>
+            <label class="form-label" for="field_id" jhiTranslate="cadastroalunoApp.deslocamento.id">ID</label>
             <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
           </div>
         }
 
         @let nomeRef = editForm.get('nome')!;
         <div class="mb-3">
-          <label class="form-label" for="field_nome" jhiTranslate="cadastroaluno1App.deslocamento.nome">Nome</label>
+          <label class="form-label" for="field_nome" jhiTranslate="cadastroalunoApp.deslocamento.nome">Nome</label>
           <input type="text" class="form-control" name="nome" id="field_nome" data-cy="nome" formControlName="nome" />
           @if (nomeRef.invalid && (nomeRef.dirty || nomeRef.touched)) {
             <div>
@@ -39,7 +39,7 @@
 
         @let grauRef = editForm.get('grau')!;
         <div class="mb-3">
-          <label class="form-label" for="field_grau" jhiTranslate="cadastroaluno1App.deslocamento.grau">Grau</label>
+          <label class="form-label" for="field_grau" jhiTranslate="cadastroalunoApp.deslocamento.grau">Grau</label>
           <input type="text" class="form-control" name="grau" id="field_grau" data-cy="grau" formControlName="grau" />
           @if (grauRef.invalid && (grauRef.dirty || grauRef.touched)) {
             <div>
@@ -56,7 +56,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_cadastroAluno" jhiTranslate="cadastroaluno1App.deslocamento.cadastroAluno"
+          <label class="form-label" for="field_cadastroAluno" jhiTranslate="cadastroalunoApp.deslocamento.cadastroAluno"
             >Cadastro Aluno</label
           >
           <select

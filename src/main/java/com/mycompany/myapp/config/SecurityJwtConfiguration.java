@@ -12,10 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
-import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 
 @Configuration
 public class SecurityJwtConfiguration {
@@ -26,31 +26,22 @@ public class SecurityJwtConfiguration {
     private String jwtKey;
 
     @Bean
-    public ReactiveJwtDecoder jwtDecoder(SecurityMetersService metersService) {
-        NimbusReactiveJwtDecoder jwtDecoder = NimbusReactiveJwtDecoder.withSecretKey(getSecretKey()).macAlgorithm(JWT_ALGORITHM).build();
+    public JwtDecoder jwtDecoder(SecurityMetersService metersService) {
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(getSecretKey()).macAlgorithm(JWT_ALGORITHM).build();
         return token -> {
             try {
-                return jwtDecoder
-                    .decode(token)
-                    .doOnError(e -> {
-                        if (e.getMessage().contains("Jwt expired at")) {
-                            metersService.trackTokenExpired();
-                        } else if (e.getMessage().contains("Failed to validate the token")) {
-                            metersService.trackTokenInvalidSignature();
-                        } else if (
-                            e.getMessage().contains("Invalid JWT serialization:") ||
-                            e.getMessage().contains("Invalid unsecured/JWS/JWE header:")
-                        ) {
-                            metersService.trackTokenMalformed();
-                        } else {
-                            LOG.error("Unknown JWT reactive error {}", e.getMessage());
-                        }
-                    });
+                return jwtDecoder.decode(token);
             } catch (Exception e) {
-                if (e.getMessage().contains("An error occurred while attempting to decode the Jwt")) {
-                    metersService.trackTokenMalformed();
-                } else if (e.getMessage().contains("Failed to validate the token")) {
+                if (e.getMessage().contains("Invalid signature")) {
                     metersService.trackTokenInvalidSignature();
+                } else if (e.getMessage().contains("Jwt expired at")) {
+                    metersService.trackTokenExpired();
+                } else if (
+                    e.getMessage().contains("Invalid JWT serialization") ||
+                    e.getMessage().contains("Malformed token") ||
+                    e.getMessage().contains("Invalid unsecured/JWS/JWE")
+                ) {
+                    metersService.trackTokenMalformed();
                 } else {
                     LOG.error("Unknown JWT error {}", e.getMessage());
                 }

@@ -1,8 +1,8 @@
 {
-  "name": "cadastroaluno-1",
+  "name": "cadastroaluno",
   "version": "0.0.1-SNAPSHOT",
   "private": true,
-  "description": "Description for Cadastroaluno 1",
+  "description": "Description for Cadastroaluno",
   "license": "UNLICENSED",
   "scripts": {
     "app:start": "./mvnw -ntp --batch-mode",
@@ -72,14 +72,11 @@
     "packaging": "jar"
   },
   "dependencies": {
-    "@angular/animations": "19.0.5",
-    "@angular/cdk": "^19.0.4",
     "@angular/common": "19.0.5",
     "@angular/compiler": "19.0.5",
     "@angular/core": "19.0.5",
     "@angular/forms": "19.0.5",
     "@angular/localize": "19.0.5",
-    "@angular/material": "^19.0.4",
     "@angular/platform-browser": "19.0.5",
     "@angular/platform-browser-dynamic": "19.0.5",
     "@angular/router": "19.0.5",
@@ -93,7 +90,6 @@
     "bootstrap": "5.3.3",
     "dayjs": "1.11.13",
     "ngx-infinite-scroll": "19.0.0",
-    "ngx-mask": "^19.0.6",
     "rxjs": "7.8.1",
     "tslib": "2.8.1",
     "zone.js": "0.15.0"
@@ -112,7 +108,6 @@
     "browser-sync": "3.0.3",
     "browser-sync-webpack-plugin": "2.3.0",
     "buffer": "6.0.3",
-    "colorette": "1.2.2",
     "concurrently": "9.1.0",
     "copy-webpack-plugin": "12.0.2",
     "eslint": "9.17.0",
@@ -135,7 +130,6 @@
     "prettier-plugin-java": "2.6.5",
     "prettier-plugin-packagejson": "2.5.6",
     "rimraf": "5.0.8",
-    "sass-migrator": "^2.3.0",
     "swagger-ui-dist": "5.18.2",
     "ts-jest": "29.2.5",
     "typescript": "5.6.3",

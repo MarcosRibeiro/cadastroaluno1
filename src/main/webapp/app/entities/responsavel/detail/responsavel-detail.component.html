@@ -2,7 +2,7 @@
   <div class="col-8">
     @if (responsavel(); as responsavelRef) {
       <div>
-        <h2 data-cy="responsavelDetailsHeading"><span jhiTranslate="cadastroaluno1App.responsavel.detail.title">Responsavel</span></h2>
+        <h2 data-cy="responsavelDetailsHeading"><span jhiTranslate="cadastroalunoApp.responsavel.detail.title">Responsavel</span></h2>
 
         <hr />
 
@@ -15,15 +15,15 @@
           <dd>
             <span>{{ responsavelRef.id }}</span>
           </dd>
-          <dt><span jhiTranslate="cadastroaluno1App.responsavel.nome">Nome</span></dt>
+          <dt><span jhiTranslate="cadastroalunoApp.responsavel.nome">Nome</span></dt>
           <dd>
             <span>{{ responsavelRef.nome }}</span>
           </dd>
-          <dt><span jhiTranslate="cadastroaluno1App.responsavel.parentesco">Parentesco</span></dt>
+          <dt><span jhiTranslate="cadastroalunoApp.responsavel.parentesco">Parentesco</span></dt>
           <dd>
             <span>{{ responsavelRef.parentesco }}</span>
           </dd>
-          <dt><span jhiTranslate="cadastroaluno1App.responsavel.cadastroAluno">Cadastro Aluno</span></dt>
+          <dt><span jhiTranslate="cadastroalunoApp.responsavel.cadastroAluno">Cadastro Aluno</span></dt>
           <dd>
             @if (responsavel()!.cadastroAluno) {
               <div>

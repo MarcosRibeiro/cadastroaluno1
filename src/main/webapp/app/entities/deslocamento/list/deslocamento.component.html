@@ -1,11 +1,11 @@
 <div>
   <h2 id="page-heading" data-cy="DeslocamentoHeading">
-    <span jhiTranslate="cadastroaluno1App.deslocamento.home.title">Deslocamentos</span>
+    <span jhiTranslate="cadastroalunoApp.deslocamento.home.title">Deslocamentos</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
-        <span jhiTranslate="cadastroaluno1App.deslocamento.home.refreshListLabel">Atualizar lista</span>
+        <span jhiTranslate="cadastroalunoApp.deslocamento.home.refreshListLabel">Atualizar lista</span>
       </button>
 
       <button
@@ -15,7 +15,7 @@
         [routerLink]="['/deslocamento/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span class="hidden-sm-down" jhiTranslate="cadastroaluno1App.deslocamento.home.createLabel">Criar novo Deslocamento</span>
+        <span class="hidden-sm-down" jhiTranslate="cadastroalunoApp.deslocamento.home.createLabel">Criar novo Deslocamento</span>
       </button>
     </div>
   </h2>
@@ -27,7 +27,7 @@
   <form name="searchForm" class="row row-cols-sm-auto align-items-center">
     <div class="col-sm-12">
       <div class="input-group w-100 mt-3">
-        <label class="visually-hidden" for="currentSearch" jhiTranslate="cadastroaluno1App.deslocamento.home.search"
+        <label class="visually-hidden" for="currentSearch" jhiTranslate="cadastroalunoApp.deslocamento.home.search"
           >Pesquisar por Deslocamento</label
         >
         <input
@@ -36,7 +36,7 @@
           [(ngModel)]="currentSearch"
           id="currentSearch"
           name="currentSearch"
-          placeholder="{{ 'cadastroaluno1App.deslocamento.home.search' | translate }}"
+          placeholder="{{ 'cadastroalunoApp.deslocamento.home.search' | translate }}"
         />
 
         <button class="btn btn-info" (click)="search(currentSearch)">
@@ -54,7 +54,7 @@
 
   @if (deslocamentos().length === 0) {
     <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="cadastroaluno1App.deslocamento.home.notFound">Nenhum Deslocamento encontrado</span>
+      <span jhiTranslate="cadastroalunoApp.deslocamento.home.notFound">Nenhum Deslocamento encontrado</span>
     </div>
   } @else {
     <div class="table-responsive table-entities" id="entities">
@@ -70,7 +70,7 @@
             </th>
             <th scope="col" jhiSortBy="nome">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.deslocamento.nome">Nome</span>
+                <span jhiTranslate="cadastroalunoApp.deslocamento.nome">Nome</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -78,7 +78,7 @@
             </th>
             <th scope="col" jhiSortBy="grau">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.deslocamento.grau">Grau</span>
+                <span jhiTranslate="cadastroalunoApp.deslocamento.grau">Grau</span>
                 @if (!currentSearch) {
                   <fa-icon class="p-1" icon="sort"></fa-icon>
                 }
@@ -86,7 +86,7 @@
             </th>
             <th scope="col" jhiSortBy="cadastroAluno.id">
               <div class="d-flex">
-                <span jhiTranslate="cadastroaluno1App.deslocamento.cadastroAluno">Cadastro Aluno</span>
+                <span jhiTranslate="cadastroalunoApp.deslocamento.cadastroAluno">Cadastro Aluno</span>
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>

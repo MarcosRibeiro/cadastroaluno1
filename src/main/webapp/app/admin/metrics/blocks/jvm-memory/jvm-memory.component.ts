@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 
-import { SharedModule } from 'app/shared/shared.module';
+import SharedModule from 'app/shared/shared.module';
 import { JvmMetrics } from 'app/admin/metrics/metrics.model';
 
 @Component({

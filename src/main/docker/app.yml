@@ -1,14 +1,14 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: cadastroaluno1
+name: cadastroaluno
 services:
   app:
-    image: cadastroaluno1
+    image: cadastroaluno
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_R2DBC_URL=r2dbc:mysql://mysql:3306/cadastroaluno1?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-      - SPRING_LIQUIBASE_URL=jdbc:mysql://mysql:3306/cadastroaluno1?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/cadastroaluno?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://mysql:3306/cadastroaluno?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
     ports:
       - 127.0.0.1:8080:8080

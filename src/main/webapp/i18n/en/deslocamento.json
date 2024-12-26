@@ -1,0 +1,27 @@
+{
+  "cadastroalunoApp": {
+    "deslocamento": {
+      "home": {
+        "title": "Deslocamentos",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Deslocamento",
+        "createOrEditLabel": "Create or edit a Deslocamento",
+        "search": "Search for Deslocamento",
+        "notFound": "No Deslocamentos found"
+      },
+      "created": "A new Deslocamento is created with identifier {{ param }}",
+      "updated": "A Deslocamento is updated with identifier {{ param }}",
+      "deleted": "A Deslocamento is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Deslocamento {{ id }}?"
+      },
+      "detail": {
+        "title": "Deslocamento"
+      },
+      "id": "ID",
+      "nome": "Nome",
+      "grau": "Grau",
+      "cadastroAluno": "Cadastro Aluno"
+    }
+  }
+}

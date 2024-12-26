@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
-import { SharedModule } from 'app/shared/shared.module';
+import SharedModule from 'app/shared/shared.module';
 import { Databases } from 'app/admin/metrics/metrics.model';
 import { filterNaN } from 'app/core/util/operators';
 

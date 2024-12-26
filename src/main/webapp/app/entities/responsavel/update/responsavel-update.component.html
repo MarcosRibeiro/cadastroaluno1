@@ -4,7 +4,7 @@
       <h2
         id="jhi-responsavel-heading"
         data-cy="ResponsavelCreateUpdateHeading"
-        jhiTranslate="cadastroaluno1App.responsavel.home.createOrEditLabel"
+        jhiTranslate="cadastroalunoApp.responsavel.home.createOrEditLabel"
       >
         Criar ou editar Responsavel
       </h2>
@@ -14,14 +14,14 @@
 
         @if (editForm.controls.id.value !== null) {
           <div class="mb-3">
-            <label class="form-label" for="field_id" jhiTranslate="cadastroaluno1App.responsavel.id">ID</label>
+            <label class="form-label" for="field_id" jhiTranslate="cadastroalunoApp.responsavel.id">ID</label>
             <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
           </div>
         }
 
         @let nomeRef = editForm.get('nome')!;
         <div class="mb-3">
-          <label class="form-label" for="field_nome" jhiTranslate="cadastroaluno1App.responsavel.nome">Nome</label>
+          <label class="form-label" for="field_nome" jhiTranslate="cadastroalunoApp.responsavel.nome">Nome</label>
           <input type="text" class="form-control" name="nome" id="field_nome" data-cy="nome" formControlName="nome" />
           @if (nomeRef.invalid && (nomeRef.dirty || nomeRef.touched)) {
             <div>
@@ -39,7 +39,7 @@
 
         @let parentescoRef = editForm.get('parentesco')!;
         <div class="mb-3">
-          <label class="form-label" for="field_parentesco" jhiTranslate="cadastroaluno1App.responsavel.parentesco">Parentesco</label>
+          <label class="form-label" for="field_parentesco" jhiTranslate="cadastroalunoApp.responsavel.parentesco">Parentesco</label>
           <input
             type="text"
             class="form-control"
@@ -63,7 +63,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_cadastroAluno" jhiTranslate="cadastroaluno1App.responsavel.cadastroAluno"
+          <label class="form-label" for="field_cadastroAluno" jhiTranslate="cadastroalunoApp.responsavel.cadastroAluno"
             >Cadastro Aluno</label
           >
           <select

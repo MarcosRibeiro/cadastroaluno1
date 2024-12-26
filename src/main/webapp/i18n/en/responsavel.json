@@ -1,0 +1,27 @@
+{
+  "cadastroalunoApp": {
+    "responsavel": {
+      "home": {
+        "title": "Responsavels",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Responsavel",
+        "createOrEditLabel": "Create or edit a Responsavel",
+        "search": "Search for Responsavel",
+        "notFound": "No Responsavels found"
+      },
+      "created": "A new Responsavel is created with identifier {{ param }}",
+      "updated": "A Responsavel is updated with identifier {{ param }}",
+      "deleted": "A Responsavel is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Responsavel {{ id }}?"
+      },
+      "detail": {
+        "title": "Responsavel"
+      },
+      "id": "ID",
+      "nome": "Nome",
+      "parentesco": "Parentesco",
+      "cadastroAluno": "Cadastro Aluno"
+    }
+  }
+}

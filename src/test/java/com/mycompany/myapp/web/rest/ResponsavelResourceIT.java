@@ -5,15 +5,16 @@ import static com.mycompany.myapp.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Responsavel;
-import com.mycompany.myapp.repository.EntityManager;
 import com.mycompany.myapp.repository.ResponsavelRepository;
 import com.mycompany.myapp.repository.search.ResponsavelSearchRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -23,17 +24,18 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.util.Streamable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Integration tests for the {@link ResponsavelResource} REST controller.
  */
 @IntegrationTest
-@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_ENTITY_TIMEOUT)
+@AutoConfigureMockMvc
 @WithMockUser
 class ResponsavelResourceIT {
 
@@ -63,7 +65,7 @@ class ResponsavelResourceIT {
     private EntityManager em;
 
     @Autowired
-    private WebTestClient webTestClient;
+    private MockMvc restResponsavelMockMvc;
 
     private Responsavel responsavel;
 
@@ -89,14 +91,6 @@ class ResponsavelResourceIT {
         return new Responsavel().nome(UPDATED_NOME).parentesco(UPDATED_PARENTESCO);
     }
 
-    public static void deleteEntities(EntityManager em) {
-        try {
-            em.deleteAll(Responsavel.class).block();
-        } catch (Exception e) {
-            // It can fail, if other entities are still referring this - it will be removed later.
-        }
-    }
-
     @BeforeEach
     public void initTest() {
         responsavel = createEntity();
@@ -105,29 +99,27 @@ class ResponsavelResourceIT {
     @AfterEach
     public void cleanup() {
         if (insertedResponsavel != null) {
-            responsavelRepository.delete(insertedResponsavel).block();
-            responsavelSearchRepository.delete(insertedResponsavel).block();
+            responsavelRepository.delete(insertedResponsavel);
+            responsavelSearchRepository.delete(insertedResponsavel);
             insertedResponsavel = null;
         }
-        deleteEntities(em);
     }
 
     @Test
+    @Transactional
     void createResponsavel() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         // Create the Responsavel
-        var returnedResponsavel = webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(responsavel))
-            .exchange()
-            .expectStatus()
-            .isCreated()
-            .expectBody(Responsavel.class)
-            .returnResult()
-            .getResponseBody();
+        var returnedResponsavel = om.readValue(
+            restResponsavelMockMvc
+                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(responsavel)))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString(),
+            Responsavel.class
+        );
 
         // Validate the Responsavel in the database
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
@@ -136,7 +128,7 @@ class ResponsavelResourceIT {
         await()
             .atMost(5, TimeUnit.SECONDS)
             .untilAsserted(() -> {
-                int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+                int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
                 assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore + 1);
             });
 
@@ -144,158 +136,127 @@ class ResponsavelResourceIT {
     }
 
     @Test
+    @Transactional
     void createResponsavelWithExistingId() throws Exception {
         // Create the Responsavel with an existing ID
         responsavel.setId(1L);
 
         long databaseSizeBeforeCreate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(responsavel))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restResponsavelMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(responsavel)))
+            .andExpect(status().isBadRequest());
 
         // Validate the Responsavel in the database
         assertSameRepositoryCount(databaseSizeBeforeCreate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void checkNomeIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         // set the field null
         responsavel.setNome(null);
 
         // Create the Responsavel, which fails.
 
-        webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(responsavel))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restResponsavelMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(responsavel)))
+            .andExpect(status().isBadRequest());
 
         assertSameRepositoryCount(databaseSizeBeforeTest);
 
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void checkParentescoIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         // set the field null
         responsavel.setParentesco(null);
 
         // Create the Responsavel, which fails.
 
-        webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(responsavel))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restResponsavelMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(responsavel)))
+            .andExpect(status().isBadRequest());
 
         assertSameRepositoryCount(databaseSizeBeforeTest);
 
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
-    void getAllResponsavels() {
+    @Transactional
+    void getAllResponsavels() throws Exception {
         // Initialize the database
-        insertedResponsavel = responsavelRepository.save(responsavel).block();
+        insertedResponsavel = responsavelRepository.saveAndFlush(responsavel);
 
         // Get all the responsavelList
-        webTestClient
-            .get()
-            .uri(ENTITY_API_URL + "?sort=id,desc")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus()
-            .isOk()
-            .expectHeader()
-            .contentType(MediaType.APPLICATION_JSON)
-            .expectBody()
-            .jsonPath("$.[*].id")
-            .value(hasItem(responsavel.getId().intValue()))
-            .jsonPath("$.[*].nome")
-            .value(hasItem(DEFAULT_NOME))
-            .jsonPath("$.[*].parentesco")
-            .value(hasItem(DEFAULT_PARENTESCO));
+        restResponsavelMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(responsavel.getId().intValue())))
+            .andExpect(jsonPath("$.[*].nome").value(hasItem(DEFAULT_NOME)))
+            .andExpect(jsonPath("$.[*].parentesco").value(hasItem(DEFAULT_PARENTESCO)));
     }
 
     @Test
-    void getResponsavel() {
+    @Transactional
+    void getResponsavel() throws Exception {
         // Initialize the database
-        insertedResponsavel = responsavelRepository.save(responsavel).block();
+        insertedResponsavel = responsavelRepository.saveAndFlush(responsavel);
 
         // Get the responsavel
-        webTestClient
-            .get()
-            .uri(ENTITY_API_URL_ID, responsavel.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus()
-            .isOk()
-            .expectHeader()
-            .contentType(MediaType.APPLICATION_JSON)
-            .expectBody()
-            .jsonPath("$.id")
-            .value(is(responsavel.getId().intValue()))
-            .jsonPath("$.nome")
-            .value(is(DEFAULT_NOME))
-            .jsonPath("$.parentesco")
-            .value(is(DEFAULT_PARENTESCO));
+        restResponsavelMockMvc
+            .perform(get(ENTITY_API_URL_ID, responsavel.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.id").value(responsavel.getId().intValue()))
+            .andExpect(jsonPath("$.nome").value(DEFAULT_NOME))
+            .andExpect(jsonPath("$.parentesco").value(DEFAULT_PARENTESCO));
     }
 
     @Test
-    void getNonExistingResponsavel() {
+    @Transactional
+    void getNonExistingResponsavel() throws Exception {
         // Get the responsavel
-        webTestClient
-            .get()
-            .uri(ENTITY_API_URL_ID, Long.MAX_VALUE)
-            .accept(MediaType.APPLICATION_PROBLEM_JSON)
-            .exchange()
-            .expectStatus()
-            .isNotFound();
+        restResponsavelMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
     @Test
+    @Transactional
     void putExistingResponsavel() throws Exception {
         // Initialize the database
-        insertedResponsavel = responsavelRepository.save(responsavel).block();
+        insertedResponsavel = responsavelRepository.saveAndFlush(responsavel);
 
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        responsavelSearchRepository.save(responsavel).block();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        responsavelSearchRepository.save(responsavel);
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
 
         // Update the responsavel
-        Responsavel updatedResponsavel = responsavelRepository.findById(responsavel.getId()).block();
+        Responsavel updatedResponsavel = responsavelRepository.findById(responsavel.getId()).orElseThrow();
+        // Disconnect from session so that the updates on updatedResponsavel are not directly saved in db
+        em.detach(updatedResponsavel);
         updatedResponsavel.nome(UPDATED_NOME).parentesco(UPDATED_PARENTESCO);
 
-        webTestClient
-            .put()
-            .uri(ENTITY_API_URL_ID, updatedResponsavel.getId())
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(updatedResponsavel))
-            .exchange()
-            .expectStatus()
-            .isOk();
+        restResponsavelMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, updatedResponsavel.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(updatedResponsavel))
+            )
+            .andExpect(status().isOk());
 
         // Validate the Responsavel in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
@@ -304,89 +265,82 @@ class ResponsavelResourceIT {
         await()
             .atMost(5, TimeUnit.SECONDS)
             .untilAsserted(() -> {
-                int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+                int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
                 assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
-                List<Responsavel> responsavelSearchList = Streamable.of(
-                    responsavelSearchRepository.findAll().collectList().block()
-                ).toList();
+                List<Responsavel> responsavelSearchList = Streamable.of(responsavelSearchRepository.findAll()).toList();
                 Responsavel testResponsavelSearch = responsavelSearchList.get(searchDatabaseSizeAfter - 1);
 
-                // Test fails because reactive api returns an empty object instead of null
-                // assertResponsavelAllPropertiesEquals(testResponsavelSearch, updatedResponsavel);
-                assertResponsavelUpdatableFieldsEquals(testResponsavelSearch, updatedResponsavel);
+                assertResponsavelAllPropertiesEquals(testResponsavelSearch, updatedResponsavel);
             });
     }
 
     @Test
+    @Transactional
     void putNonExistingResponsavel() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         responsavel.setId(longCount.incrementAndGet());
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        webTestClient
-            .put()
-            .uri(ENTITY_API_URL_ID, responsavel.getId())
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(responsavel))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restResponsavelMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, responsavel.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(responsavel))
+            )
+            .andExpect(status().isBadRequest());
 
         // Validate the Responsavel in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void putWithIdMismatchResponsavel() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         responsavel.setId(longCount.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        webTestClient
-            .put()
-            .uri(ENTITY_API_URL_ID, longCount.incrementAndGet())
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(responsavel))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restResponsavelMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, longCount.incrementAndGet())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(om.writeValueAsBytes(responsavel))
+            )
+            .andExpect(status().isBadRequest());
 
         // Validate the Responsavel in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void putWithMissingIdPathParamResponsavel() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         responsavel.setId(longCount.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        webTestClient
-            .put()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(responsavel))
-            .exchange()
-            .expectStatus()
-            .isEqualTo(405);
+        restResponsavelMockMvc
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(responsavel)))
+            .andExpect(status().isMethodNotAllowed());
 
         // Validate the Responsavel in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void partialUpdateResponsavelWithPatch() throws Exception {
         // Initialize the database
-        insertedResponsavel = responsavelRepository.save(responsavel).block();
+        insertedResponsavel = responsavelRepository.saveAndFlush(responsavel);
 
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
@@ -394,16 +348,15 @@ class ResponsavelResourceIT {
         Responsavel partialUpdatedResponsavel = new Responsavel();
         partialUpdatedResponsavel.setId(responsavel.getId());
 
-        partialUpdatedResponsavel.nome(UPDATED_NOME).parentesco(UPDATED_PARENTESCO);
+        partialUpdatedResponsavel.nome(UPDATED_NOME);
 
-        webTestClient
-            .patch()
-            .uri(ENTITY_API_URL_ID, partialUpdatedResponsavel.getId())
-            .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(partialUpdatedResponsavel))
-            .exchange()
-            .expectStatus()
-            .isOk();
+        restResponsavelMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedResponsavel.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(partialUpdatedResponsavel))
+            )
+            .andExpect(status().isOk());
 
         // Validate the Responsavel in the database
 
@@ -415,9 +368,10 @@ class ResponsavelResourceIT {
     }
 
     @Test
+    @Transactional
     void fullUpdateResponsavelWithPatch() throws Exception {
         // Initialize the database
-        insertedResponsavel = responsavelRepository.save(responsavel).block();
+        insertedResponsavel = responsavelRepository.saveAndFlush(responsavel);
 
         long databaseSizeBeforeUpdate = getRepositoryCount();
 
@@ -427,14 +381,13 @@ class ResponsavelResourceIT {
 
         partialUpdatedResponsavel.nome(UPDATED_NOME).parentesco(UPDATED_PARENTESCO);
 
-        webTestClient
-            .patch()
-            .uri(ENTITY_API_URL_ID, partialUpdatedResponsavel.getId())
-            .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(partialUpdatedResponsavel))
-            .exchange()
-            .expectStatus()
-            .isOk();
+        restResponsavelMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedResponsavel.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(partialUpdatedResponsavel))
+            )
+            .andExpect(status().isOk());
 
         // Validate the Responsavel in the database
 
@@ -443,123 +396,109 @@ class ResponsavelResourceIT {
     }
 
     @Test
+    @Transactional
     void patchNonExistingResponsavel() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         responsavel.setId(longCount.incrementAndGet());
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        webTestClient
-            .patch()
-            .uri(ENTITY_API_URL_ID, responsavel.getId())
-            .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(responsavel))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restResponsavelMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, responsavel.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(responsavel))
+            )
+            .andExpect(status().isBadRequest());
 
         // Validate the Responsavel in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void patchWithIdMismatchResponsavel() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         responsavel.setId(longCount.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        webTestClient
-            .patch()
-            .uri(ENTITY_API_URL_ID, longCount.incrementAndGet())
-            .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(responsavel))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
+        restResponsavelMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, longCount.incrementAndGet())
+                    .contentType("application/merge-patch+json")
+                    .content(om.writeValueAsBytes(responsavel))
+            )
+            .andExpect(status().isBadRequest());
 
         // Validate the Responsavel in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
+    @Transactional
     void patchWithMissingIdPathParamResponsavel() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         responsavel.setId(longCount.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
-        webTestClient
-            .patch()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(responsavel))
-            .exchange()
-            .expectStatus()
-            .isEqualTo(405);
+        restResponsavelMockMvc
+            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(om.writeValueAsBytes(responsavel)))
+            .andExpect(status().isMethodNotAllowed());
 
         // Validate the Responsavel in the database
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     }
 
     @Test
-    void deleteResponsavel() {
+    @Transactional
+    void deleteResponsavel() throws Exception {
         // Initialize the database
-        insertedResponsavel = responsavelRepository.save(responsavel).block();
-        responsavelRepository.save(responsavel).block();
-        responsavelSearchRepository.save(responsavel).block();
+        insertedResponsavel = responsavelRepository.saveAndFlush(responsavel);
+        responsavelRepository.save(responsavel);
+        responsavelSearchRepository.save(responsavel);
 
         long databaseSizeBeforeDelete = getRepositoryCount();
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         assertThat(searchDatabaseSizeBefore).isEqualTo(databaseSizeBeforeDelete);
 
         // Delete the responsavel
-        webTestClient
-            .delete()
-            .uri(ENTITY_API_URL_ID, responsavel.getId())
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus()
-            .isNoContent();
+        restResponsavelMockMvc
+            .perform(delete(ENTITY_API_URL_ID, responsavel.getId()).accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
         assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll().collectList().block());
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(responsavelSearchRepository.findAll());
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore - 1);
     }
 
     @Test
-    void searchResponsavel() {
+    @Transactional
+    void searchResponsavel() throws Exception {
         // Initialize the database
-        insertedResponsavel = responsavelRepository.save(responsavel).block();
-        responsavelSearchRepository.save(responsavel).block();
+        insertedResponsavel = responsavelRepository.saveAndFlush(responsavel);
+        responsavelSearchRepository.save(responsavel);
 
         // Search the responsavel
-        webTestClient
-            .get()
-            .uri(ENTITY_SEARCH_API_URL + "?query=id:" + responsavel.getId())
-            .exchange()
-            .expectStatus()
-            .isOk()
-            .expectHeader()
-            .contentType(MediaType.APPLICATION_JSON)
-            .expectBody()
-            .jsonPath("$.[*].id")
-            .value(hasItem(responsavel.getId().intValue()))
-            .jsonPath("$.[*].nome")
-            .value(hasItem(DEFAULT_NOME))
-            .jsonPath("$.[*].parentesco")
-            .value(hasItem(DEFAULT_PARENTESCO));
+        restResponsavelMockMvc
+            .perform(get(ENTITY_SEARCH_API_URL + "?query=id:" + responsavel.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(responsavel.getId().intValue())))
+            .andExpect(jsonPath("$.[*].nome").value(hasItem(DEFAULT_NOME)))
+            .andExpect(jsonPath("$.[*].parentesco").value(hasItem(DEFAULT_PARENTESCO)));
     }
 
     protected long getRepositoryCount() {
-        return responsavelRepository.count().block();
+        return responsavelRepository.count();
     }
 
     protected void assertIncrementedRepositoryCount(long countBefore) {
@@ -575,18 +514,14 @@ class ResponsavelResourceIT {
     }
 
     protected Responsavel getPersistedResponsavel(Responsavel responsavel) {
-        return responsavelRepository.findById(responsavel.getId()).block();
+        return responsavelRepository.findById(responsavel.getId()).orElseThrow();
     }
 
     protected void assertPersistedResponsavelToMatchAllProperties(Responsavel expectedResponsavel) {
-        // Test fails because reactive api returns an empty object instead of null
-        // assertResponsavelAllPropertiesEquals(expectedResponsavel, getPersistedResponsavel(expectedResponsavel));
-        assertResponsavelUpdatableFieldsEquals(expectedResponsavel, getPersistedResponsavel(expectedResponsavel));
+        assertResponsavelAllPropertiesEquals(expectedResponsavel, getPersistedResponsavel(expectedResponsavel));
     }
 
     protected void assertPersistedResponsavelToMatchUpdatableProperties(Responsavel expectedResponsavel) {
-        // Test fails because reactive api returns an empty object instead of null
-        // assertResponsavelAllUpdatablePropertiesEquals(expectedResponsavel, getPersistedResponsavel(expectedResponsavel));
-        assertResponsavelUpdatableFieldsEquals(expectedResponsavel, getPersistedResponsavel(expectedResponsavel));
+        assertResponsavelAllUpdatablePropertiesEquals(expectedResponsavel, getPersistedResponsavel(expectedResponsavel));
     }
 }

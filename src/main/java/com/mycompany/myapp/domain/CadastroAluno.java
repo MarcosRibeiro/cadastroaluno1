@@ -6,19 +6,21 @@ import com.mycompany.myapp.domain.enumeration.SimNao;
 import com.mycompany.myapp.domain.enumeration.SituacaoResidencia;
 import com.mycompany.myapp.domain.enumeration.TipoResidencia;
 import com.mycompany.myapp.domain.enumeration.Turno;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A CadastroAluno.
  */
-@Table("cadastro_aluno")
+@Entity
+@Table(name = "cadastro_aluno")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "cadastroaluno")
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class CadastroAluno implements Serializable {
@@ -26,379 +28,395 @@ public class CadastroAluno implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @NotNull(message = "must not be null")
-    @Column("data_cadastro")
+    @NotNull
+    @Column(name = "data_cadastro", nullable = false)
     private LocalDate dataCadastro;
 
     @Size(max = 20)
-    @Column("matricula")
+    @Column(name = "matricula", length = 20)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String matricula;
 
     @Size(max = 50)
-    @Column("grupo")
+    @Column(name = "grupo", length = 50)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String grupo;
 
-    @NotNull(message = "must not be null")
+    @NotNull
     @Size(max = 255)
-    @Column("nome")
+    @Column(name = "nome", length = 255, nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String nome;
 
-    @NotNull(message = "must not be null")
-    @Column("dn")
+    @NotNull
+    @Column(name = "dn", nullable = false)
     private LocalDate dn;
 
-    @NotNull(message = "must not be null")
+    @NotNull
     @Size(max = 10)
-    @Column("cep")
+    @Column(name = "cep", length = 10, nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String cep;
 
-    @NotNull(message = "must not be null")
+    @NotNull
     @Size(max = 5000)
-    @Column("endereco")
+    @Column(name = "endereco", length = 5000, nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String endereco;
 
     @Size(max = 10)
-    @Column("qd")
+    @Column(name = "qd", length = 10)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String qd;
 
     @Size(max = 10)
-    @Column("lote")
+    @Column(name = "lote", length = 10)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String lote;
 
     @Size(max = 10)
-    @Column("endnumero")
+    @Column(name = "endnumero", length = 10)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String endnumero;
 
     @Size(max = 100)
-    @Column("bairro")
+    @Column(name = "bairro", length = 100)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String bairro;
 
     @Size(max = 100)
-    @Column("municipio")
+    @Column(name = "municipio", length = 100)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String municipio;
 
     @Size(max = 2)
-    @Column("uf")
+    @Column(name = "uf", length = 2)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String uf;
 
-    @NotNull(message = "must not be null")
+    @NotNull
     @Size(max = 15)
-    @Column("fone")
+    @Column(name = "fone", length = 15, nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String fone;
 
     @Size(max = 50)
-    @Column("certidao")
+    @Column(name = "certidao", length = 50)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String certidao;
 
     @Size(max = 50)
-    @Column("termo")
+    @Column(name = "termo", length = 50)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String termo;
 
     @Size(max = 100)
-    @Column("cartorio")
+    @Column(name = "cartorio", length = 100)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String cartorio;
 
     @Size(max = 100)
-    @Column("naturalidade")
+    @Column(name = "naturalidade", length = 100)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String naturalidade;
 
     @Size(max = 20)
-    @Column("rg")
+    @Column(name = "rg", length = 20)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String rg;
 
-    @NotNull(message = "must not be null")
+    @NotNull
     @Size(max = 14)
-    @Column("cpf")
+    @Column(name = "cpf", length = 14, nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String cpf;
 
     @Size(max = 15)
-    @Column("nis")
+    @Column(name = "nis", length = 15)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String nis;
 
     @Size(max = 100)
-    @Column("cras")
+    @Column(name = "cras", length = 100)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String cras;
 
     @Size(max = 255)
-    @Column("filiacao_pai")
+    @Column(name = "filiacao_pai", length = 255)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String filiacaoPai;
 
     @Size(max = 15)
-    @Column("pai_telefone")
+    @Column(name = "pai_telefone", length = 15)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String paiTelefone;
 
     @Size(max = 100)
-    @Column("pai_naturalidade")
+    @Column(name = "pai_naturalidade", length = 100)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String paiNaturalidade;
 
     @Size(max = 2)
-    @Column("pai_uf")
+    @Column(name = "pai_uf", length = 2)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String paiUf;
 
     @Size(max = 20)
-    @Column("pai_rg")
+    @Column(name = "pai_rg", length = 20)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String paiRg;
 
-    @Column("pai_data_nascimento")
+    @Column(name = "pai_data_nascimento")
     private LocalDate paiDataNascimento;
 
     @Size(max = 14)
-    @Column("pai_cpf")
+    @Column(name = "pai_cpf", length = 14)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String paiCpf;
 
     @Size(max = 15)
-    @Column("pai_nis")
+    @Column(name = "pai_nis", length = 15)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String paiNis;
 
     @Size(max = 20)
-    @Column("pai_titulo_eleitor")
+    @Column(name = "pai_titulo_eleitor", length = 20)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String paiTituloEleitor;
 
     @Size(max = 10)
-    @Column("pai_zona")
+    @Column(name = "pai_zona", length = 10)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String paiZona;
 
     @Size(max = 10)
-    @Column("pai_secao")
+    @Column(name = "pai_secao", length = 10)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String paiSecao;
 
     @Size(max = 100)
-    @Column("pai_municipio")
+    @Column(name = "pai_municipio", length = 100)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String paiMunicipio;
 
-    @NotNull(message = "must not be null")
+    @NotNull
     @Size(max = 255)
-    @Column("filiacao_mae")
+    @Column(name = "filiacao_mae", length = 255, nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String filiacaoMae;
 
     @Size(max = 15)
-    @Column("mae_telefone")
+    @Column(name = "mae_telefone", length = 15)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String maeTelefone;
 
     @Size(max = 100)
-    @Column("mae_naturalidade")
+    @Column(name = "mae_naturalidade", length = 100)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String maeNaturalidade;
 
     @Size(max = 2)
-    @Column("mae_uf")
+    @Column(name = "mae_uf", length = 2)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String maeUf;
 
     @Size(max = 20)
-    @Column("mae_rg")
+    @Column(name = "mae_rg", length = 20)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String maeRg;
 
-    @Column("mae_data_nascimento")
+    @Column(name = "mae_data_nascimento")
     private LocalDate maeDataNascimento;
 
     @Size(max = 14)
-    @Column("mae_cpf")
+    @Column(name = "mae_cpf", length = 14)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String maeCpf;
 
     @Size(max = 15)
-    @Column("mae_nis")
+    @Column(name = "mae_nis", length = 15)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String maeNis;
 
     @Size(max = 20)
-    @Column("mae_titulo_eleitor")
+    @Column(name = "mae_titulo_eleitor", length = 20)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String maeTituloEleitor;
 
     @Size(max = 10)
-    @Column("mae_zona")
+    @Column(name = "mae_zona", length = 10)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String maeZona;
 
     @Size(max = 10)
-    @Column("mae_secao")
+    @Column(name = "mae_secao", length = 10)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String maeSecao;
 
     @Size(max = 100)
-    @Column("mae_municipio")
+    @Column(name = "mae_municipio", length = 100)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String maeMunicipio;
 
     @Size(max = 255)
-    @Column("nome_escola")
+    @Column(name = "nome_escola", length = 255)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String nomeEscola;
 
     @Size(max = 50)
-    @Column("ano_cursando")
+    @Column(name = "ano_cursando", length = 50)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String anoCursando;
 
-    @Column("turno")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "turno")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private Turno turno;
 
-    @Column("media_escolar")
+    @Column(name = "media_escolar")
     private Double mediaEscolar;
 
-    @Column("prioritario")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "prioritario")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private SimNao prioritario;
 
     @Size(max = 5000)
-    @Column("obs")
+    @Column(name = "obs", length = 5000)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String obs;
 
-    @Column("comportamento_casa")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "comportamento_casa")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private Comportamento comportamentoCasa;
 
-    @Column("comportamento_escola")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "comportamento_escola")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private Comportamento comportamentoEscola;
 
-    @Column("deficiencia")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "deficiencia")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private SimNao deficiencia;
 
-    @Column("adaptacoes")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "adaptacoes")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private SimNao adaptacoes;
 
-    @Column("medicacao")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "medicacao")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private SimNao medicacao;
 
     @Size(max = 5000)
-    @Column("medicacao_desc")
+    @Column(name = "medicacao_desc", length = 5000)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String medicacaoDesc;
 
-    @Column("alergia")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "alergia")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private SimNao alergia;
 
     @Size(max = 5000)
-    @Column("alergia_desc")
+    @Column(name = "alergia_desc", length = 5000)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String alergiaDesc;
 
     @Size(max = 5000)
-    @Column("historico_medico")
+    @Column(name = "historico_medico", length = 5000)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String historicoMedico;
 
     @Size(max = 20)
-    @Column("renda_familiar")
+    @Column(name = "renda_familiar", length = 20)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String rendaFamiliar;
 
-    @Column("pessoas_trabalham")
+    @Column(name = "pessoas_trabalham")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer pessoasTrabalham;
 
-    @Column("num_pessoas_lar")
+    @Column(name = "num_pessoas_lar")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
     private Integer numPessoasLar;
 
-    @Column("beneficio_social")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "beneficio_social")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private SimNao beneficioSocial;
 
     @Size(max = 5000)
-    @Column("beneficios")
+    @Column(name = "beneficios", length = 5000)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String beneficios;
 
-    @Column("tipo_residencia")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_residencia")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private TipoResidencia tipoResidencia;
 
     @Size(max = 100)
-    @Column("tipo_residencia_desc")
+    @Column(name = "tipo_residencia_desc", length = 100)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String tipoResidenciaDesc;
 
-    @Column("situacao_residencia")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "situacao_residencia")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
     private SituacaoResidencia situacaoResidencia;
 
     @Size(max = 100)
-    @Column("situacao_residencia_desc")
+    @Column(name = "situacao_residencia_desc", length = 100)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String situacaoResidenciaDesc;
 
-    @NotNull(message = "must not be null")
+    @NotNull
     @Size(max = 255)
-    @Column("contato_emergencia")
+    @Column(name = "contato_emergencia", length = 255, nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String contatoEmergencia;
 
-    @NotNull(message = "must not be null")
+    @NotNull
     @Size(max = 15)
-    @Column("fone_emergencia")
+    @Column(name = "fone_emergencia", length = 15, nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String foneEmergencia;
 
-    @NotNull(message = "must not be null")
+    @NotNull
     @Size(max = 50)
-    @Column("relacao_emergencia")
+    @Column(name = "relacao_emergencia", length = 50, nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String relacaoEmergencia;
 
-    @NotNull(message = "must not be null")
-    @Column("autorizacao")
+    @NotNull
+    @Column(name = "autorizacao", nullable = false)
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
     private Boolean autorizacao;
 
-    @Column("foto_aluno")
+    @Column(name = "foto_aluno")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String fotoAluno;
 
-    @Column("foto_mae")
+    @Column(name = "foto_mae")
     @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text)
     private String fotoMae;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cadastroAluno")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(value = { "cadastroAluno" }, allowSetters = true)
     private Set<Responsavel> responsaveis = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cadastroAluno")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @org.springframework.data.annotation.Transient
     @JsonIgnoreProperties(value = { "cadastroAluno" }, allowSetters = true)
     private Set<Deslocamento> deslocamentos = new HashSet<>();

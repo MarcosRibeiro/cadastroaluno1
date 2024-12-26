@@ -25,12 +25,12 @@ export class AlertErrorComponent implements OnDestroy {
   private readonly translateService = inject(TranslateService);
 
   constructor() {
-    this.errorListener = this.eventManager.subscribe('cadastroaluno1App.error', (response: EventWithContent<unknown> | string) => {
+    this.errorListener = this.eventManager.subscribe('cadastroalunoApp.error', (response: EventWithContent<unknown> | string) => {
       const errorResponse = (response as EventWithContent<AlertError>).content;
       this.addErrorAlert(errorResponse.message, errorResponse.key, errorResponse.params);
     });
 
-    this.httpErrorListener = this.eventManager.subscribe('cadastroaluno1App.httpError', (response: EventWithContent<unknown> | string) => {
+    this.httpErrorListener = this.eventManager.subscribe('cadastroalunoApp.httpError', (response: EventWithContent<unknown> | string) => {
       this.handleHttpError(response);
     });
   }
@@ -125,7 +125,7 @@ export class AlertErrorComponent implements OnDestroy {
       }
       // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
       const convertedField: string = fieldError.field.replace(/\[\d*\]/g, '[]');
-      const fieldName: string = this.translateService.instant(`cadastroaluno1App.${fieldError.objectName as string}.${convertedField}`);
+      const fieldName: string = this.translateService.instant(`cadastroalunoApp.${fieldError.objectName as string}.${convertedField}`);
       this.addErrorAlert(`Error on field "${fieldName}"`, `error.${fieldError.message as string}`, { fieldName });
     }
   }

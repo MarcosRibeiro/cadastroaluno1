@@ -4,9 +4,9 @@ import { ICadastroAluno, NewCadastroAluno } from './cadastro-aluno.model';
 
 export const sampleWithRequiredData: ICadastroAluno = {
   id: 28709,
-  dataCadastro: dayjs('2024-12-25'),
+  dataCadastro: dayjs('2024-12-26'),
   nome: 'above',
-  dn: dayjs('2024-12-25'),
+  dn: dayjs('2024-12-26'),
   cep: 'stylish ch',
   endereco: 'overconfidently out',
   fone: 'provided warped',
@@ -20,7 +20,7 @@ export const sampleWithRequiredData: ICadastroAluno = {
 
 export const sampleWithPartialData: ICadastroAluno = {
   id: 16927,
-  dataCadastro: dayjs('2024-12-25'),
+  dataCadastro: dayjs('2024-12-26'),
   matricula: 'lanky of beep',
   grupo: 'to stool',
   nome: 'microblog',
@@ -63,11 +63,11 @@ export const sampleWithPartialData: ICadastroAluno = {
 
 export const sampleWithFullData: ICadastroAluno = {
   id: 8626,
-  dataCadastro: dayjs('2024-12-25'),
+  dataCadastro: dayjs('2024-12-26'),
   matricula: 'idealistic role viol',
   grupo: 'understanding',
   nome: 'like wavy sadly',
-  dn: dayjs('2024-12-25'),
+  dn: dayjs('2024-12-26'),
   cep: 'lovingly t',
   endereco: 'version',
   qd: 'safely',
@@ -90,7 +90,7 @@ export const sampleWithFullData: ICadastroAluno = {
   paiNaturalidade: 'cannibalise immediately what',
   paiUf: 'fi',
   paiRg: 'crank yum behind',
-  paiDataNascimento: dayjs('2024-12-25'),
+  paiDataNascimento: dayjs('2024-12-26'),
   paiCpf: 'satirise',
   paiNis: 'every bid now',
   paiTituloEleitor: 'among that deed',
@@ -102,7 +102,7 @@ export const sampleWithFullData: ICadastroAluno = {
   maeNaturalidade: 'down who',
   maeUf: 'se',
   maeRg: 'yowza provided iride',
-  maeDataNascimento: dayjs('2024-12-25'),
+  maeDataNascimento: dayjs('2024-12-26'),
   maeCpf: 'biodegradable ',
   maeNis: 'redact',
   maeTituloEleitor: 'almost impostor',
@@ -142,9 +142,9 @@ export const sampleWithFullData: ICadastroAluno = {
 };
 
 export const sampleWithNewData: NewCadastroAluno = {
-  dataCadastro: dayjs('2024-12-25'),
+  dataCadastro: dayjs('2024-12-26'),
   nome: 'lava closely',
-  dn: dayjs('2024-12-25'),
+  dn: dayjs('2024-12-26'),
   cep: 'worthless ',
   endereco: 'supposing',
   fone: 'cook for',

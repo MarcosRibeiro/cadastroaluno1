@@ -2,7 +2,7 @@
   <div class="col-8">
     @if (deslocamento(); as deslocamentoRef) {
       <div>
-        <h2 data-cy="deslocamentoDetailsHeading"><span jhiTranslate="cadastroaluno1App.deslocamento.detail.title">Deslocamento</span></h2>
+        <h2 data-cy="deslocamentoDetailsHeading"><span jhiTranslate="cadastroalunoApp.deslocamento.detail.title">Deslocamento</span></h2>
 
         <hr />
 
@@ -15,15 +15,15 @@
           <dd>
             <span>{{ deslocamentoRef.id }}</span>
           </dd>
-          <dt><span jhiTranslate="cadastroaluno1App.deslocamento.nome">Nome</span></dt>
+          <dt><span jhiTranslate="cadastroalunoApp.deslocamento.nome">Nome</span></dt>
           <dd>
             <span>{{ deslocamentoRef.nome }}</span>
           </dd>
-          <dt><span jhiTranslate="cadastroaluno1App.deslocamento.grau">Grau</span></dt>
+          <dt><span jhiTranslate="cadastroalunoApp.deslocamento.grau">Grau</span></dt>
           <dd>
             <span>{{ deslocamentoRef.grau }}</span>
           </dd>
-          <dt><span jhiTranslate="cadastroaluno1App.deslocamento.cadastroAluno">Cadastro Aluno</span></dt>
+          <dt><span jhiTranslate="cadastroalunoApp.deslocamento.cadastroAluno">Cadastro Aluno</span></dt>
           <dd>
             @if (deslocamento()!.cadastroAluno) {
               <div>

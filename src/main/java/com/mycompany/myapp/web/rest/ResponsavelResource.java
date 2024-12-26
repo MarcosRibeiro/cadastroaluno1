@@ -4,31 +4,27 @@ import com.mycompany.myapp.domain.Responsavel;
 import com.mycompany.myapp.repository.ResponsavelRepository;
 import com.mycompany.myapp.repository.search.ResponsavelSearchRepository;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import com.mycompany.myapp.web.rest.errors.ElasticsearchExceptionMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.util.ForwardedHeaderUtils;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
-import tech.jhipster.web.util.reactive.ResponseUtil;
+import tech.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Responsavel}.
@@ -62,23 +58,16 @@ public class ResponsavelResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public Mono<ResponseEntity<Responsavel>> createResponsavel(@Valid @RequestBody Responsavel responsavel) throws URISyntaxException {
+    public ResponseEntity<Responsavel> createResponsavel(@Valid @RequestBody Responsavel responsavel) throws URISyntaxException {
         LOG.debug("REST request to save Responsavel : {}", responsavel);
         if (responsavel.getId() != null) {
             throw new BadRequestAlertException("A new responsavel cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        return responsavelRepository
-            .save(responsavel)
-            .flatMap(responsavelSearchRepository::save)
-            .map(result -> {
-                try {
-                    return ResponseEntity.created(new URI("/api/responsavels/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-                        .body(result);
-                } catch (URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+        responsavel = responsavelRepository.save(responsavel);
+        responsavelSearchRepository.index(responsavel);
+        return ResponseEntity.created(new URI("/api/responsavels/" + responsavel.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, responsavel.getId().toString()))
+            .body(responsavel);
     }
 
     /**
@@ -92,7 +81,7 @@ public class ResponsavelResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<Responsavel>> updateResponsavel(
+    public ResponseEntity<Responsavel> updateResponsavel(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody Responsavel responsavel
     ) throws URISyntaxException {
@@ -104,23 +93,15 @@ public class ResponsavelResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        return responsavelRepository
-            .existsById(id)
-            .flatMap(exists -> {
-                if (!exists) {
-                    return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
-                }
+        if (!responsavelRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
 
-                return responsavelRepository
-                    .save(responsavel)
-                    .flatMap(responsavelSearchRepository::save)
-                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-                    .map(result ->
-                        ResponseEntity.ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-                            .body(result)
-                    );
-            });
+        responsavel = responsavelRepository.save(responsavel);
+        responsavelSearchRepository.index(responsavel);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, responsavel.getId().toString()))
+            .body(responsavel);
     }
 
     /**
@@ -135,7 +116,7 @@ public class ResponsavelResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public Mono<ResponseEntity<Responsavel>> partialUpdateResponsavel(
+    public ResponseEntity<Responsavel> partialUpdateResponsavel(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody Responsavel responsavel
     ) throws URISyntaxException {
@@ -147,67 +128,46 @@ public class ResponsavelResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        return responsavelRepository
-            .existsById(id)
-            .flatMap(exists -> {
-                if (!exists) {
-                    return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
+        if (!responsavelRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<Responsavel> result = responsavelRepository
+            .findById(responsavel.getId())
+            .map(existingResponsavel -> {
+                if (responsavel.getNome() != null) {
+                    existingResponsavel.setNome(responsavel.getNome());
+                }
+                if (responsavel.getParentesco() != null) {
+                    existingResponsavel.setParentesco(responsavel.getParentesco());
                 }
 
-                Mono<Responsavel> result = responsavelRepository
-                    .findById(responsavel.getId())
-                    .map(existingResponsavel -> {
-                        if (responsavel.getNome() != null) {
-                            existingResponsavel.setNome(responsavel.getNome());
-                        }
-                        if (responsavel.getParentesco() != null) {
-                            existingResponsavel.setParentesco(responsavel.getParentesco());
-                        }
-
-                        return existingResponsavel;
-                    })
-                    .flatMap(responsavelRepository::save)
-                    .flatMap(savedResponsavel -> {
-                        responsavelSearchRepository.save(savedResponsavel);
-                        return Mono.just(savedResponsavel);
-                    });
-
-                return result
-                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
-                    .map(res ->
-                        ResponseEntity.ok()
-                            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, res.getId().toString()))
-                            .body(res)
-                    );
+                return existingResponsavel;
+            })
+            .map(responsavelRepository::save)
+            .map(savedResponsavel -> {
+                responsavelSearchRepository.index(savedResponsavel);
+                return savedResponsavel;
             });
+
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, responsavel.getId().toString())
+        );
     }
 
     /**
      * {@code GET  /responsavels} : get all the responsavels.
      *
      * @param pageable the pagination information.
-     * @param request a {@link ServerHttpRequest} request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of responsavels in body.
      */
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<List<Responsavel>>> getAllResponsavels(
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable,
-        ServerHttpRequest request
-    ) {
+    @GetMapping("")
+    public ResponseEntity<List<Responsavel>> getAllResponsavels(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Responsavels");
-        return responsavelRepository
-            .count()
-            .zipWith(responsavelRepository.findAllBy(pageable).collectList())
-            .map(countWithEntities ->
-                ResponseEntity.ok()
-                    .headers(
-                        PaginationUtil.generatePaginationHttpHeaders(
-                            ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
-                            new PageImpl<>(countWithEntities.getT2(), pageable, countWithEntities.getT1())
-                        )
-                    )
-                    .body(countWithEntities.getT2())
-            );
+        Page<Responsavel> page = responsavelRepository.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -217,9 +177,9 @@ public class ResponsavelResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the responsavel, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public Mono<ResponseEntity<Responsavel>> getResponsavel(@PathVariable("id") Long id) {
+    public ResponseEntity<Responsavel> getResponsavel(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Responsavel : {}", id);
-        Mono<Responsavel> responsavel = responsavelRepository.findById(id);
+        Optional<Responsavel> responsavel = responsavelRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(responsavel);
     }
 
@@ -230,18 +190,13 @@ public class ResponsavelResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public Mono<ResponseEntity<Void>> deleteResponsavel(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteResponsavel(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Responsavel : {}", id);
-        return responsavelRepository
-            .deleteById(id)
-            .then(responsavelSearchRepository.deleteById(id))
-            .then(
-                Mono.just(
-                    ResponseEntity.noContent()
-                        .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-                        .build()
-                )
-            );
+        responsavelRepository.deleteById(id);
+        responsavelSearchRepository.deleteFromIndexById(id);
+        return ResponseEntity.noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
     }
 
     /**
@@ -250,25 +205,20 @@ public class ResponsavelResource {
      *
      * @param query the query of the responsavel search.
      * @param pageable the pagination information.
-     * @param request a {@link ServerHttpRequest} request.
      * @return the result of the search.
      */
     @GetMapping("/_search")
-    public Mono<ResponseEntity<Flux<Responsavel>>> searchResponsavels(
+    public ResponseEntity<List<Responsavel>> searchResponsavels(
         @RequestParam("query") String query,
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable,
-        ServerHttpRequest request
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
         LOG.debug("REST request to search for a page of Responsavels for query {}", query);
-        return responsavelSearchRepository
-            .count()
-            .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
-            .map(page ->
-                PaginationUtil.generatePaginationHttpHeaders(
-                    ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()),
-                    page
-                )
-            )
-            .map(headers -> ResponseEntity.ok().headers(headers).body(responsavelSearchRepository.search(query, pageable)));
+        try {
+            Page<Responsavel> page = responsavelSearchRepository.search(query, pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+            return ResponseEntity.ok().headers(headers).body(page.getContent());
+        } catch (RuntimeException e) {
+            throw ElasticsearchExceptionMapper.mapException(e);
+        }
     }
 }

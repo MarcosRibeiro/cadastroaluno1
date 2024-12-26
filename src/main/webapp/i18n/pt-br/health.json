@@ -17,7 +17,7 @@
       "readinessState": "Readiness state",
       "ping": "Application",
       "elasticsearch": "Elasticsearch",
-      "r2dbc": "Banco de dados"
+      "db": "Banco de dados"
     },
     "table": {
       "service": "Nome do Serviço",
