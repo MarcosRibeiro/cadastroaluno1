@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -12,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { DadosAlunoComponent } from './dados-aluno/dados-aluno.component';
 import { EnderecoComponent } from './endereco/endereco.component';
@@ -44,7 +44,6 @@ import { CepService } from './cep.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule,
     MatInputModule,
     MatFormFieldModule,
     MatSelectModule,
@@ -57,7 +56,7 @@ import { CepService } from './cep.service';
     NgxMaskDirective,
     NgxMaskPipe,
   ],
-  providers: [CepService, provideNgxMask()],
+  providers: [CepService, provideNgxMask(), provideHttpClient(withInterceptorsFromDi)],
   exports: [CadastroAlunoComponent],
 })
 export class CadastroAlunoModule {}
