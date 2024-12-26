@@ -1,7 +1,7 @@
 import os
 import re
 
-BASE_DIR = "C:\\\\cadastroaluno"  # Duas barras para evitar escapes (\c)
+BASE_DIR = "C:\\cadastroaluno"  # Substitua se o caminho for diferente
 
 def corrigir_pom_xml():
     """
@@ -17,7 +17,7 @@ def corrigir_pom_xml():
         with open(pom_path, "r+", encoding="utf-8") as f:
             original = f.read()
 
-            injection = r"""
+            injection = """
     <dependencyManagement>
       <dependencies>
         <dependency>
@@ -39,7 +39,7 @@ def corrigir_pom_xml():
                     or "javax.xml.bind" not in original
                     or "org.apache.commons" not in original):
                 print("[INFO] Inserindo dependencyManagement para jaxb-api 2.3.1 e commons-text 1.12.0.")
-                new_content = re.sub(r"(</project>)", injection + "\n\\1", original, 1, flags=re.IGNORECASE)
+                new_content = re.sub(r"(</project>)", injection + r"\n\1", original, 1, flags=re.IGNORECASE)
                 if new_content == original:
                     print("[AVISO] Não foi possível inserir dependencyManagement automaticamente no pom.xml.")
                     return
@@ -51,6 +51,168 @@ def corrigir_pom_xml():
                 print("[INFO] dependencyManagement possivelmente já está configurado no pom.xml.")
     except Exception as e:
         print(f"[ERRO] Erro ao processar pom.xml: {e}")
+
+def corrigir_arquivo_especifico(filepath, correcoes):
+    """
+    Lê um arquivo específico, aplica as correções e sobrescreve se necessário.
+    """
+    try:
+        with open(filepath, "r+", encoding="utf-8") as f:
+            original = f.read()
+            content = original
+
+            for padrao, substituto in correcoes:
+                content = re.sub(padrao, substituto, content)
+
+            if content != original:
+                f.seek(0)
+                f.write(content)
+                f.truncate()
+                print(f"[OK] Modificado: {filepath}")
+            else:
+                print(f"[INFO] Nenhuma modificação necessária em: {filepath}")
+
+    except Exception as e:
+        print(f"[ERRO] Erro ao processar arquivo {filepath}: {e}")
+
+def main():
+    print("[INFO] Script de correção iniciado (modo ultra-focado).")
+
+    # 1) Corrigir pom.xml (dependências)
+    corrigir_pom_xml()
+
+    # 2) Correções em arquivos .ts específicos
+    arquivos_para_corrigir = {
+        "src/main/webapp/app/shared/shared.module.ts": [
+            # Substituir importações incorretas no shared.module.ts
+            (r"import\s+AlertComponent\s+from\s+'\./alert/alert\.component';",
+             "import { AlertComponent } from './alert/alert.component';"),
+            (r"import\s+AlertErrorComponent\s+from\s+'\./alert/alert-error\.component';",
+             "import { AlertErrorComponent } from './alert/alert-error.component';"),
+            (r"import\s+SortByDirective\s+from\s+'\./sort/sort-by\.directive';",
+             "import { SortByDirective } from './sort/sort-by.directive';"),
+            (r"import\s+SortDirective\s+from\s+'\./sort/sort\.directive';",
+             "import { SortDirective } from './sort/sort.directive';")
+        ],
+        "src/main/webapp/app/entities/cadastro-aluno/service/cadastro-aluno.service.ts": [
+            # Corrigir erro TS2345 em cadastro-aluno.service.ts
+            (r"(\.includes\()(\w+), (\w+)(\))", r"\1\2 as number, \3\4"),
+            (r"(\.push\()(\w+)(\))", r"\1\2 as number\3")
+        ],
+        "src/main/webapp/app/entities/cadastro-aluno/cadastro-aluno.routes.ts": [
+            # Corrigir erro de digitação no cadastro-aluno.routes.ts
+            (r"(\.\.\/cadastro-aluno\.model';)", r"../cadastro-aluno.model';")
+        ],
+        "src/main/webapp/app/cadastro-aluno/cadastro-aluno/cadastro-aluno.component.ts": [
+            # 4) create(cadastroAluno) -> create({ ...cadastroAluno, id: null })
+            (r"(\.create\s*\(\s*)cadastroAluno(\s*\))", r"\1{ ...cadastroAluno, id: null }\2")
+        ],
+        "src/main/webapp/app/cadastro-aluno/cadastro-aluno.module.ts": [
+            # 3) withInterceptorsFromDi -> withInterceptorsFromDi()
+            (r"withInterceptorsFromDi", r"withInterceptorsFromDi()")
+        ]
+    }
+
+    for filepath, correcoes in arquivos_para_corrigir.items():
+        caminho_completo = os.path.join(BASE_DIR, filepath)
+        corrigir_arquivo_especifico(caminho_completo, correcoes)
+
+    # 3) Remover 'standalone: true' e 'imports: []' dos decorators MENCIONADOS NOS ERROS
+    #  (Usa a função 'remover_decorator_entries' do script anterior,
+    #   mas agora aplicada a arquivos específicos)
+    arquivos_remover_decorator = [
+        "src/main/webapp/app/account/activate/activate.component.ts",
+        "src/main/webapp/app/account/password-reset/finish/password-reset-finish.component.ts",
+        "src/main/webapp/app/account/password-reset/init/password-reset-init.component.ts",
+        "src/main/webapp/app/account/password/password-strength-bar/password-strength-bar.component.ts",
+        "src/main/webapp/app/account/password/password.component.ts",
+        "src/main/webapp/app/account/register/register.component.ts",
+        "src/main/webapp/app/account/settings/settings.component.ts",
+        "src/main/webapp/app/admin/configuration/configuration.component.ts",
+        "src/main/webapp/app/admin/health/health.component.ts",
+        "src/main/webapp/app/admin/health/modal/health-modal.component.ts",
+        "src/main/webapp/app/admin/logs/logs.component.ts",
+        "src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.component.ts",
+        "src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.component.ts",
+        "src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.component.ts",
+        "src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.ts",
+        "src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.ts",
+        "src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.ts",
+        "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.ts",
+        "src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.component.ts",
+        "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.component.ts",
+        "src/main/webapp/app/admin/metrics/metrics.component.ts",
+        "src/main/webapp/app/admin/user-management/delete/user-management-delete-dialog.component.ts",
+        "src/main/webapp/app/admin/user-management/detail/user-management-detail.component.ts",
+        "src/main/webapp/app/admin/user-management/list/user-management.component.ts",
+        "src/main/webapp/app/admin/user-management/update/user-management-update.component.ts",
+        "src/main/webapp/app/entities/admin/authority/delete/authority-delete-dialog.component.ts",
+        "src/main/webapp/app/entities/admin/authority/detail/authority-detail.component.ts",
+        "src/main/webapp/app/entities/admin/authority/list/authority.component.ts",
+        "src/main/webapp/app/entities/admin/authority/update/authority-update.component.ts",
+        "src/main/webapp/app/entities/cadastro-aluno/detail/cadastro-aluno-detail.component.ts",
+        "src/main/webapp/app/entities/cadastro-aluno/update/cadastro-aluno-update.component.ts",
+        "src/main/webapp/app/entities/deslocamento/delete/deslocamento-delete-dialog.component.ts",
+        "src/main/webapp/app/entities/deslocamento/detail/deslocamento-detail.component.ts",
+        "src/main/webapp/app/entities/deslocamento/list/deslocamento.component.ts",
+        "src/main/webapp/app/entities/deslocamento/update/deslocamento-update.component.ts",
+        "src/main/webapp/app/entities/responsavel/delete/responsavel-delete-dialog.component.ts",
+        "src/main/webapp/app/entities/responsavel/detail/responsavel-detail.component.ts",
+        "src/main/webapp/app/entities/responsavel/list/responsavel.component.ts",
+        "src/main/webapp/app/entities/responsavel/update/responsavel-update.component.ts",
+        "src/main/webapp/app/home/home.component.ts",
+        "src/main/webapp/app/layouts/error/error.component.ts",
+        "src/main/webapp/app/layouts/navbar/navbar.component.ts",
+        "src/main/webapp/app/layouts/profiles/page-ribbon.component.ts",
+        "src/main/webapp/app/login/login.component.ts"
+    ]
+
+    for rel_filepath in arquivos_remover_decorator:
+        filepath = os.path.join(BASE_DIR, rel_filepath)
+
+        if os.path.isfile(filepath):  # Verifica se o arquivo existe
+            try:
+                with open(filepath, "r+", encoding="utf-8") as f:
+                    original = f.read()
+                    lines = original.split("\n")
+                    new_lines = []
+                    in_decorator = False
+                    brace_level = 0
+                    decorator_lines = []
+
+                    for line in lines:
+                        if not in_decorator and re.search(r"@(Component|Directive|Pipe)\s*\(", line):
+                            in_decorator = True
+                            brace_level = 0
+                            decorator_lines = [line]
+                        elif in_decorator:
+                            decorator_lines.append(line)
+                            brace_level += line.count("{") - line.count("}")
+                            if brace_level <= 0 and ")" in line:
+                                in_decorator = False
+                                new_lines.extend(remover_decorator_entries(decorator_lines))
+                                decorator_lines = []
+                        else:
+                            new_lines.append(line)
+
+                    content = "\n".join(new_lines)
+
+                    if content != original:
+                        f.seek(0)
+                        f.write(content)
+                        f.truncate()
+                        print(f"[OK] Modificado (decorator): {filepath}")
+                    else:
+                        print(f"[INFO] Nenhuma modificação de decorator necessária em: {filepath}")
+            except Exception as e:
+                print(f"[ERRO] Erro ao processar arquivo {filepath}: {e}")
+        else:
+            print(f"[AVISO] Arquivo não encontrado: {filepath}")
+
+    print("\n[FINAL] Concluído!")
+    print("Agora execute:")
+    print("  1) npm run clean-www && npm run webapp:build")
+    print("  2) .\\mvnw")
 
 def remover_decorator_entries(lines):
     """
@@ -64,185 +226,12 @@ def remover_decorator_entries(lines):
         if i < len(filtered) - 1:
             next_line = filtered[i + 1].strip()
             if line.strip().endswith(",") and next_line.startswith(("})", "},")):
-                result.append(re.sub(r",\s*$", "", line))
+                result.append(re.sub(r",?\s*$", "", line))
             else:
                 result.append(line)
         else:
             result.append(line)
     return result
-
-def process_ts_file(filepath):
-    """
-    Lê o arquivo, faz correções e sobrescreve.
-    """
-    try:
-        with open(filepath, "r+", encoding="utf-8") as f:
-            original = f.read()
-            content = original
-
-            # 1) export default class -> export class
-            content = re.sub(r"\bexport\s+default\s+class\b", "export class", content)
-
-            # 2) styleUrls absolutos -> relativos
-            content = re.sub(r"styleUrls\s*:\s*\[\s*'[^']*([-\w]+\.component\.css)[^']*'\s*\]",
-                             r"styleUrls: ['./\1']", content)
-
-            # 3) withInterceptorsFromDi -> withInterceptorsFromDi()
-            content = content.replace("withInterceptorsFromDi", "withInterceptorsFromDi()")
-
-            # 4) create(cadastroAluno) -> create({ ...cadastroAluno, id: null })
-            content = re.sub(r"(\.create\s*\(\s*)cadastroAluno(\s*\))",
-                             r"\1{ ...cadastroAluno, id: null }\2", content)
-
-            # 5) remover 'standalone: true' e 'imports: []' do decorator
-            lines = content.split("\n")
-            new_lines = []
-            in_decorator = False
-            brace_level = 0
-            decorator_lines = []
-
-            for line in lines:
-                if not in_decorator and re.search(r"@(Component|Directive|Pipe)\s*\(", line):
-                    in_decorator = True
-                    brace_level = 0
-                    decorator_lines = [line]
-                elif in_decorator:
-                    decorator_lines.append(line)
-                    brace_level += line.count("{") - line.count("}")
-                    if brace_level <= 0 and ")" in line:
-                        in_decorator = False
-                        new_lines.extend(remover_decorator_entries(decorator_lines))
-                        decorator_lines = []
-                else:
-                    new_lines.append(line)
-
-            content = "\n".join(new_lines)
-
-            # 6) Correções de erros do Prettier e Typescript
-            content = fix_prettier_and_typescript_errors(content)
-
-            if content != original:
-                f.seek(0)  # Retorna ao início do arquivo
-                f.write(content)
-                f.truncate()  # Remove o conteúdo restante
-                print(f"[OK] Modificado: {filepath}")
-
-    except Exception as e:
-        print(f"[ERRO] Erro ao processar arquivo {filepath}: {e}")
-
-def fix_prettier_and_typescript_errors(content):
-    """
-    Corrige erros específicos do Prettier e TypeScript encontrados nos logs.
-    """
-    # Remover espaços extras antes de '?'
-    content = re.sub(r"\s+\?", "?", content)
-
-    # Remover '?' desnecessários (TS18048, TS7015)
-    content = re.sub(r"TS18048: '(\w+)' is possibly 'undefined'", r"'\1' is possibly 'undefined'", content)
-    content = re.sub(r"TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'",
-                     "Element implicitly has an 'any' type because index expression is not of type 'number'", content)
-    content = re.sub(r"\[`\$\{(.+?)\}`\]", r"[\1]", content)  # Substitui [`${predicate},${order}`] por [predicate, order]
-    content = re.sub(r"sortParam\s*\?\.\s*length", "sortParam?.length ? sortParam : undefined", content) # Adiciona condicional para sortParam?.length
-
-    # Adicionar ';' faltantes (Parsing error: ';' expected)
-    content = re.sub(r"([;|\n])(\s*})", r"\1;\2", content)
-
-    # Adicionar ',' faltantes (Parsing error: ',' expected)
-    content = re.sub(r"(\{\s*[\w\s.:]+\s*[\w\s.:]+)\s*(\})", r"\1,\2", content)
-    content = re.sub(r"(,)\s*(\))", r"\2", content)
-    content = re.sub(r"(\()\s*(,)", r"\1", content)
-    content = re.sub(r"(\()(\s*cadastroAluno\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*authorities\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*firstName\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*lastName\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*email\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*login\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*activated\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*langKey\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*createdBy\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*createdDate\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*lastModifiedBy\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*lastModifiedDate\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*id\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*nome\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*cpf\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*matricula\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*dataNascimento\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*turno\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*curso\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*valorMensalidade\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*dataVencimento\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*comportamento\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*observacoes\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*cep\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*logradouro\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*bairro\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*localidade\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*uf\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*numero\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*complemento\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*tipoLogradouro\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*tipoResidencia\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*situacaoMoradia\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*possuiVeiculo\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*moramCom\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*responsavel\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*nome\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*dataNascimento\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*cpf\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*parentesco\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*profissao\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*telefone\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*email\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*cep\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*logradouro\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*bairro\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*localidade\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*uf\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*numero\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*complemento\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*tipoLogradouro\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*inicio\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*fim\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*km\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*valorVale\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*cadastroAluno\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*name\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*pageSize\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*page\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*predicate\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*ascending\s*)(\))", r"\1{\2}\3", content)
-    content = re.sub(r"(\()(\s*fields\s*)(\))", r"\1{\2}\3", content)
-
-    # Remover '?' de 'import' (TS2613)
-    content = re.sub(r"TS2613: Module '(.+?)' has no default export\.", r"Module '\1' has no default export.", content)
-    content = re.sub(r"import\s+(\w+)\s+from\s+'\./app/app\.component';", r"import { \1 } from './app/app.component';", content)
-
-    return content
-
-def corrigir_arquivos_ts():
-    """
-    Percorre recursivamente .ts em BASE_DIR, chamando process_ts_file.
-    """
-    for root, _, files in os.walk(BASE_DIR):
-        for file in files:
-            if file.endswith(".ts"):
-                filepath = os.path.join(root, file)
-                process_ts_file(filepath)
-
-def main():
-    print("[INFO] Script de correção iniciado.")
-
-    # 1) Corrigir pom.xml
-    corrigir_pom_xml()
-
-    # 2) Corrigir .ts
-    corrigir_arquivos_ts()
-
-    print("\n[FINAL] Concluído!")
-    print("Agora:")
-    print("  1) npm run clean-www && npm run webapp:build")
-    print("  2) .\\mvnw")
 
 if __name__ == "__main__":
     main()
