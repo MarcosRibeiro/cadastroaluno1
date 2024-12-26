@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { CadastroAlunoService } from '../../entities/cadastro-aluno/service/cadastro-aluno.service';
 import { ICadastroAluno } from '../../entities/cadastro-aluno/cadastro-aluno.model';
 
@@ -72,8 +72,8 @@ export class CadastroAlunoComponent {
       informacoesEscolares: this.fb.group({
         nomeEscola: [null, Validators.maxLength(255)],
         anoCursando: [null, Validators.maxLength(50)],
-        turno: [null],
-        mediaEscolar: [null],
+        turno: [null, Validators.required],
+        mediaEscolar: [null, [Validators.min(0), Validators.max(10)]],
       }),
       informacoesComplementares: this.fb.group({
         prioritario: [null],
@@ -116,32 +116,35 @@ export class CadastroAlunoComponent {
     });
   }
 
+  get responsaveis(): FormArray {
+    return this.cadastroAlunoForm.get('responsaveis.responsaveis') as FormArray;
+  }
+
+  get deslocamentos(): FormArray {
+    return this.cadastroAlunoForm.get('deslocamento.deslocamentos') as FormArray;
+  }
+
   onSubmit(): void {
     if (this.cadastroAlunoForm.valid) {
       const cadastroAluno: ICadastroAluno = this.cadastroAlunoForm.value;
       this.cadastroAlunoService.create(cadastroAluno).subscribe({
         next: () => {
-          // Lidar com sucesso
-          this.onClear(); // Limpa o formulário após o envio
+          this.onClear();
         },
         error: () => {
-          // Lidar com erro
           this.onError();
         },
       });
     } else {
-      // Marcar todos os campos como tocados para exibir erros de validação
       this.cadastroAlunoForm.markAllAsTouched();
     }
   }
 
   onClear(): void {
     this.cadastroAlunoForm.reset();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   }
 
   protected onError(): void {
-    // Lidar com erro
-    console.error('Erro ao cadastrar:');
+    console.error('Erro ao cadastrar.');
   }
 }
