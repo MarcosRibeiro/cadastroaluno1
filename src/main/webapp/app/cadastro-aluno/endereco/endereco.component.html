@@ -1,56 +1,69 @@
-<div [formGroup]="form">
-  <h3>Endereço</h3>
+<form [formGroup]="form">
   <div class="row">
-    <mat-form-field appearance="fill" class="col-md-2">
-      <mat-label>CEP</mat-label>
-      <input matInput formControlName="cep" (blur)="buscarCep()" mask="00000-000" required />
-      <mat-error *ngIf="form.get('cep')?.hasError('required') && form.get('cep')?.touched"> CEP é obrigatório. </mat-error>
-      <mat-error *ngIf="form.get('cep')?.hasError('maxlength')"> CEP deve ter no máximo 10 caracteres. </mat-error>
-    </mat-form-field>
+    <div class="col-md-2">
+      <mat-form-field appearance="fill">
+        <mat-label>CEP</mat-label>
+        <input matInput formControlName="cep" required maxlength="10" />
+        <mat-error *ngIf="form.get('cep')?.hasError('required') && form.get('cep')?.touched"> CEP é obrigatório. </mat-error>
+        <mat-error *ngIf="form.get('cep')?.hasError('maxlength')"> CEP deve ter no máximo 10 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="fill" class="col-md-6">
-      <mat-label>Endereço</mat-label>
-      <input matInput formControlName="endereco" required />
-      <mat-error *ngIf="form.get('endereco')?.hasError('required') && form.get('endereco')?.touched"> Endereço é obrigatório. </mat-error>
-      <mat-error *ngIf="form.get('endereco')?.hasError('maxlength')"> Endereço deve ter no máximo 5000 caracteres. </mat-error>
-    </mat-form-field>
+    <div class="col-md-6">
+      <mat-form-field appearance="fill">
+        <mat-label>Endereço</mat-label>
+        <input matInput formControlName="endereco" required maxlength="5000" />
+        <mat-error *ngIf="form.get('endereco')?.hasError('required') && form.get('endereco')?.touched"> Endereço é obrigatório. </mat-error>
+        <mat-error *ngIf="form.get('endereco')?.hasError('maxlength')"> Endereço deve ter no máximo 5000 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="fill" class="col-md-2">
-      <mat-label>Quadra</mat-label>
-      <input matInput formControlName="qd" />
-      <mat-error *ngIf="form.get('qd')?.hasError('maxlength')"> Quadra deve ter no máximo 10 caracteres. </mat-error>
-    </mat-form-field>
+    <div class="col-md-2">
+      <mat-form-field appearance="fill">
+        <mat-label>Quadra</mat-label>
+        <input matInput formControlName="qd" maxlength="10" />
+        <mat-error *ngIf="form.get('qd')?.hasError('maxlength')"> Quadra deve ter no máximo 10 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="fill" class="col-md-2">
-      <mat-label>Lote</mat-label>
-      <input matInput formControlName="lote" />
-      <mat-error *ngIf="form.get('lote')?.hasError('maxlength')"> Lote deve ter no máximo 10 caracteres. </mat-error>
-    </mat-form-field>
+    <div class="col-md-2">
+      <mat-form-field appearance="fill">
+        <mat-label>Lote</mat-label>
+        <input matInput formControlName="lote" maxlength="10" />
+        <mat-error *ngIf="form.get('lote')?.hasError('maxlength')"> Lote deve ter no máximo 10 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-2">
+      <mat-form-field appearance="fill">
+        <mat-label>Número</mat-label>
+        <input matInput formControlName="endnumero" maxlength="10" />
+        <mat-error *ngIf="form.get('endnumero')?.hasError('maxlength')"> Número deve ter no máximo 10 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field appearance="fill">
+        <mat-label>Bairro</mat-label>
+        <input matInput formControlName="bairro" maxlength="100" />
+        <mat-error *ngIf="form.get('bairro')?.hasError('maxlength')"> Bairro deve ter no máximo 100 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field appearance="fill">
+        <mat-label>Município</mat-label>
+        <input matInput formControlName="municipio" maxlength="100" />
+        <mat-error *ngIf="form.get('municipio')?.hasError('maxlength')"> Município deve ter no máximo 100 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-2">
+      <mat-form-field appearance="fill">
+        <mat-label>UF</mat-label>
+        <input matInput formControlName="uf" maxlength="2" />
+        <mat-error *ngIf="form.get('uf')?.hasError('maxlength')"> UF deve ter no máximo 2 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
   </div>
-
-  <div class="row">
-    <mat-form-field appearance="fill" class="col-md-2">
-      <mat-label>Número</mat-label>
-      <input matInput formControlName="endnumero" />
-      <mat-error *ngIf="form.get('endnumero')?.hasError('maxlength')"> Número deve ter no máximo 10 caracteres. </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="col-md-4">
-      <mat-label>Bairro</mat-label>
-      <input matInput formControlName="bairro" />
-      <mat-error *ngIf="form.get('bairro')?.hasError('maxlength')"> Bairro deve ter no máximo 100 caracteres. </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="col-md-4">
-      <mat-label>Município</mat-label>
-      <input matInput formControlName="municipio" />
-      <mat-error *ngIf="form.get('municipio')?.hasError('maxlength')"> Município deve ter no máximo 100 caracteres. </mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="col-md-2">
-      <mat-label>UF</mat-label>
-      <input matInput formControlName="uf" />
-      <mat-error *ngIf="form.get('uf')?.hasError('maxlength')"> UF deve ter no máximo 2 caracteres. </mat-error>
-    </mat-form-field>
-  </div>
-</div>
+</form>

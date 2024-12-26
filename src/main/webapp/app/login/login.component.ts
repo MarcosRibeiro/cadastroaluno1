@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
-import SharedModule from 'app/shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
 

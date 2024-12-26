@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import SharedModule from 'app/shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 
 @Component({
   selector: 'jhi-error',

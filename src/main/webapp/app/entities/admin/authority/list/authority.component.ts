@@ -3,7 +3,7 @@ import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/r
 import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import SharedModule from 'app/shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
 import { FormsModule } from '@angular/forms';
 import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';

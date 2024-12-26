@@ -1,35 +1,41 @@
-<div [formGroup]="form">
-  <h3>Dados do Aluno</h3>
+<form [formGroup]="form">
   <div class="row">
-    <mat-form-field appearance="fill" class="col-md-2">
-      <mat-label>Data do Cadastro</mat-label>
-      <input matInput [matDatepicker]="pickerDataCadastro" formControlName="dataCadastro" required />
-      <mat-datepicker-toggle matSuffix [for]="pickerDataCadastro"></mat-datepicker-toggle>
-      <mat-datepicker #pickerDataCadastro></mat-datepicker>
-      <mat-error *ngIf="form.get('dataCadastro')?.hasError('required') && form.get('dataCadastro')?.touched">
-        Data do Cadastro é obrigatória.
-      </mat-error>
-    </mat-form-field>
+    <div class="col-md-2">
+      <mat-form-field appearance="fill">
+        <mat-label>Data do Cadastro</mat-label>
+        <input matInput formControlName="dataCadastro" required />
+        <mat-error *ngIf="form.get('dataCadastro')?.hasError('required') && form.get('dataCadastro')?.touched">
+          Data do Cadastro é obrigatória.
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="fill" class="col-md-6">
-      <mat-label>Nome do Aluno</mat-label>
-      <input matInput formControlName="nome" required />
-      <mat-error *ngIf="form.get('nome')?.hasError('required') && form.get('nome')?.touched"> Nome do Aluno é obrigatório. </mat-error>
-      <mat-error *ngIf="form.get('nome')?.hasError('maxlength')"> Nome deve ter no máximo 255 caracteres. </mat-error>
-    </mat-form-field>
+    <div class="col-md-6">
+      <mat-form-field appearance="fill">
+        <mat-label>Nome do Aluno</mat-label>
+        <input matInput formControlName="nome" required maxlength="255" />
+        <mat-error *ngIf="form.get('nome')?.hasError('required') && form.get('nome')?.touched"> Nome do Aluno é obrigatório. </mat-error>
+        <mat-error *ngIf="form.get('nome')?.hasError('maxlength')"> Nome deve ter no máximo 255 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="fill" class="col-md-2">
-      <mat-label>Data de Nascimento</mat-label>
-      <input matInput [matDatepicker]="pickerDn" formControlName="dn" required />
-      <mat-datepicker-toggle matSuffix [for]="pickerDn"></mat-datepicker-toggle>
-      <mat-datepicker #pickerDn></mat-datepicker>
-      <mat-error *ngIf="form.get('dn')?.hasError('required') && form.get('dn')?.touched"> Data de Nascimento é obrigatória. </mat-error>
-    </mat-form-field>
+    <div class="col-md-2">
+      <mat-form-field appearance="fill">
+        <mat-label>Data de Nascimento</mat-label>
+        <input matInput [matDatepicker]="pickerDn" formControlName="dn" required />
+        <mat-datepicker-toggle matSuffix [for]="pickerDn"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDn></mat-datepicker>
 
-    <mat-form-field appearance="fill" class="col-md-2">
-      <mat-label>Grupo</mat-label>
-      <input matInput formControlName="grupo" />
-      <mat-error *ngIf="form.get('grupo')?.hasError('maxlength')"> Grupo deve ter no máximo 50 caracteres. </mat-error>
-    </mat-form-field>
+        <mat-error *ngIf="form.get('dn')?.hasError('required') && form.get('dn')?.touched"> Data de Nascimento é obrigatória. </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-2">
+      <mat-form-field appearance="fill">
+        <mat-label>Grupo</mat-label>
+        <input matInput formControlName="grupo" maxlength="50" />
+        <mat-error *ngIf="form.get('grupo')?.hasError('maxlength')"> Grupo deve ter no máximo 50 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
   </div>
-</div>
+</form>

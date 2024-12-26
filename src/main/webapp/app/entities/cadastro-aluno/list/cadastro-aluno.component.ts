@@ -4,7 +4,7 @@ import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/r
 import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import SharedModule from 'app/shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 import { SortDirective, SortByDirective } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { FormsModule } from '@angular/forms';

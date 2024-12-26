@@ -1,42 +1,43 @@
-<div [formGroup]="form">
-  <h3>Informações Escolares</h3>
-
-  <!-- Linha 1: Nome da Escola, Ano Cursando e Turno -->
+<form [formGroup]="form">
   <div class="row">
-    <!-- Nome da Escola -->
-    <mat-form-field appearance="fill" class="col-md-6">
-      <mat-label>Nome da Escola</mat-label>
-      <input matInput formControlName="nomeEscola" maxlength="255" />
-      <mat-error *ngIf="form.get('nomeEscola')?.hasError('maxlength')"> Nome da Escola deve ter no máximo 255 caracteres. </mat-error>
-    </mat-form-field>
+    <div class="col-md-6">
+      <mat-form-field appearance="fill">
+        <mat-label>Nome da Escola</mat-label>
+        <input matInput formControlName="nomeEscola" maxlength="255" />
+        <mat-error *ngIf="form.get('nomeEscola')?.hasError('maxlength')"> Nome da Escola deve ter no máximo 255 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
 
-    <!-- Ano Cursando -->
-    <mat-form-field appearance="fill" class="col-md-3">
-      <mat-label>Ano Cursando</mat-label>
-      <input matInput formControlName="anoCursando" maxlength="50" />
-      <mat-error *ngIf="form.get('anoCursando')?.hasError('maxlength')"> Ano Cursando deve ter no máximo 50 caracteres. </mat-error>
-    </mat-form-field>
+    <div class="col-md-3">
+      <mat-form-field appearance="fill">
+        <mat-label>Ano Cursando</mat-label>
+        <input matInput formControlName="anoCursando" maxlength="50" />
+        <mat-error *ngIf="form.get('anoCursando')?.hasError('maxlength')"> Ano Cursando deve ter no máximo 50 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
 
-    <!-- Turno -->
-    <mat-form-field appearance="fill" class="col-md-3">
-      <mat-label>Turno</mat-label>
-      <mat-select formControlName="turno">
-        <mat-option value="MATUTINO">Matutino</mat-option>
-        <mat-option value="VESPERTINO">Vespertino</mat-option>
-        <mat-option value="NOTURNO">Noturno</mat-option>
-      </mat-select>
-      <mat-error *ngIf="form.get('turno')?.hasError('required')"> O turno é obrigatório. </mat-error>
-    </mat-form-field>
+    <div class="col-md-3">
+      <mat-form-field appearance="fill">
+        <mat-label>Turno</mat-label>
+        <mat-select formControlName="turno" required>
+          <mat-option value="MATUTINO">Matutino</mat-option>
+          <mat-option value="VESPERTINO">Vespertino</mat-option>
+          <mat-option value="NOTURNO">Noturno</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('turno')?.hasError('required')"> O turno é obrigatório. </mat-error>
+      </mat-form-field>
+    </div>
   </div>
 
-  <!-- Linha 2: Média Escolar -->
   <div class="row">
-    <mat-form-field appearance="fill" class="col-md-3">
-      <mat-label>Média Escolar</mat-label>
-      <input matInput type="number" formControlName="mediaEscolar" />
-      <mat-error *ngIf="form.get('mediaEscolar')?.hasError('min')"> A média deve ser maior ou igual a 0. </mat-error>
-      <mat-error *ngIf="form.get('mediaEscolar')?.hasError('max')"> A média deve ser menor ou igual a 10. </mat-error>
-      <mat-error *ngIf="form.get('mediaEscolar')?.hasError('required')"> A média escolar é obrigatória. </mat-error>
-    </mat-form-field>
+    <div class="col-md-3">
+      <mat-form-field appearance="fill">
+        <mat-label>Média Escolar</mat-label>
+        <input matInput formControlName="mediaEscolar" required min="0" max="10" type="number" />
+        <mat-error *ngIf="form.get('mediaEscolar')?.hasError('min')"> A média deve ser maior ou igual a 0. </mat-error>
+        <mat-error *ngIf="form.get('mediaEscolar')?.hasError('max')"> A média deve ser menor ou igual a 10. </mat-error>
+        <mat-error *ngIf="form.get('mediaEscolar')?.hasError('required')"> A média escolar é obrigatória. </mat-error>
+      </mat-form-field>
+    </div>
   </div>
-</div>
+</form>

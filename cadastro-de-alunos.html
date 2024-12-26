@@ -1,0 +1,1619 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matrícula de Aluno</title>
+
+    <!-- Inclui o CSS do Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
+        font-size: 16px;
+      }
+
+      .container {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+        max-width: 1000px;
+        transition: all 0.3s ease-in-out;
+        position: relative;
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: #343a40;
+        text-align: center;
+        transition: color 0.3s ease-in-out;
+      }
+
+      .form-group label {
+        font-weight: bold;
+        margin-bottom: 8px;
+        transition: color 0.3s ease-in-out;
+      }
+
+      .form-control {
+        font-size: 18px;
+        padding: 12px;
+        border-radius: 5px;
+        transition: box-shadow 0.3s ease-in-out;
+        position: relative;
+      }
+
+      .form-select {
+        appearance: auto;
+        width: 100%;
+        /* Ajusta a largura do elemento select para ocupar 100% do contêiner pai */
+      }
+
+      .form-clear {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #aaa;
+        transition: color 0.3s ease-in-out;
+      }
+
+      .form-clear:hover {
+        color: #000;
+      }
+
+      .btn-container {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        padding: 15px 30px;
+        font-size: 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease-in-out;
+      }
+
+      .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+      }
+
+      .form-group.required .form-control:valid {
+        background-color: #f0fff4;
+      }
+
+      .form-group.required .form-control:invalid {
+        background-color: #fff3f3;
+      }
+
+      .collapse-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 15px;
+        background-color: #e9ecef;
+        border-radius: 5px;
+        transition: background-color 0.3s ease-in-out;
+        font-size: 1.5rem;
+        margin-bottom: 30px;
+      }
+
+      .collapse-header:hover {
+        background-color: #d3d9df;
+      }
+
+      .collapse-header h3 {
+        margin: 0;
+        padding: 0;
+        color: #343a40;
+        text-align: center;
+      }
+
+      .collapse-header .bi {
+        font-size: 1.5rem;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .collapse.show .collapse-header .bi {
+        transform: rotate(180deg);
+      }
+
+      .divider {
+        border-bottom: 1px solid #ced4da;
+        margin: 20px 0;
+      }
+
+      .foto-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .foto-upload {
+        width: 120px;
+        height: 150px;
+        border: 2px dashed #ced4da;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        overflow: hidden;
+        margin-bottom: 10px;
+      }
+
+      .foto-upload img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      .foto-upload input[type='file'] {
+        display: none;
+      }
+
+      .error-message {
+        color: red;
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+      }
+
+      .btn-danger {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 20px;
+        }
+
+        .collapse-header {
+          font-size: 1.2rem;
+          padding: 10px;
+        }
+
+        .btn-primary {
+          padding: 10px 20px;
+          font-size: 18px;
+        }
+      }
+
+      .full-width {
+        width: 100%;
+      }
+
+      .form-control:invalid {
+        border-color: #e3342f;
+        background-color: #fcebea;
+      }
+
+      .form-control:valid {
+        border-color: #38c172;
+        background-color: #e3fcec;
+      }
+
+      .error-message {
+        color: #e3342f;
+        font-size: 0.875rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Título e Foto -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="foto-container">
+            <label for="foto-aluno" class="foto-upload">
+              <img src="placeholder-foto.png" alt="Foto 3x4 Aluno" id="foto-preview-aluno" />
+              <input type="file" id="foto-aluno" name="foto-aluno" accept="image/*" />
+            </label>
+            <p class="text-center">Foto do Aluno</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="foto-container">
+            <label for="foto-mae" class="foto-upload">
+              <img src="placeholder-foto.png" alt="Foto 3x4 Mãe" id="foto-preview-mae" />
+              <input type="file" id="foto-mae" name="foto-mae" accept="image/*" />
+            </label>
+            <p class="text-center">Foto da Mãe</p>
+          </div>
+        </div>
+      </div>
+
+      <h2>MATRÍCULA/AUTORIZAÇÃO</h2>
+      <hr />
+      <form id="matricula-form" action="#" method="post" novalidate>
+        <!-- Continue com o restante do formulário -->
+
+        <!-- Dados do Aluno -->
+        <div
+          class="collapse-header full-width"
+          data-bs-toggle="collapse"
+          href="#dados-aluno"
+          role="button"
+          aria-expanded="true"
+          aria-controls="dados-aluno"
+          onclick="toggleIcon(this)"
+        >
+          <h3>Dados do Aluno</h3>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="collapse show" id="dados-aluno">
+          <div class="row">
+            <div class="form-group col-md-4 required">
+              <label for="data">Data do Cadastro:</label>
+              <input type="date" class="form-control" id="data" name="data" aria-describedby="data-error" />
+              <div class="error-message" id="data-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="matricula">Matrícula Nº:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="matricula"
+                name="matricula"
+                placeholder="Número da Matrícula"
+                aria-describedby="matricula-error"
+              />
+              <div class="error-message" id="matricula-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="grupo">Grupo:</label>
+              <input type="text" class="form-control" id="grupo" name="grupo" placeholder="Nome do Grupo" aria-describedby="grupo-error" />
+              <div class="error-message" id="grupo-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-8 required">
+              <label for="nome">Nome Completo:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nome"
+                name="nome"
+                placeholder="Digite o nome completo"
+                aria-describedby="nome-error"
+              />
+              <div class="error-message" id="nome-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4 required">
+              <label for="dn">Data de Nascimento:</label>
+              <input type="date" class="form-control" id="dn" name="dn" aria-describedby="dn-error" />
+              <div class="error-message" id="dn-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+
+          <!-- CAMPOS DE ENDEREÇO -->
+          <div class="row">
+            <div class="form-group col-md-2 required">
+              <label for="cep">CEP:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cep"
+                name="cep"
+                placeholder="Somente números"
+                required
+                aria-required="true"
+                aria-describedby="cep-error"
+              />
+              <div class="error-message" id="cep-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+
+            <div class="form-group col-md-4 required">
+              <label for="endereco">Endereço:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="endereco"
+                name="endereco"
+                placeholder="Digite o endereço completo"
+                required
+                aria-required="true"
+                aria-describedby="endereco-error"
+              />
+              <div class="error-message" id="endereco-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+
+            <div class="form-group col-md-2 required">
+              <label for="qd">QD:</label>
+              <input type="text" class="form-control" id="qd" name="qd" placeholder="Digite a quadra" aria-describedby="qd-error" />
+              <div class="error-message" id="qd-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+
+            <div class="form-group col-md-2 required">
+              <label for="lote">Lote:</label>
+              <input type="text" class="form-control" id="lote" name="lote" placeholder="Digite o lote" aria-describedby="lote-error" />
+              <div class="error-message" id="lote-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+
+            <div class="form-group col-md-1 required">
+              <label for="endnumero">Nº:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="endnumero"
+                name="endnumero"
+                placeholder="Digite o número"
+                aria-describedby="endnumero-error"
+              />
+              <div class="error-message" id="endnumero-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-4 required">
+              <label for="bairro">Bairro:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="bairro"
+                name="bairro"
+                placeholder="Nome do bairro"
+                aria-describedby="bairro-error"
+              />
+              <div class="error-message" id="bairro-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+
+            <div class="form-group col-md-4 required">
+              <label for="cidade">Municipio:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="municipio"
+                name="municipio"
+                placeholder="Nome da municipio"
+                aria-describedby="municipio-error"
+              />
+              <div class="error-message" id="municipio-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+
+            <div class="form-group col-md-4 required">
+              <label for="uf">UF:</label>
+              <input type="text" class="form-control" id="uf" name="uf" placeholder="Nome do uf" aria-describedby="uf-error" />
+              <div class="error-message" id="uf-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+          <!-- FIM DE CAMPOS DE ENDEREÇO -->
+
+          <div class="row">
+            <div class="form-group col-md-4 required">
+              <label for="fone">Telefone:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="fone"
+                name="fone"
+                placeholder="(DDD) Número"
+                required
+                aria-required="true"
+                aria-describedby="fone-error"
+              />
+              <div class="error-message" id="fone-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4 required">
+              <label for="certidao">Certidão de Nascimento:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="certidao"
+                name="certidao"
+                placeholder="Número da Certidão"
+                aria-describedby="certidao-error"
+              />
+              <div class="error-message" id="certidao-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4 required">
+              <label for="termo">Termo da Certidão:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="termo"
+                name="termo"
+                placeholder="Termo da Certidão"
+                aria-describedby="termo-error"
+              />
+              <div class="error-message" id="termo-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-4 required">
+              <label for="cartorio">Cartório:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cartorio"
+                name="cartorio"
+                placeholder="Nome do Cartório"
+                aria-describedby="cartorio-error"
+              />
+              <div class="error-message" id="cartorio-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4 required">
+              <label for="naturalidade">Naturalidade:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="naturalidade"
+                name="naturalidade"
+                placeholder="Cidade de nascimento"
+                aria-describedby="naturalidade-error"
+              />
+              <div class="error-message" id="naturalidade-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4 required">
+              <label for="rg">RG:</label>
+              <input type="text" class="form-control" id="rg" name="rg" placeholder="Número do RG" aria-describedby="rg-error" />
+              <div class="error-message" id="rg-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-4 required">
+              <label for="cpf">CPF:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cpf"
+                name="cpf"
+                placeholder="Número do CPF"
+                required
+                aria-required="true"
+                aria-describedby="cpf-error"
+              />
+              <div class="error-message" id="cpf-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4 required">
+              <label for="nis">NIS do Aluno:</label>
+              <input type="text" class="form-control" id="nis" name="nis" placeholder="Número do NIS" aria-describedby="nis-error" />
+              <div class="error-message" id="nis-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4 required">
+              <label for="cras">CRAS de Referência:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cras"
+                name="cras"
+                placeholder="Nome do CRAS de referência"
+                aria-describedby="cras-error"
+              />
+              <div class="error-message" id="cras-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filiação -->
+        <div
+          class="collapse-header full-width"
+          data-bs-toggle="collapse"
+          href="#filiacao"
+          role="button"
+          aria-expanded="true"
+          aria-controls="filiacao"
+          onclick="toggleIcon(this)"
+        >
+          <h3>Filiação</h3>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="collapse show" id="filiacao">
+          <div class="row">
+            <!-- Pai -->
+            <div class="form-group col-md-6 required">
+              <label for="filiacao-pai">Filiação - Pai:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="filiacao-pai"
+                name="filiacao-pai"
+                placeholder="Nome do pai"
+                aria-describedby="filiacao-pai-error"
+              />
+              <div class="error-message" id="filiacao-pai-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="pai-telefone">Telefone:</label>
+              <input type="tel" class="form-control" id="pai-telefone" name="pai-telefone" placeholder="Telefone" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="pai-naturalidade">Naturalidade:</label>
+              <input type="text" class="form-control" id="pai-naturalidade" name="pai-naturalidade" placeholder="Naturalidade" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="pai-uf">UF:</label>
+              <input type="text" class="form-control" id="pai-uf" name="pai-uf" placeholder="UF" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="pai-rg">RG:</label>
+              <input type="text" class="form-control" id="pai-rg" name="pai-rg" placeholder="RG" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="pai-data-nascimento">Data de Nascimento:</label>
+              <input type="date" class="form-control" id="pai-data-nascimento" name="pai-data-nascimento" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="pai-cpf">CPF:</label>
+              <input type="text" class="form-control" id="pai-cpf" name="pai-cpf" placeholder="CPF" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="pai-nis">NIS:</label>
+              <input type="text" class="form-control" id="pai-nis" name="pai-nis" placeholder="NIS" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="pai-titulo-eleitor">Título de Eleitor:</label>
+              <input type="text" class="form-control" id="pai-titulo-eleitor" name="pai-titulo-eleitor" placeholder="Título de Eleitor" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="pai-zona">Zona:</label>
+              <input type="text" class="form-control" id="pai-zona" name="pai-zona" placeholder="Zona" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="pai-secao">Seção:</label>
+              <input type="text" class="form-control" id="pai-secao" name="pai-secao" placeholder="Seção" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="pai-municipio">Município:</label>
+              <input type="text" class="form-control" id="pai-municipio" name="pai-municipio" placeholder="Município" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+
+            <!-- Mãe -->
+            <div class="form-group col-md-6 required">
+              <label for="filiacao-mae">Filiação - Mãe:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="filiacao-mae"
+                name="filiacao-mae"
+                placeholder="Nome da mãe"
+                aria-describedby="filiacao-mae-error"
+              />
+              <div class="error-message" id="filiacao-mae-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="mae-telefone">Telefone:</label>
+              <input type="tel" class="form-control" id="mae-telefone" name="mae-telefone" placeholder="Telefone" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="mae-naturalidade">Naturalidade:</label>
+              <input type="text" class="form-control" id="mae-naturalidade" name="mae-naturalidade" placeholder="Naturalidade" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="mae-uf">UF:</label>
+              <input type="text" class="form-control" id="mae-uf" name="mae-uf" placeholder="UF" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="mae-rg">RG:</label>
+              <input type="text" class="form-control" id="mae-rg" name="mae-rg" placeholder="RG" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="mae-data-nascimento">Data de Nascimento:</label>
+              <input type="date" class="form-control" id="mae-data-nascimento" name="mae-data-nascimento" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="mae-cpf">CPF:</label>
+              <input type="text" class="form-control" id="mae-cpf" name="mae-cpf" placeholder="CPF" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="mae-nis">NIS:</label>
+              <input type="text" class="form-control" id="mae-nis" name="mae-nis" placeholder="NIS" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="mae-titulo-eleitor">Título de Eleitor:</label>
+              <input type="text" class="form-control" id="mae-titulo-eleitor" name="mae-titulo-eleitor" placeholder="Título de Eleitor" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="mae-zona">Zona:</label>
+              <input type="text" class="form-control" id="mae-zona" name="mae-zona" placeholder="Zona" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="mae-secao">Seção:</label>
+              <input type="text" class="form-control" id="mae-secao" name="mae-secao" placeholder="Seção" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="mae-municipio">Município:</label>
+              <input type="text" class="form-control" id="mae-municipio" name="mae-municipio" placeholder="Município" />
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+          <div id="outros-responsaveis"></div>
+          <button type="button" class="btn btn-secondary" onclick="adicionarResponsavel()">Adicionar Responsável</button>
+        </div>
+
+        <!-- Informações Escolares -->
+        <div
+          class="collapse-header full-width"
+          data-bs-toggle="collapse"
+          href="#informacoes-escolares"
+          role="button"
+          aria-expanded="true"
+          aria-controls="informacoes-escolares"
+          onclick="toggleIcon(this)"
+        >
+          <h3>Informações Escolares</h3>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="collapse show" id="informacoes-escolares">
+          <div class="row">
+            <div class="form-group col-md-6 required">
+              <label for="nome-escola">Nome da Escola:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nome-escola"
+                name="nome-escola"
+                placeholder="Nome da escola"
+                aria-describedby="nome-escola-error"
+              />
+              <div class="error-message" id="nome-escola-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-6 required">
+              <label for="ano-cursando">Ano Cursando:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="ano-cursando"
+                name="ano-cursando"
+                placeholder="Ano que está cursando"
+                aria-describedby="ano-cursando-error"
+              />
+              <div class="error-message" id="ano-cursando-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6 required">
+              <label for="turno">Turno:</label>
+              <select class="form-select" id="turno" name="turno" aria-describedby="turno-error">
+                <option value="" disabled selected>Selecione</option>
+                <option value="matutino">Matutino</option>
+                <option value="vespertino">Vespertino</option>
+                <option value="noturno">Noturno</option>
+              </select>
+              <div class="error-message" id="turno-error"></div>
+            </div>
+            <div class="form-group col-md-6 required">
+              <label for="media-escolar">Média Escolar:</label>
+              <input
+                type="number"
+                class="form-control"
+                id="media-escolar"
+                name="media-escolar"
+                placeholder="Média escolar"
+                aria-describedby="media-escolar-error"
+              />
+              <div class="error-message" id="media-escolar-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6 required">
+              <label for="prioritario">Prioritário(a)?</label>
+              <select class="form-select" id="prioritario" name="prioritario" aria-describedby="prioritario-error">
+                <option value="" disabled selected>Selecione</option>
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+              </select>
+              <div class="error-message" id="prioritario-error"></div>
+            </div>
+            <div class="form-group col-md-6 required">
+              <label for="obs">Observações:</label>
+              <textarea class="form-control" id="obs" name="obs" placeholder="Observações" aria-describedby="obs-error"></textarea>
+              <div class="error-message" id="obs-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comportamento do Aluno -->
+        <div
+          class="collapse-header full-width"
+          data-bs-toggle="collapse"
+          href="#comportamento-aluno"
+          role="button"
+          aria-expanded="true"
+          aria-controls="comportamento-aluno"
+          onclick="toggleIcon(this)"
+        >
+          <h3>Comportamento do Aluno</h3>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="collapse show" id="comportamento-aluno">
+          <div class="row">
+            <div class="form-group col-md-6 required">
+              <label for="comportamento-casa">Comportamento em Casa:</label>
+              <select class="form-select" id="comportamento-casa" name="comportamento-casa" aria-describedby="comportamento-casa-error">
+                <option value="" disabled selected>Selecione</option>
+                <option value="tranquilo">Tranquilo</option>
+                <option value="agitado">Agitado</option>
+              </select>
+              <div class="error-message" id="comportamento-casa-error"></div>
+            </div>
+            <div class="form-group col-md-6 required">
+              <label for="comportamento-escola">Comportamento na Escola:</label>
+              <select
+                class="form-select"
+                id="comportamento-escola"
+                name="comportamento-escola"
+                aria-describedby="comportamento-escola-error"
+              >
+                <option value="" disabled selected>Selecione</option>
+                <option value="tranquilo">Tranquilo</option>
+                <option value="agitado">Agitado</option>
+              </select>
+              <div class="error-message" id="comportamento-escola-error"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Saúde e Necessidades Especiais -->
+        <div
+          class="collapse-header full-width"
+          data-bs-toggle="collapse"
+          href="#saude-necessidades"
+          role="button"
+          aria-expanded="true"
+          aria-controls="saude-necessidades"
+          onclick="toggleIcon(this)"
+        >
+          <h3>Saúde e Necessidades Especiais</h3>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="collapse show" id="saude-necessidades">
+          <div class="row">
+            <div class="form-group col-md-6 required">
+              <label for="deficiencia">Possui Deficiência?</label>
+              <select class="form-select" id="deficiencia" name="deficiencia" aria-describedby="deficiencia-error">
+                <option value="" disabled selected>Selecione</option>
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+              </select>
+              <div class="error-message" id="deficiencia-error"></div>
+            </div>
+            <div class="form-group col-md-6 required">
+              <label for="adaptacoes">Necessita de Adaptações?</label>
+              <select class="form-select" id="adaptacoes" name="adaptacoes" aria-describedby="adaptacoes-error">
+                <option value="" disabled selected>Selecione</option>
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+              </select>
+              <div class="error-message" id="adaptacoes-error"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6 required">
+              <label for="medicacao">Medicação:</label>
+              <select
+                class="form-select"
+                id="medicacao"
+                name="medicacao"
+                required
+                aria-required="true"
+                aria-describedby="medicacao-error"
+                onchange="toggleMedicacaoField()"
+              >
+                <option value="" disabled selected>Selecione</option>
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+              </select>
+              <div class="error-message" id="medicacao-error"></div>
+            </div>
+            <div class="form-group col-md-6 required" id="medicacao-details" style="display: none">
+              <label for="medicacao-desc">Descreva a Medicação:</label>
+              <textarea
+                class="form-control"
+                id="medicacao-desc"
+                name="medicacao-desc"
+                placeholder="Descreva a medicação"
+                aria-describedby="medicacao-desc-error"
+              ></textarea>
+              <div class="error-message" id="medicacao-desc-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6 required">
+              <label for="alergia">Alergia:</label>
+              <select
+                class="form-select"
+                id="alergia"
+                name="alergia"
+                required
+                aria-required="true"
+                aria-describedby="alergia-error"
+                onchange="toggleAlergiaField()"
+              >
+                <option value="" disabled selected>Selecione</option>
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+              </select>
+              <div class="error-message" id="alergia-error"></div>
+            </div>
+            <div class="form-group col-md-6 required" id="alergia-details" style="display: none">
+              <label for="alergia-desc">Descreva a Alergia:</label>
+              <textarea
+                class="form-control"
+                id="alergia-desc"
+                name="alergia-desc"
+                placeholder="Descreva a alergia"
+                aria-describedby="alergia-desc-error"
+              ></textarea>
+              <div class="error-message" id="alergia-desc-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-12 required">
+              <label for="historico-medico">Histórico Médico:</label>
+              <textarea
+                class="form-control"
+                id="historico-medico"
+                name="historico-medico"
+                placeholder="Descreva o histórico médico relevante"
+                aria-describedby="historico-medico-error"
+              ></textarea>
+              <div class="error-message" id="historico-medico-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Informações Socioeconômicas -->
+        <div
+          class="collapse-header full-width"
+          data-bs-toggle="collapse"
+          href="#informacoes-socioeconomicas"
+          role="button"
+          aria-expanded="true"
+          aria-controls="informacoes-socioeconomicas"
+          onclick="toggleIcon(this)"
+        >
+          <h3>Informações Socioeconômicas</h3>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="collapse show" id="informacoes-socioeconomicas">
+          <div class="row">
+            <div class="form-group col-md-4 required">
+              <label for="renda-familiar">Renda Familiar Mensal:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="renda-familiar"
+                name="renda-familiar"
+                placeholder="Renda mensal"
+                aria-describedby="renda-familiar-error"
+              />
+              <div class="error-message" id="renda-familiar-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4 required">
+              <label for="pessoas-trabalham">Nº de Pessoas que Trabalham:</label>
+              <input
+                type="number"
+                class="form-control"
+                id="pessoas-trabalham"
+                name="pessoas-trabalham"
+                aria-describedby="pessoas-trabalham-error"
+              />
+              <div class="error-message" id="pessoas-trabalham-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-4 required">
+              <label for="num-pessoas-lar">Nº de Pessoas no Lar:</label>
+              <input
+                type="number"
+                class="form-control"
+                id="num-pessoas-lar"
+                name="num-pessoas-lar"
+                aria-describedby="num-pessoas-lar-error"
+              />
+              <div class="error-message" id="num-pessoas-lar-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-4 required">
+              <label for="beneficio-social">Recebe Benefício Social?</label>
+              <select
+                class="form-select"
+                id="beneficio-social"
+                name="beneficio-social"
+                aria-describedby="beneficio-social-error"
+                onchange="toggleBeneficiosField()"
+              >
+                <option value="" disabled selected>Selecione</option>
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+              </select>
+              <div class="error-message" id="beneficio-social-error"></div>
+            </div>
+            <div class="form-group col-md-8 required" id="beneficios-details" style="display: none">
+              <label for="beneficios">Quais Benefícios?</label>
+              <textarea
+                class="form-control"
+                id="beneficios"
+                name="beneficios"
+                placeholder="Descreva os benefícios recebidos"
+                aria-describedby="beneficios-error"
+              ></textarea>
+              <div class="error-message" id="beneficios-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-6 required">
+              <label for="tipo-residencia">Tipo de Residência:</label>
+              <select
+                class="form-select"
+                id="tipo-residencia"
+                name="tipo-residencia"
+                aria-describedby="tipo-residencia-error"
+                onchange="toggleOutroResidenciaField()"
+              >
+                <option value="" disabled selected>Selecione</option>
+                <option value="casa">Casa</option>
+                <option value="apartamento">Apartamento</option>
+                <option value="outro">Outro</option>
+              </select>
+              <div class="error-message" id="tipo-residencia-error"></div>
+            </div>
+            <div class="form-group col-md-6" id="tipo-residencia-outro" style="display: none">
+              <label for="tipo-residencia-desc">Descreva:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="tipo-residencia-desc"
+                name="tipo-residencia-desc"
+                placeholder="Descreva o tipo de residência"
+                aria-describedby="tipo-residencia-desc-error"
+              />
+              <div class="error-message" id="tipo-residencia-desc-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-6 required">
+              <label for="situacao-residencia">Situação da Residência:</label>
+              <select
+                class="form-select"
+                id="situacao-residencia"
+                name="situacao-residencia"
+                aria-describedby="situacao-residencia-error"
+                onchange="toggleOutraSituacaoField()"
+              >
+                <option value="" disabled selected>Selecione</option>
+                <option value="propria">Própria</option>
+                <option value="alugada">Alugada</option>
+                <option value="cedida">Cedida</option>
+                <option value="outra">Outra</option>
+              </select>
+              <div class="error-message" id="situacao-residencia-error"></div>
+            </div>
+            <div class="form-group col-md-6" id="situacao-residencia-outra" style="display: none">
+              <label for="situacao-residencia-desc">Descreva:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="situacao-residencia-desc"
+                name="situacao-residencia-desc"
+                placeholder="Descreva a situação da residência"
+                aria-describedby="situacao-residencia-desc-error"
+              />
+              <div class="error-message" id="situacao-residencia-desc-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contato de Emergência -->
+        <div
+          class="collapse-header full-width"
+          data-bs-toggle="collapse"
+          href="#contato-emergencia"
+          role="button"
+          aria-expanded="true"
+          aria-controls="contato-emergencia"
+          onclick="toggleIcon(this)"
+        >
+          <h3>Contato de Emergência</h3>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="collapse show" id="contato-emergencia">
+          <div class="row">
+            <div class="form-group col-md-6 required">
+              <label for="contato-emergencia">Nome do Contato de Emergência:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="contato-emergencia"
+                name="contato-emergencia"
+                placeholder="Nome do contato"
+                required
+                aria-required="true"
+                aria-describedby="contato-emergencia-error"
+              />
+              <div class="error-message" id="contato-emergencia-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+            <div class="form-group col-md-6 required">
+              <label for="fone-emergencia">Telefone do Contato de Emergência:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="fone-emergencia"
+                name="fone-emergencia"
+                placeholder="(DDD) Número"
+                required
+                aria-required="true"
+                aria-describedby="fone-emergencia-error"
+              />
+              <div class="error-message" id="fone-emergencia-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-12 required">
+              <label for="relacao-emergencia">Relação com o Aluno:</label>
+              <input
+                type="text"
+                class="form-control"
+                id="relacao-emergencia"
+                name="relacao-emergencia"
+                placeholder="Ex: Tio, Avó, Vizinho"
+                required
+                aria-required="true"
+                aria-describedby="relacao-emergencia-error"
+              />
+              <div class="error-message" id="relacao-emergencia-error"></div>
+              <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Autorização para Deslocamento -->
+        <div
+          class="collapse-header full-width"
+          data-bs-toggle="collapse"
+          href="#autorizacao-deslocamento"
+          role="button"
+          aria-expanded="true"
+          aria-controls="autorizacao-deslocamento"
+          onclick="toggleIcon(this)"
+        >
+          <h3>Autorização para Deslocamento</h3>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="collapse show" id="autorizacao-deslocamento">
+          <div id="autorizacao-deslocamento-container">
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="autorizacao-deslocamento-nome">Nome:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="autorizacao-deslocamento-nome"
+                  name="autorizacao-deslocamento-nome[]"
+                  placeholder="Nome da pessoa autorizada"
+                  aria-describedby="autorizacao-deslocamento-nome-error"
+                />
+                <div class="error-message" id="autorizacao-deslocamento-nome-error"></div>
+                <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="autorizacao-deslocamento-grau">Grau de Parentesco:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="autorizacao-deslocamento-grau"
+                  name="autorizacao-deslocamento-grau[]"
+                  placeholder="Grau de parentesco"
+                  aria-describedby="autorizacao-deslocamento-grau-error"
+                />
+                <div class="error-message" id="autorizacao-deslocamento-grau-error"></div>
+                <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-secondary mt-2" onclick="adicionarAutorizacaoDeslocamento()">Adicionar Pessoa</button>
+        </div>
+
+        <div class="form-group required mt-4">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="autorizacao" name="autorizacao" aria-describedby="autorizacao-error" />
+            <label class="form-check-label" for="autorizacao"
+              >Autorizo a participação no PROJETO SEMEAR e das atividades existentes, conforme as normas e regulamentos, e autorizo o uso da
+              imagem deste aluno em publicações.</label
+            >
+            <div class="error-message" id="autorizacao-error"></div>
+          </div>
+        </div>
+
+        <div class="btn-container">
+          <button type="submit" class="btn btn-primary">Enviar Matrícula</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Inclui o JavaScript do Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Função para aplicar máscara a um campo de telefone
+        function aplicarMascaraTelefone(selector) {
+          document.querySelectorAll(selector).forEach(function (el) {
+            new Cleave(el, {
+              delimiters: ['(', ') ', '-'],
+              blocks: [0, 2, 5, 4],
+              numericOnly: true,
+              onValueChanged: function (e) {
+                var value = e.target.rawValue;
+                if (value.length > 10) {
+                  e.target.setRawValue(value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '$1$2-$3'));
+                } else {
+                  e.target.setRawValue(value.replace(/^(\d{2})(\d{4})(\d{4}).*/, '$1$2-$3'));
+                }
+              },
+            });
+          });
+        }
+
+        // Função para aplicar máscara a um campo de CPF
+        function aplicarMascaraCPF(selector) {
+          document.querySelectorAll(selector).forEach(function (el) {
+            new Cleave(el, {
+              delimiters: ['.', '.', '-'],
+              blocks: [3, 3, 3, 2],
+              numericOnly: true,
+            });
+          });
+        }
+
+        // Função para aplicar máscara a um campo de CEP
+        function aplicarMascaraCEP(selector) {
+          document.querySelectorAll(selector).forEach(function (el) {
+            new Cleave(el, {
+              delimiters: ['-'],
+              blocks: [5, 3],
+              numericOnly: true,
+            });
+          });
+        }
+
+        // Função para aplicar máscara a um campo de moeda
+        function aplicarMascaraMoeda(selector) {
+          document.querySelectorAll(selector).forEach(function (el) {
+            new Cleave(el, {
+              numeral: true,
+              numeralDecimalMark: ',',
+              delimiter: '.',
+              numeralThousandsGroupStyle: 'thousand',
+              prefix: 'R$ ',
+              noImmediatePrefix: true,
+              rawValueTrimPrefix: true,
+              onValueChanged: function (e) {
+                var value = e.target.rawValue;
+                if (value.length > 2) {
+                  var integerPart = value.slice(0, -2);
+                  var decimalPart = value.slice(-2);
+                  e.target.setRawValue(integerPart + ',' + decimalPart);
+                } else {
+                  e.target.setRawValue('0,' + value.padStart(2, '0'));
+                }
+              },
+            });
+          });
+        }
+
+        // Função para validar CPF
+        function validarCPF(cpf) {
+          cpf = cpf.replace(/\D/g, '');
+          if (cpf.length !== 11) return false;
+
+          let soma = 0;
+          let resto;
+          for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+          resto = (soma * 10) % 11;
+          if (resto === 10 || resto === 11) resto = 0;
+          if (resto !== parseInt(cpf.substring(9, 10))) return false;
+          soma = 0;
+          for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+          resto = (soma * 10) % 11;
+          if (resto === 10 || resto === 11) resto = 0;
+          if (resto !== parseInt(cpf.substring(10, 11))) return false;
+          return true;
+        }
+
+        document.getElementById('cpf').addEventListener('input', function () {
+          const isValid = validarCPF(this.value);
+          const errorElement = document.getElementById('cpf-error');
+          if (!isValid) {
+            this.classList.add('is-invalid');
+            errorElement.textContent = 'CPF inválido.';
+          } else {
+            this.classList.remove('is-invalid');
+            errorElement.textContent = '';
+          }
+        });
+
+        // Função para validar telefone
+        function validarTelefone(telefone) {
+          telefone = telefone.replace(/[^\d]+/g, '');
+          return telefone.length === 10 || telefone.length === 11;
+        }
+
+        // Função para aplicar validação de CPF ao sair do campo
+        function aplicarValidacaoCPF(selector) {
+          document.querySelectorAll(selector).forEach(function (el) {
+            el.addEventListener('blur', function () {
+              const cpf = el.value;
+              const errorElementId = el.getAttribute('aria-describedby');
+              const errorElement = document.getElementById(errorElementId);
+              if (!validarCPF(cpf)) {
+                el.classList.add('is-invalid');
+                errorElement.textContent = 'CPF inválido.';
+              } else {
+                el.classList.remove('is-invalid');
+                errorElement.textContent = '';
+              }
+            });
+          });
+        }
+
+        // Função para aplicar validação de telefone ao sair do campo
+        function aplicarValidacaoTelefone(selector) {
+          document.querySelectorAll(selector).forEach(function (el) {
+            el.addEventListener('blur', function () {
+              const telefone = el.value;
+              const errorElementId = el.getAttribute('aria-describedby');
+              const errorElement = document.getElementById(errorElementId);
+              if (!validarTelefone(telefone)) {
+                el.classList.add('is-invalid');
+                errorElement.textContent = 'Telefone inválido.';
+              } else {
+                el.classList.remove('is-invalid');
+                errorElement.textContent = '';
+              }
+            });
+          });
+        }
+
+        // Função para aplicar validação de idade mínima ao sair do campo
+        function aplicarValidacaoDataNascimento(selector, idadeMinima = 5) {
+          document.querySelectorAll(selector).forEach(function (el) {
+            el.addEventListener('blur', function () {
+              const dataNascimento = new Date(el.value);
+              const hoje = new Date();
+              const idade = hoje.getFullYear() - dataNascimento.getFullYear();
+              const m = hoje.getMonth() - dataNascimento.getMonth();
+              const errorElementId = el.getAttribute('aria-describedby');
+              const errorElement = document.getElementById(errorElementId);
+
+              if (m < 0 || (m === 0 && hoje.getDate() < dataNascimento.getDate())) {
+                idade--;
+              }
+
+              if (idade < idadeMinima) {
+                el.classList.add('is-invalid');
+                errorElement.textContent = `Idade mínima de ${idadeMinima} anos.`;
+              } else {
+                el.classList.remove('is-invalid');
+                errorElement.textContent = '';
+              }
+            });
+          });
+        }
+
+        // Aplica a máscara aos campos com as IDs específicas
+        aplicarMascaraTelefone('#fone, #fone-emergencia, #pai-telefone, #mae-telefone');
+        aplicarMascaraCPF('#cpf, #pai-cpf, #mae-cpf');
+        aplicarMascaraCEP('#cep');
+        aplicarMascaraMoeda('#renda-familiar');
+
+        // Aplica a validação de CPF aos campos com os IDs específicos
+        aplicarValidacaoCPF('#cpf, #pai-cpf, #mae-cpf');
+
+        // Aplica a validação de telefone aos campos com os IDs específicos
+        aplicarValidacaoTelefone('#fone, #fone-emergencia, #pai-telefone, #mae-telefone');
+
+        // Aplica a validação de data de nascimento aos campos com os IDs específicos
+        aplicarValidacaoDataNascimento('#dn');
+
+        // Pré-visualização da foto
+        function previewImage(input, previewElementId) {
+          const file = input.files[0];
+          const reader = new FileReader();
+
+          reader.onload = e => {
+            document.getElementById(previewElementId).src = e.target.result;
+          };
+
+          if (file) {
+            reader.readAsDataURL(file);
+          } else {
+            document.getElementById(previewElementId).src = 'placeholder-foto.png';
+          }
+        }
+
+        document.getElementById('foto-aluno').addEventListener('change', function () {
+          previewImage(this, 'foto-preview-aluno');
+        });
+
+        document.getElementById('foto-mae').addEventListener('change', function () {
+          previewImage(this, 'foto-preview-mae');
+        });
+
+        // Exibe/oculta campo de medicação
+        window.toggleMedicacaoField = function () {
+          const medicacao = document.getElementById('medicacao').value;
+          const medicacaoDetails = document.getElementById('medicacao-details');
+          medicacaoDetails.style.display = medicacao === 'sim' ? 'block' : 'none';
+        };
+
+        // Exibe/oculta campo de alergia
+        window.toggleAlergiaField = function () {
+          const alergia = document.getElementById('alergia').value;
+          const alergiaDetails = document.getElementById('alergia-details');
+          alergiaDetails.style.display = alergia === 'sim' ? 'block' : 'none';
+        };
+
+        // Exibe/oculta campo de benefícios sociais
+        window.toggleBeneficiosField = function () {
+          const beneficioSocial = document.getElementById('beneficio-social').value;
+          const beneficiosDetails = document.getElementById('beneficios-details');
+          beneficiosDetails.style.display = beneficioSocial === 'sim' ? 'block' : 'none';
+        };
+
+        // Exibe/oculta campo de outro tipo de residência
+        window.toggleOutroResidenciaField = function () {
+          const tipoResidencia = document.getElementById('tipo-residencia').value;
+          const tipoResidenciaOutro = document.getElementById('tipo-residencia-outro');
+          tipoResidenciaOutro.style.display = tipoResidencia === 'outro' ? 'block' : 'none';
+        };
+
+        // Exibe/oculta campo de outra situação de residência
+        window.toggleOutraSituacaoField = function () {
+          const situacaoResidencia = document.getElementById('situacao-residencia').value;
+          const situacaoResidenciaOutra = document.getElementById('situacao-residencia-outra');
+          situacaoResidenciaOutra.style.display = situacaoResidencia === 'outra' ? 'block' : 'none';
+        };
+
+        // Função para adicionar/remover responsáveis
+        window.adicionarResponsavel = function () {
+          // Conta quantos responsáveis já foram adicionados
+          const responsaveisCount = document.querySelectorAll('#outros-responsaveis .responsavel-row').length;
+          if (responsaveisCount < 3) {
+            // Adiciona um novo campo se ainda não tiver 3
+            const responsavelHTML = `
+            <div class="row mt-2 responsavel-row">
+              <div class="form-group col-md-5">
+                <label for="responsavel-nome">Nome:</label>
+                <input type="text" class="form-control" name="responsavel-nome[]" placeholder="Nome do responsável" aria-describedby="responsavel-nome-error">
+                <div class="error-message" id="responsavel-nome-error"></div>
+                <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+              </div>
+              <div class="form-group col-md-5">
+                <label for="responsavel-parentesco">Parentesco:</label>
+                <input type="text" class="form-control" name="responsavel-parentesco[]" placeholder="Parentesco" aria-describedby="responsavel-parentesco-error">
+                <div class="error-message" id="responsavel-parentesco-error"></div>
+                <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+              </div>
+              <div class="form-group col-md-2">
+                <label>Remover:</label>
+                <button type="button" class="btn btn-danger form-control" onclick="removerResponsavel(this)">X</button>
+              </div>
+            </div>`;
+            document.querySelector('#outros-responsaveis').insertAdjacentHTML('beforeend', responsavelHTML);
+          } else {
+            // Exibe uma mensagem de alerta se já tiver 3
+            alert('Você pode adicionar no máximo 3 responsáveis.');
+          }
+        };
+
+        // Remove um responsável
+        window.removerResponsavel = function (button) {
+          button.closest('.responsavel-row').remove();
+        };
+
+        // Função para adicionar/remover pessoas autorizadas
+        window.adicionarAutorizacaoDeslocamento = function () {
+          // Conta quantas autorizações já foram adicionadas
+          const autorizacoesCount = document.querySelectorAll('#autorizacao-deslocamento-container .row').length;
+          if (autorizacoesCount < 3) {
+            // Adiciona um novo campo se ainda não tiver 3
+            const autorizacaoHTML = `
+            <div class="row mt-2">
+              <div class="form-group col-md-5">
+                <label for="autorizacao-deslocamento-nome">Nome:</label>
+                <input type="text" class="form-control" name="autorizacao-deslocamento-nome[]" placeholder="Nome da pessoa autorizada" aria-describedby="autorizacao-deslocamento-nome-error">
+                <div class="error-message" id="autorizacao-deslocamento-nome-error"></div>
+                <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+              </div>
+              <div class="form-group col-md-5">
+                <label for="autorizacao-deslocamento-grau">Grau de Parentesco:</label>
+                <input type="text" class="form-control" name="autorizacao-deslocamento-grau[]" placeholder="Grau de parentesco" aria-describedby="autorizacao-deslocamento-grau-error">
+                <div class="error-message" id="autorizacao-deslocamento-grau-error"></div>
+                <i class="bi bi-x form-clear" onclick="clearInput(this)"></i>
+              </div>
+              <div class="form-group col-md-2">
+                <label>Remover:</label>
+                <button type="button" class="btn btn-danger form-control" onclick="removerAutorizacaoDeslocamento(this)">X</button>
+              </div>
+            </div>`;
+            document.querySelector('#autorizacao-deslocamento-container').insertAdjacentHTML('beforeend', autorizacaoHTML);
+          } else {
+            // Exibe uma mensagem de alerta se já tiver 3
+            alert('Você pode adicionar no máximo 3 autorizações de deslocamento.');
+          }
+        };
+
+        // Remove uma pessoa autorizada para deslocamento
+        window.removerAutorizacaoDeslocamento = function (button) {
+          button.closest('.row').remove();
+        };
+
+        // Função para alternar o ícone de seta no cabeçalho das seções
+        window.toggleIcon = function (header) {
+          const icon = header.querySelector('.bi');
+          icon.classList.toggle('bi-chevron-down');
+          icon.classList.toggle('bi-chevron-up');
+        };
+
+        // Função para limpar o conteúdo do campo
+        window.clearInput = function (button) {
+          const input = button.previousElementSibling;
+          input.value = '';
+          input.dispatchEvent(new Event('input')); // Dispara o evento input para atualizar a validação e mensagens de erro
+        };
+
+        // Validação do formulário
+        $('#matricula-form').on('submit', function (event) {
+          event.preventDefault();
+          const form = $(this)[0];
+          let valid = true;
+
+          // Valida cada campo do formulário
+          $(form)
+            .find('input, select, textarea')
+            .each(function () {
+              if (!this.checkValidity()) {
+                valid = false;
+                $(this).addClass('is-invalid');
+                $(this).next('.error-message').text(this.validationMessage);
+              } else {
+                $(this).removeClass('is-invalid');
+                $(this).next('.error-message').text('');
+              }
+            });
+
+          // Envia o formulário se todos os campos estiverem válidos
+          if (valid) {
+            // Aqui você pode colocar a lógica para enviar os dados do formulário para
+            // o backend, por exemplo, usando AJAX.
+            alert('Formulário enviado com sucesso!');
+            form.submit();
+          }
+        });
+
+        // Limpa a mensagem de erro ao corrigir o campo
+        $('#matricula-form')
+          .find('input, select, textarea')
+          .on('input change', function () {
+            if (this.checkValidity()) {
+              $(this).removeClass('is-invalid');
+              $(this).next('.error-message').text('');
+            }
+          });
+
+        // Funções para buscar e preencher campos com base no CEP
+        function clearCepFields() {
+          $('#endereco').val('');
+          $('#bairro').val('');
+          $('#municipio').val('');
+          $('#uf').val('');
+        }
+
+        function fillCepFields(data) {
+          $('#endereco').val(data.logradouro);
+          $('#bairro').val(data.bairro);
+          $('#municipio').val(data.localidade);
+          $('#uf').val(data.uf);
+        }
+
+        function searchCep(cep) {
+          clearCepFields();
+
+          if (cep !== '') {
+            $.getJSON(`https://viacep.com.br/ws/${cep}/json/`, function (data) {
+              if (!('erro' in data)) {
+                fillCepFields(data);
+              } else {
+                alert('CEP não encontrado.');
+              }
+            });
+          }
+        }
+
+        // Busca o CEP ao sair do campo
+        $(document).ready(function () {
+          $('#cep').on('blur', function () {
+            const cep = $(this).val().replace(/\D/g, '');
+            searchCep(cep);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

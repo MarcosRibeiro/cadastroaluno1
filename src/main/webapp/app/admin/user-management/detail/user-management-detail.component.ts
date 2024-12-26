@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import SharedModule from 'app/shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 
 import { User } from '../user-management.model';
 

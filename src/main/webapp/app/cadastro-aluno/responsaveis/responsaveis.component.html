@@ -1,21 +1,21 @@
-<div [formGroup]="form">
-  <h3>Responsáveis</h3>
-  <div formArrayName="responsaveis">
-    <div *ngFor="let responsavel of responsaveis.controls; let i = index" [formGroupName]="i" class="responsavel-item">
-      <h4>Responsável {{ i + 1 }}</h4>
-      <div class="row">
-        <mat-form-field appearance="fill" class="col-md-6">
+<form [formGroup]="form">
+  <div *ngFor="let responsavel of responsaveis.controls; let i = index" [formGroupName]="i" class="responsavel-item">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field appearance="fill">
           <mat-label>Nome</mat-label>
-          <input matInput formControlName="nome" required />
+          <input matInput formControlName="nome" required maxlength="255" />
           <mat-error *ngIf="responsavel.get('nome')?.hasError('required') && responsavel.get('nome')?.touched">
-            Nome é obrigatório.
+            Nome do Responsável é obrigatório.
           </mat-error>
           <mat-error *ngIf="responsavel.get('nome')?.hasError('maxlength')"> Nome deve ter no máximo 255 caracteres. </mat-error>
         </mat-form-field>
+      </div>
 
-        <mat-form-field appearance="fill" class="col-md-6">
+      <div class="col-md-4">
+        <mat-form-field appearance="fill">
           <mat-label>Parentesco</mat-label>
-          <input matInput formControlName="parentesco" required />
+          <input matInput formControlName="parentesco" required maxlength="50" />
           <mat-error *ngIf="responsavel.get('parentesco')?.hasError('required') && responsavel.get('parentesco')?.touched">
             Parentesco é obrigatório.
           </mat-error>
@@ -23,7 +23,7 @@
         </mat-form-field>
       </div>
 
-      <div class="button-container">
+      <div class="col-md-2 d-flex align-items-center">
         <button mat-icon-button color="warn" (click)="removeResponsavel(i)" *ngIf="responsaveis.controls.length > 1">
           <mat-icon>delete</mat-icon>
         </button>
@@ -31,7 +31,5 @@
     </div>
   </div>
 
-  <div class="button-container">
-    <button mat-raised-button color="accent" (click)="addResponsavel()"><mat-icon>add</mat-icon> Adicionar Responsável</button>
-  </div>
-</div>
+  <button mat-raised-button color="accent" type="button" (click)="addResponsavel()"><mat-icon>add</mat-icon> Adicionar Responsável</button>
+</form>

@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, Renderer2, inject } from '@angular/core';
 
-import SharedModule from 'app/shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 
 @Component({
   selector: 'jhi-password-strength-bar',

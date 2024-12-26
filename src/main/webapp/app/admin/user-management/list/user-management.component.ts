@@ -4,7 +4,7 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import SharedModule from 'app/shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 import { SortByDirective, SortDirective, SortService, SortState, sortStateSignal } from 'app/shared/sort';
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { SORT } from 'app/config/navigation.constants';
