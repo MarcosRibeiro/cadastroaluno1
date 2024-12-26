@@ -7,7 +7,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./deslocamento.component.css'],
 })
 export class DeslocamentoComponent {
-  @Input() form!: FormGroup<any>;
+  @Input() form!: FormGroup;
 
   constructor(private fb: FormBuilder) {}
 

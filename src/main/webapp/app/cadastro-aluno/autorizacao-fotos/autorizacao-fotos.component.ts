@@ -7,7 +7,7 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./autorizacao-fotos.component.css'],
 })
 export class AutorizacaoFotosComponent {
-  @Input() form!: FormGroup; // Removido o <any>
+  @Input() form!: FormGroup;
   fotoAlunoPreview: string | ArrayBuffer | null = null;
   fotoMaePreview: string | ArrayBuffer | null = null;
 

@@ -75,7 +75,7 @@ export class CadastroAlunoService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  getCadastroAlunoIdentifier(cadastroAluno: Pick<ICadastroAluno, 'id'>): number {
+  getCadastroAlunoIdentifier(cadastroAluno: Pick<ICadastroAluno, 'id'>): number | undefined {
     return cadastroAluno.id;
   }
 

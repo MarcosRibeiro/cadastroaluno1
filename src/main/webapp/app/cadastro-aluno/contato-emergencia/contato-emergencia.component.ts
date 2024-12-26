@@ -7,5 +7,5 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./contato-emergencia.component.css'],
 })
 export class ContatoEmergenciaComponent {
-  @Input() form!: FormGroup<any>;
+  @Input() form!: FormGroup;
 }
